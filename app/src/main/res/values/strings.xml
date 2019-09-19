@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Smarty Bucket</string>
+    <string name="app_tagline">Tracking expenses the smart way.</string>
+    <string name="home">Home</string>
+    <string name="scan">Scan</string>
+    <string name="inventory">Inventory</string>
+    <string name="dollar_sign">$</string>
+    <string name="money_spent_value">10</string>
+    <string name="money_spent_label">Money Spent</string>
+    <string name="money_spent_msg">Great! So far your monthly spending hasn\'t reached your monthly budget limit.</string>
+    <string name="monthly_budget_date_range">10 – 21 SEP</string>
 </resources>
