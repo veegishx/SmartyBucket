@@ -29,7 +29,7 @@
 
             <TextView
                 android:id="@+id/moneySpent"
-                android:layout_width="51dp"
+                android:layout_width="68dp"
                 android:layout_height="45dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
@@ -37,7 +37,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="37dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginEnd="269dp"
+                android:layout_marginEnd="252dp"
                 android:layout_marginBottom="42dp"
                 android:gravity="center"
                 android:text="@string/money_spent_value"
@@ -53,11 +53,11 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="17dp"
-                android:layout_marginTop="71dp"
-                android:layout_marginEnd="270dp"
-                android:layout_marginRight="270dp"
-                android:layout_marginBottom="19dp"
+                android:layout_marginStart="26dp"
+                android:layout_marginTop="69dp"
+                android:layout_marginEnd="261dp"
+                android:layout_marginRight="261dp"
+                android:layout_marginBottom="21dp"
                 android:gravity="center"
                 android:text="@string/money_spent_label"
                 android:textAllCaps="true"
@@ -76,41 +76,30 @@
                 android:textColor="#00D615"
                 android:textSize="36sp" />
 
-            <TextView
-                android:id="@+id/moneySpentMsg"
-                android:layout_width="236dp"
-                android:layout_height="36dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginTop="50dp"
-                android:layout_marginEnd="6dp"
-                android:layout_marginBottom="22dp"
-                android:text="@string/money_spent_msg"
-                android:textSize="12sp" />
-
-            <View
-                android:id="@+id/view"
-                android:layout_width="2dp"
-                android:layout_height="71dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="254dp"
-                android:layout_marginBottom="17dp"
-                android:background="#36000000" />
-
             <View
                 android:id="@+id/cardDateView"
                 android:layout_width="52dp"
                 android:layout_height="17dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginEnd="191dp"
-                android:layout_marginBottom="62dp"
+                android:layout_marginEnd="170dp"
+                android:layout_marginBottom="70dp"
                 android:fadeScrollbars="false"
-                android:foreground="#313435" />
+                android:foreground="#313435"
+                tools:targetApi="m" />
+
+            <TextView
+                android:id="@+id/moneySpentMsg"
+                android:layout_width="216dp"
+                android:layout_height="44dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="42dp"
+                android:layout_marginEnd="7dp"
+                android:layout_marginBottom="21dp"
+                android:text="@string/money_spent_msg"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/textView11"
@@ -127,6 +116,18 @@
                 android:textColor="#F8F8F8"
                 android:textSize="8sp"
                 android:textStyle="bold" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="2dp"
+                android:layout_height="71dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="234dp"
+                android:layout_marginBottom="21dp"
+                android:background="#36000000" />
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
@@ -166,5 +167,78 @@
         app:layout_constraintHorizontal_bias="0.115"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="364dp"
+        android:layout_height="85dp"
+        app:cardCornerRadius="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        app:cardPreventCornerOverlap="false"
+        app:layout_constraintVertical_bias="0.054">
+
+        <ImageView
+            android:id="@+id/add_more_items_card"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:foreground="@drawable/add_more_items_background"
+            android:scaleType="centerInside"
+            android:src="@drawable/add_more_items_background"
+            app:srcCompat="@drawable/add_more_items_background" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="188dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="71dp"
+                android:layout_marginBottom="11dp"
+                android:text="@string/track_new_items_msg_body"
+                android:textColor="#102C38"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="181dp"
+                android:layout_height="20dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="104dp"
+                android:layout_marginTop="19dp"
+                android:layout_marginEnd="79dp"
+                android:layout_marginBottom="45dp"
+                android:gravity="left|center_vertical"
+                android:text="@string/track_new_items_msg_heading"
+                android:textColor="#082431"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="52dp"
+                android:layout_height="54dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="276dp"
+                android:layout_marginBottom="13dp"
+                app:srcCompat="@android:drawable/ic_menu_add" />
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
