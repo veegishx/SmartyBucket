@@ -8,144 +8,252 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        android:layout_width="365dp"
-        android:layout_height="115dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        app:cardCornerRadius="12dp"
-        app:contentPadding="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.193">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="5dp">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical" android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/moneySpent"
-                android:layout_width="68dp"
-                android:layout_height="45dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="37dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="252dp"
-                android:layout_marginBottom="42dp"
-                android:gravity="center"
-                android:text="@string/money_spent_value"
-                android:textColor="#024732"
-                android:textSize="36sp" />
-
-            <TextView
-                android:id="@+id/textView7"
-                android:layout_width="70dp"
-                android:layout_height="17dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="26dp"
-                android:layout_marginTop="69dp"
-                android:layout_marginEnd="261dp"
-                android:layout_marginRight="261dp"
-                android:layout_marginBottom="21dp"
-                android:gravity="center"
-                android:text="@string/money_spent_label"
-                android:textAllCaps="true"
-                android:textSize="10sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textView8"
+                android:id="@+id/appName"
                 android:layout_width="wrap_content"
-                android:layout_height="45dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="320dp"
-                android:layout_marginBottom="42dp"
-                android:text="@string/dollar_sign"
-                android:textColor="#00D615"
-                android:textSize="36sp" />
-
-            <View
-                android:id="@+id/cardDateView"
-                android:layout_width="52dp"
-                android:layout_height="17dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="170dp"
-                android:layout_marginBottom="70dp"
-                android:fadeScrollbars="false"
-                android:foreground="#313435"
-                tools:targetApi="m" />
-
-            <TextView
-                android:id="@+id/moneySpentMsg"
-                android:layout_width="216dp"
-                android:layout_height="44dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginTop="42dp"
-                android:layout_marginEnd="7dp"
-                android:layout_marginBottom="21dp"
-                android:text="@string/money_spent_msg"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/textView11"
-                android:layout_width="48dp"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/cardDateView"
-                android:layout_alignEnd="@+id/cardDateView"
-                android:layout_alignBottom="@+id/cardDateView"
-                android:layout_marginTop="3dp"
-                android:layout_marginEnd="2dp"
-                android:layout_marginBottom="3dp"
-                android:gravity="center"
-                android:text="@string/monthly_budget_date_range"
-                android:textColor="#F8F8F8"
-                android:textSize="8sp"
-                android:textStyle="bold" />
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:text="@string/app_name"
+                android:textColor="#050001"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.108"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.049" />
 
-            <View
-                android:id="@+id/view"
-                android:layout_width="2dp"
-                android:layout_height="71dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="234dp"
-                android:layout_marginBottom="21dp"
-                android:background="#36000000" />
+            <TextView
+                android:id="@+id/appTagline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:text="@string/app_tagline"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.115"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appName" />
 
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="wrap_content"
+                android:layout_height="115dp"
+                android:layout_margin="15dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardCornerRadius="12dp"
+                app:contentPadding="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.193">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textColor="#050001"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.108"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.049" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/moneySpent"
+                        android:layout_width="68dp"
+                        android:layout_height="45dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="37dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="252dp"
+                        android:layout_marginBottom="42dp"
+                        android:gravity="center"
+                        android:text="@string/money_spent_value"
+                        android:textColor="#024732"
+                        android:textSize="36sp" />
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="70dp"
+                        android:layout_height="17dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="26dp"
+                        android:layout_marginTop="69dp"
+                        android:layout_marginEnd="261dp"
+                        android:layout_marginRight="261dp"
+                        android:layout_marginBottom="21dp"
+                        android:gravity="center"
+                        android:text="@string/money_spent_label"
+                        android:textAllCaps="true"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="45dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginEnd="320dp"
+                        android:layout_marginBottom="42dp"
+                        android:text="@string/dollar_sign"
+                        android:textColor="#00D615"
+                        android:textSize="36sp" />
+
+                    <TextView
+                        android:id="@+id/moneySpentMsg"
+                        android:layout_width="216dp"
+                        android:layout_height="44dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="42dp"
+                        android:layout_marginEnd="7dp"
+                        android:layout_marginBottom="21dp"
+                        android:text="@string/money_spent_msg"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/textView11"
+                        android:layout_width="48dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/cardDateView"
+                        android:layout_alignEnd="@+id/cardDateView"
+                        android:layout_alignBottom="@+id/cardDateView"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:gravity="center"
+                        android:text="@string/monthly_budget_date_range"
+                        android:textColor="#F8F8F8"
+                        android:textSize="8sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:id="@+id/cardDateView"
+                        android:layout_width="52dp"
+                        android:layout_height="17dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginEnd="170dp"
+                        android:layout_marginBottom="70dp"
+                        android:fadeScrollbars="false"
+                        android:foreground="#313435"
+                        tools:targetApi="m" />
+
+                    <View
+                        android:id="@+id/view"
+                        android:layout_width="2dp"
+                        android:layout_height="71dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="234dp"
+                        android:layout_marginBottom="21dp"
+                        android:background="#36000000" />
+
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="85dp"
+                android:layout_margin="15dp"
+                app:cardCornerRadius="12dp"
+                app:cardPreventCornerOverlap="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.52"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView"
+                app:layout_constraintVertical_bias="0.054">
+
+                <ImageView
+                    android:id="@+id/add_more_items_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/add_more_items_background"
+                    app:srcCompat="@drawable/add_more_items_background" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="52dp"
+                        android:layout_height="54dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="47dp"
+                        android:layout_marginTop="19dp"
+                        android:layout_marginEnd="265dp"
+                        android:layout_marginBottom="12dp"
+                        app:srcCompat="@drawable/ic_add_circle_outline_primary_24dp" />
+
+                    <TextView
+                        android:id="@+id/textView16"
+                        android:layout_width="215dp"
+                        android:layout_height="27dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="103dp"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginEnd="46dp"
+                        android:layout_marginBottom="44dp"
+                        android:gravity="left|center_vertical"
+                        android:text="@string/track_new_items_msg_heading"
+                        android:textColor="#082431"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView17"
+                        android:layout_width="212dp"
+                        android:layout_height="37dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginEnd="49dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/track_new_items_msg_body"
+                        android:textColor="#102C38"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:layout_margin="20dp"
+                app:srcCompat="@drawable/dissertation_project_logo_black" />
+        </LinearLayout>
+    </ScrollView>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -158,6 +266,8 @@
             android:layout_gravity="bottom"
             app:backgroundTint="@color/colorPrimary"
             app:fabAlignmentMode="center"
+            app:hideOnScroll="true"
+            app:layout_scrollFlags="scroll|enterAlways"
             app:navigationIcon="@drawable/ic_menu_white_24dp"/>
 
 
@@ -169,89 +279,5 @@
             app:layout_anchor="@id/bottom_app_bar" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    <TextView
-        android:id="@+id/textView12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app_tagline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.115"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="364dp"
-        android:layout_height="85dp"
-        app:cardCornerRadius="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.52"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView"
-        app:cardPreventCornerOverlap="false"
-        app:layout_constraintVertical_bias="0.054">
-
-        <ImageView
-            android:id="@+id/add_more_items_card"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:foreground="@drawable/add_more_items_background"
-            android:scaleType="centerInside"
-            android:src="@drawable/add_more_items_background"
-            app:srcCompat="@drawable/add_more_items_background" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/textView17"
-                android:layout_width="212dp"
-                android:layout_height="37dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="49dp"
-                android:layout_marginBottom="8dp"
-                android:text="@string/track_new_items_msg_body"
-                android:textColor="#102C38"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textView16"
-                android:layout_width="215dp"
-                android:layout_height="27dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="103dp"
-                android:layout_marginTop="14dp"
-                android:layout_marginEnd="46dp"
-                android:layout_marginBottom="44dp"
-                android:gravity="left|center_vertical"
-                android:text="@string/track_new_items_msg_heading"
-                android:textColor="#082431"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="52dp"
-                android:layout_height="54dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="47dp"
-                android:layout_marginTop="19dp"
-                android:layout_marginEnd="265dp"
-                android:layout_marginBottom="12dp"
-                app:srcCompat="@drawable/ic_add_circle_outline_primary_24dp" />
-
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,15 +1,22 @@
 package com.saphyrelabs.smartybucket;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
+    BottomAppBar bab;
+    private BottomSheetDialog bottomSheetDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Initialize BottomAppBar
-        BottomAppBar bab = findViewById(R.id.bottom_app_bar);
+        bab = findViewById(R.id.bottom_app_bar);
 
         // Append menu items to BottomAppBar
         bab.replaceMenu(R.menu.menu_items);
@@ -40,7 +47,58 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return false;
             }
+        });
 
+        // Register click event for BottomAppBar drawer icon
+        bab.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openNavigationMenu();
+            }
+        });
+
+        // Register click event for BottomAppBar FloatingActionButton icon
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this,"Floating Action Button Clicked",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void openNavigationMenu() {
+
+        //this will get the menu layout
+        final View bottomAppBarDrawer = getLayoutInflater().inflate(R.layout.fragment_bottomsheet,null);
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(MainActivity.this);
+        bottomSheetDialog.setContentView(bottomAppBarDrawer);
+        bottomSheetDialog.show();
+
+        //this will find NavigationView from id
+        NavigationView navigationView = bottomAppBarDrawer.findViewById(R.id.fragment_bottomsheet);
+
+        //This will handle the onClick Action for the menu item
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                switch (id){
+                    case R.id.nav1:
+                        Toast.makeText(MainActivity.this,"Item 1 Clicked",Toast.LENGTH_SHORT).show();
+                        bottomSheetDialog.dismiss();
+                        break;
+                    case R.id.nav2:
+                        Toast.makeText(MainActivity.this,"Item 2 Clicked",Toast.LENGTH_SHORT).show();
+                        bottomSheetDialog.dismiss();
+                        break;
+                    case R.id.nav3:
+                        Toast.makeText(MainActivity.this,"Item 3 Clicked",Toast.LENGTH_SHORT).show();
+                        bottomSheetDialog.dismiss();
+                        break;
+                }
+                return false;
+            }
         });
     }
 }

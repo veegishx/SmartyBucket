@@ -15,4 +15,12 @@
     <string name="action_inventory">Inventory Menu</string>
     <string name="action_search">Search Item</string>
     <string name="action_settings">Settings Menu</string>
+    <!-- BottomAppBar Drawer Navigation Items -->
+    <string name="navigation_profile">My Profile</string>
+    <string name="navigation_home">Home</string>
+    <string name="navigation_recipes">My Preferences</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main">Main</string>
 </resources>
