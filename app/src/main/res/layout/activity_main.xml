@@ -208,32 +208,33 @@
 
             <TextView
                 android:id="@+id/textView17"
-                android:layout_width="188dp"
-                android:layout_height="32dp"
+                android:layout_width="212dp"
+                android:layout_height="37dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginEnd="71dp"
-                android:layout_marginBottom="11dp"
+                android:layout_marginEnd="49dp"
+                android:layout_marginBottom="8dp"
                 android:text="@string/track_new_items_msg_body"
                 android:textColor="#102C38"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView16"
-                android:layout_width="181dp"
-                android:layout_height="20dp"
+                android:layout_width="215dp"
+                android:layout_height="27dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="104dp"
-                android:layout_marginTop="19dp"
-                android:layout_marginEnd="79dp"
-                android:layout_marginBottom="45dp"
+                android:layout_marginStart="103dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="46dp"
+                android:layout_marginBottom="44dp"
                 android:gravity="left|center_vertical"
                 android:text="@string/track_new_items_msg_heading"
                 android:textColor="#082431"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <ImageView
@@ -244,11 +245,11 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="36dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginEnd="276dp"
-                android:layout_marginBottom="13dp"
-                app:srcCompat="@android:drawable/ic_menu_add" />
+                android:layout_marginStart="47dp"
+                android:layout_marginTop="19dp"
+                android:layout_marginEnd="265dp"
+                android:layout_marginBottom="12dp"
+                app:srcCompat="@drawable/ic_add_circle_outline_primary_24dp" />
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

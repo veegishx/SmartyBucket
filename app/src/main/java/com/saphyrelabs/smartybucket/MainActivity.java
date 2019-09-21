@@ -28,10 +28,10 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
                 switch (id){
-                    case R.id.app_bar_search:
-                        Toast.makeText(MainActivity.this,"Like Clicked",Toast.LENGTH_SHORT).show();
-                        break;
                     case R.id.app_bar_inventory:
+                        Toast.makeText(MainActivity.this,"Inventory Clicked",Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.app_bar_search:
                         Toast.makeText(MainActivity.this,"Search Clicked",Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.app_bar_settings:
