@@ -3,10 +3,13 @@ package com.saphyrelabs.smartybucket;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -22,6 +25,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        RelativeLayout addItemBanner = findViewById(R.id.add_more_items_banner);
+        addItemBanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View V) {
+                Intent registerItems = new Intent(MainActivity.this, RegisterItems.class);
+                startActivity(registerItems);
+            }
+        });
+
 
         // Initialize BottomAppBar
         bab = findViewById(R.id.bottom_app_bar);

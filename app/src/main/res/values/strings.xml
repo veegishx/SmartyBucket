@@ -20,6 +20,10 @@
     <string name="navigation_home">Home</string>
     <string name="navigation_recipes">My Preferences</string>
 
+    <!-- Register new Items and prices -->
+    <string name="register_items_title">Your Bucket List</string>
+    <string name="register_items_description">Add items that you usually buy and their prices</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_main">Main</string>

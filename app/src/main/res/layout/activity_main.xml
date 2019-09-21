@@ -131,15 +131,15 @@
                         android:textSize="12sp" />
 
                     <TextView
-                        android:id="@+id/textView11"
-                        android:layout_width="48dp"
-                        android:layout_height="wrap_content"
+                        android:id="@+id/date_range"
+                        android:layout_width="wrap_content"
+                        android:layout_height="13dp"
                         android:layout_alignTop="@+id/cardDateView"
                         android:layout_alignEnd="@+id/cardDateView"
                         android:layout_alignBottom="@+id/cardDateView"
                         android:layout_marginTop="3dp"
-                        android:layout_marginEnd="2dp"
-                        android:layout_marginBottom="3dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginBottom="1dp"
                         android:gravity="center"
                         android:text="@string/monthly_budget_date_range"
                         android:textColor="#F8F8F8"
@@ -154,9 +154,8 @@
                         android:layout_alignParentBottom="true"
                         android:layout_marginEnd="170dp"
                         android:layout_marginBottom="70dp"
-                        android:fadeScrollbars="false"
-                        android:foreground="#313435"
-                        tools:targetApi="m" />
+                        android:background="#E80A0707"
+                        android:fadeScrollbars="false" />
 
                     <View
                         android:id="@+id/view"
@@ -191,11 +190,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
+                    android:foreground="@drawable/add_more_items_background"
                     android:scaleType="centerInside"
                     android:src="@drawable/add_more_items_background"
                     app:srcCompat="@drawable/add_more_items_background" />
 
                 <RelativeLayout
+                    android:id="@+id/add_more_items_banner"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -221,10 +222,10 @@
                         android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginStart="103dp"
-                        android:layout_marginTop="14dp"
-                        android:layout_marginEnd="46dp"
-                        android:layout_marginBottom="44dp"
+                        android:layout_marginStart="110dp"
+                        android:layout_marginTop="13dp"
+                        android:layout_marginEnd="39dp"
+                        android:layout_marginBottom="45dp"
                         android:gravity="left|center_vertical"
                         android:text="@string/track_new_items_msg_heading"
                         android:textColor="#082431"
