@@ -11,4 +11,8 @@
     <string name="monthly_budget_date_range">10 – 21 SEP</string>
     <string name="track_new_items_msg_heading">Got more items to track?</string>
     <string name="track_new_items_msg_body">Tap here to add them and update their prices</string>
+    <!-- BottomAppBar Menu Items -->
+    <string name="action_inventory">Inventory Menu</string>
+    <string name="action_search">Search Item</string>
+    <string name="action_settings">Settings Menu</string>
 </resources>
