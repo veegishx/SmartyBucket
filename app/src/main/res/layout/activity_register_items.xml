@@ -63,13 +63,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textStyle="bold"
+                    android:layout_weight="0"
                     android:gravity="left"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginLeft="15dp"
-                    android:text="@string/register_items_category_label" />
+                    android:text="@string/register_items_category_label"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -77,9 +74,8 @@
                     android:layout_weight="5"
                     android:textStyle="bold"
                     android:gravity="left"
-                    android:layout_marginBottom="15dp"
                     android:layout_marginRight="15dp"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="80dp"
                     android:text="@string/register_items_name_label" />
             </LinearLayout>
 
@@ -95,9 +91,11 @@
                 <Spinner
                     android:id="@+id/items_category_spinner"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="34dp"
                     android:layout_weight="1.5"
+                    android:layout_marginTop="2dp"
                     android:layout_marginEnd="15dp"
+                    android:background="@drawable/spinner_border"
                     android:gravity="left" />
 
                 <com.google.android.material.textfield.TextInputLayout
