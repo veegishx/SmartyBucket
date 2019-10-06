@@ -27,11 +27,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_main">Main</string>
-    <string name="hint_text">Select Item Category</string>
+    <string name="hint_text_category">Select Item Category</string>
     <string name="register_items_item_name_label">Item Name</string>
     <string name="register_items_category_label">Category</string>
     <string name="register_items_name_label">Item</string>
-    <string-array name="items_array">
+    <string-array name="item_categories_array">
         <item>Spices</item>
         <item>Juice</item>
         <item>Vegetables</item>

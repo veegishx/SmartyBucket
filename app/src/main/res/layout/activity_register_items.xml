@@ -58,7 +58,7 @@
                     android:id="@+id/register_items_labels"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="60dp"
                     android:layout_weight="1"
                     android:gravity="center">
 
@@ -67,14 +67,18 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="left"
-                        android:text="@string/register_items_category_label" />
+                        android:paddingStart="15dp"
+                        android:text="@string/register_items_category_label"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:gravity="left"
-                        android:text="@string/register_items_name_label" />
+                        android:paddingEnd="15dp"
+                        android:text="@string/register_items_name_label"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -89,30 +93,29 @@
                     android:id="@+id/register_items_components"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center">
 
+                    <Spinner
+                        android:id="@+id/items_category_spinner"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingStart="15dp" />
+
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1">
+                        android:layout_weight="2"
+                        android:paddingEnd="15dp">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="hint" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="hint" />
+                            android:hint="@string/register_items_item_name_label"
+                            android:inputType="text" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
