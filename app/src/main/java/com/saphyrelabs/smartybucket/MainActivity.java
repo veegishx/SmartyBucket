@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                         bottomSheetDialog.dismiss();
                         break;
                 }
-                return false;
+                return MainActivity.super.onOptionsItemSelected(menuItem);
             }
         });
     }

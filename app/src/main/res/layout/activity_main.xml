@@ -154,7 +154,7 @@
                         android:layout_alignParentBottom="true"
                         android:layout_marginEnd="170dp"
                         android:layout_marginBottom="70dp"
-                        android:background="#E80A0707"
+                        android:background="#000000"
                         android:fadeScrollbars="false" />
 
                     <View
