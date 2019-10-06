@@ -1,4 +1,4 @@
-package com.saphyrelabs.smartybucket.Model;
+package com.saphyrelabs.smartybucket.model;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
 /**

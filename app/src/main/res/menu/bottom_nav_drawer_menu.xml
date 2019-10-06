@@ -12,7 +12,7 @@
             android:title="@string/navigation_profile" />
         <item
             android:id="@+id/nav3"
-            android:icon="@drawable/ic_restaurant_dark_24dp"
+            android:icon="@drawable/ic_settings_dark_24dp"
             android:title="@string/navigation_recipes" />
     </group>
 </menu>
