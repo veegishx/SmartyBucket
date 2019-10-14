@@ -1,5 +1,6 @@
 package com.saphyrelabs.smartybucket;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,8 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -20,13 +25,12 @@ import com.google.firebase.firestore.*;
 import com.saphyrelabs.smartybucket.adapter.ItemAdapter;
 import com.saphyrelabs.smartybucket.model.Item;
 
-public class RegisterItems extends AppCompatActivity implements View.OnClickListener, ItemAdapter.onItemSelectedListener {
+import java.util.UUID;
+
+public class RegisterItems extends AppCompatActivity {
     private static final String TAG = "";
     private FirebaseFirestore smartyFirestore;
     private Query readItemsQuery;
-    private ItemAdapter itmAdapter;
-    private RecyclerView itemRecycler;
-    private ViewGroup itemEmptyView;
     private static final int LIMIT = 10;
 
     @Override
@@ -34,14 +38,10 @@ public class RegisterItems extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_items);
 
-        itemRecycler = findViewById(R.id.itemRecycler);
-        itemEmptyView = findViewById(R.id.view_empty);
-
         // Enable Firestore logging
         FirebaseFirestore.setLoggingEnabled(true);
 
         initFirestore();
-        initRecyclerView();
 
         // Define & initialize spinner for item categories
         Spinner spinner = (Spinner) findViewById(R.id.items_category_spinner);
@@ -54,13 +54,45 @@ public class RegisterItems extends AppCompatActivity implements View.OnClickList
         addNewItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View V) {
-                CollectionReference items = smartyFirestore.collection("item");
 
-                for (int i = 0; i < 5; i++) {
-                    Item newItem = new Item("Veegish", "1219385", "Farmstead Sausages", "Poultry", 30.96);
-                    // Add a new document to the items collection
-                    items.add(newItem);
-                }
+                // Get values from user input
+                // itemCategory
+                Spinner spinner = (Spinner)findViewById(R.id.items_category_spinner);
+                String itemCategoryVal  = spinner.getSelectedItem().toString();
+
+                // itemName
+                EditText itemNameText = (EditText)findViewById(R.id.item_name_value);
+                String itemNameVal = itemNameText.getText().toString();
+
+                // itemPrice
+                EditText itemPriceText = (EditText)findViewById(R.id.item_price_value);
+                double itemPriceVal = Double.parseDouble(itemPriceText.getText().toString());
+
+                // itemId
+                UUID uuid = UUID.randomUUID();
+                String itemId = uuid.toString();
+
+                // user
+                String user = "Veegish Ramdani";
+
+                Item newItem = new Item(user, itemId, itemNameVal, itemCategoryVal, itemPriceVal);
+
+                smartyFirestore.collection("items").document(itemCategoryVal.toLowerCase() + "-item-" + itemId).set(newItem)
+                        .addOnSuccessListener(new OnSuccessListener< Void >() {
+
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(RegisterItems.this, "New Item Added",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(RegisterItems.this, "ERROR" + e.toString(),
+                                        Toast.LENGTH_SHORT).show();
+                                Log.d("TAG", e.toString());
+                            }
+                        });
+
+
             }
         });
 
@@ -68,49 +100,5 @@ public class RegisterItems extends AppCompatActivity implements View.OnClickList
 
     private void initFirestore() {
         smartyFirestore = FirebaseFirestore.getInstance();
-        readItemsQuery = smartyFirestore.collection("item")
-                .orderBy("itemCategory", Query.Direction.DESCENDING)
-                .limit(LIMIT);
-    }
-
-    private void initRecyclerView() {
-        if (readItemsQuery == null) {
-            Log.w(TAG, "No query, not initializing RecyclerView");
-        }
-
-        itmAdapter = new ItemAdapter(readItemsQuery, this) {
-
-            @Override
-            protected void onDataChanged() {
-                // Show/hide content if the query returns empty.
-                if (getItemCount() == 0) {
-                    itemRecycler.setVisibility(View.GONE);
-                    itemEmptyView.setVisibility(View.VISIBLE);
-                } else {
-                    itemRecycler.setVisibility(View.VISIBLE);
-                    itemEmptyView.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            protected void onError(FirebaseFirestoreException e) {
-                // Show a snackbar on errors
-                Snackbar.make(findViewById(android.R.id.content),
-                        "Error: check logs for info.", Snackbar.LENGTH_LONG).show();
-            }
-        };
-
-        itemRecycler.setLayoutManager(new LinearLayoutManager(this));
-        itemRecycler.setAdapter(itmAdapter);
-    }
-
-    @Override
-    public void onClick(View v) {
-
-    }
-
-    @Override
-    public void onItemSelected(DocumentSnapshot item) {
-
     }
 }

@@ -112,12 +112,25 @@
                         android:paddingEnd="15dp">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/item_name_value"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/register_items_item_name_label"
                             android:inputType="text" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="386dp"
+                    android:layout_height="116dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/item_price_value"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/item_price_hint" />
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -130,42 +143,6 @@
 
         </LinearLayout>
     </ScrollView>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/itemRecycler"
-        android:layout_width="400dp"
-        android:layout_height="136dp"
-        android:background="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/coordinatorLayout"
-        tools:listitem="@layout/item_view" />
-
-    <LinearLayout
-        android:id="@+id/view_empty"
-        android:layout_width="86dp"
-        android:layout_height="87dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/coordinatorLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:visibility="gone">
-
-        <ImageView android:src="@drawable/common_google_signin_btn_icon_dark"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/message_no_results" />
-
-    </LinearLayout>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"

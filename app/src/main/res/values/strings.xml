@@ -32,6 +32,7 @@
     <string name="register_items_category_label">Category</string>
     <string name="register_items_name_label">Item</string>
     <string name="message_no_results">No Items Added Yet</string>
+    <string name="item_price_hint">Item Price</string>
     <string-array name="item_categories_array">
         <item>Spices</item>
         <item>Juice</item>
