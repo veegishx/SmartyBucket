@@ -54,45 +54,7 @@ public class RegisterItems extends AppCompatActivity {
         addNewItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View V) {
-
-                // Get values from user input
-                // itemCategory
-                Spinner spinner = (Spinner)findViewById(R.id.items_category_spinner);
-                String itemCategoryVal  = spinner.getSelectedItem().toString();
-
-                // itemName
-                EditText itemNameText = (EditText)findViewById(R.id.item_name_value);
-                String itemNameVal = itemNameText.getText().toString();
-
-                // itemPrice
-                EditText itemPriceText = (EditText)findViewById(R.id.item_price_value);
-                double itemPriceVal = Double.parseDouble(itemPriceText.getText().toString());
-
-                // itemId
-                UUID uuid = UUID.randomUUID();
-                String itemId = uuid.toString();
-
-                // user
-                String user = "Veegish Ramdani";
-
-                Item newItem = new Item(user, itemId, itemNameVal, itemCategoryVal, itemPriceVal);
-
-                smartyFirestore.collection("items").document(itemCategoryVal.toLowerCase() + "-item-" + itemId).set(newItem)
-                        .addOnSuccessListener(new OnSuccessListener< Void >() {
-
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(RegisterItems.this, "New Item Added",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(RegisterItems.this, "ERROR" + e.toString(),
-                                        Toast.LENGTH_SHORT).show();
-                                Log.d("TAG", e.toString());
-                            }
-                        });
-
-
+                writeItemsToFirestore();
             }
         });
 
@@ -100,5 +62,41 @@ public class RegisterItems extends AppCompatActivity {
 
     private void initFirestore() {
         smartyFirestore = FirebaseFirestore.getInstance();
+    }
+
+    private void writeItemsToFirestore() {
+        // Get values from user input
+        // itemCategory
+        Spinner spinner = (Spinner)findViewById(R.id.items_category_spinner);
+        String itemCategoryVal  = spinner.getSelectedItem().toString();
+
+        // itemName
+        EditText itemNameText = (EditText)findViewById(R.id.item_name_value);
+        String itemNameVal = itemNameText.getText().toString();
+
+        // itemPrice
+        EditText itemPriceText = (EditText)findViewById(R.id.item_price_value);
+        double itemPriceVal = Double.parseDouble(itemPriceText.getText().toString());
+
+        // itemId
+        UUID uuid = UUID.randomUUID();
+        String itemId = uuid.toString();
+
+        // user
+        String user = "Veegish Ramdani";
+
+        Item newItem = new Item(user, itemId, itemNameVal, itemCategoryVal, itemPriceVal);
+
+        smartyFirestore.collection("items").document(itemCategoryVal.toLowerCase() + "-item-" + itemId).set(newItem)
+                .addOnSuccessListener(new OnSuccessListener< Void >() {
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(RegisterItems.this, "New Item Added", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(RegisterItems.this, "ERROR" + e.toString(), Toast.LENGTH_SHORT).show();
+                        Log.d("TAG", e.toString());
+                    }
+                });
     }
 }
