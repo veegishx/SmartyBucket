@@ -75,7 +75,8 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this,"Floating Action Button Clicked",Toast.LENGTH_SHORT).show();
+                Intent cameraIntent = new Intent(MainActivity.this, ChooseModel.class);
+                startActivity(cameraIntent);
             }
         });
     }

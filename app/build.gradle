@@ -17,6 +17,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    // Store tflite models in assets
+    aaptOptions {
+        noCompress "tflite"
+        noCompress "lite"
+    }
 }
 
 dependencies {
@@ -37,6 +43,10 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.10.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    // Tensorflow Lite
+    implementation 'org.tensorflow:tensorflow-lite:+'
+    // Cropping Library
+    implementation 'com.soundcloud.android:android-crop:1.0.1@aar'
 }
 repositories {
     mavenCentral()
