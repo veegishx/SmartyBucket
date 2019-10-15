@@ -22,14 +22,17 @@
 
     <!-- Register new Items and prices -->
     <string name="register_items_title">Your Bucket List</string>
-    <string name="register_items_description">Add items that you usually buy and their prices</string>
+    <string name="register_items_description">Add items that you usually buy &amp; their prices.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_main">Main</string>
     <string name="hint_text_category">Select Item Category</string>
+    <string name="hint_text_name">Enter Item Name</string>
+    <string name="hint_text_price">Enter Item Price</string>
     <string name="register_items_item_name_label">Item Name</string>
     <string name="register_items_category_label">Category</string>
+    <string name="register_items_price_label">Price(Rs)</string>
     <string name="register_items_name_label">Item</string>
     <string name="message_no_results">No Items Added Yet</string>
     <string name="item_price_hint">Item Price</string>

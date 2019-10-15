@@ -8,22 +8,26 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="5dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:orientation="vertical" android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/register_items_title_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="15dp"
-                android:layout_marginLeft="15dp"
                 android:text="@string/register_items_title"
                 android:textColor="#050001"
                 android:textSize="30sp"
@@ -39,10 +43,12 @@
                 android:id="@+id/register_items_description_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:layout_marginRight="15dp"
                 android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="15dp"
                 android:text="@string/register_items_description"
+                android:textColor="#1E1E1E"
+                android:textStyle="normal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.115"
                 app:layout_constraintStart_toStartOf="parent"
@@ -52,42 +58,98 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:background="#FFFFFF"
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/register_items_labels"
+                    android:id="@+id/register_items_labels2"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.3"
+                    android:background="#FFFFFF"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingTop="10dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:paddingStart="15dp"
+                        android:text="@string/register_items_item_name_label"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/register_items_components2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="left"
-                        android:paddingStart="15dp"
-                        android:text="@string/register_items_category_label"
-                        android:textStyle="bold" />
 
-                    <TextView
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="84dp"
+                        android:layout_margin="10dp"
                         android:layout_weight="2"
-                        android:gravity="left"
+                        android:background="@color/white"
                         android:paddingEnd="15dp"
-                        android:text="@string/register_items_name_label"
-                        android:textStyle="bold" />
+                        android:theme="@style/ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/item_name_value"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_text_name"
+                            android:inputType="text"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                            android:theme="@style/ThemeOverlay.MaterialComponents.TextInputEditText.FilledBox.Dense" />
+                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:background="#0047FF"
+                    android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                    <LinearLayout
+                        android:id="@+id/register_items_labels"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:background="#FFFFFF"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="24dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            android:paddingStart="15dp"
+                            android:text="@string/register_items_category_label"
+                            android:textColor="#000000"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:gravity="left"
+                            android:paddingEnd="15dp"
+                            android:text="@string/register_items_price_label"
+                            android:textColor="#000000"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/register_items_components"
@@ -101,36 +163,28 @@
                         android:id="@+id/items_category_spinner"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
                         android:layout_weight="1"
-                        android:paddingStart="15dp" />
+                        android:paddingStart="15dp"
+                        android:spinnerMode="dropdown" />
 
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
                         android:layout_weight="2"
+                        android:background="@color/white"
                         android:paddingEnd="15dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/item_name_value"
+                            android:id="@+id/item_price_value"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/register_items_item_name_label"
+                            android:hint="@string/hint_text_price"
                             android:inputType="text" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="386dp"
-                    android:layout_height="116dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/item_price_value"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/item_price_hint" />
-                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -142,7 +196,7 @@
                 android:text="ADD ITEM" />
 
         </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"

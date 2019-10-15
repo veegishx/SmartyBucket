@@ -2,13 +2,10 @@ package com.saphyrelabs.smartybucket;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,10 +16,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.*;
-import com.saphyrelabs.smartybucket.adapter.ItemAdapter;
 import com.saphyrelabs.smartybucket.model.Item;
 
 import java.util.UUID;
@@ -54,7 +48,11 @@ public class RegisterItems extends AppCompatActivity {
         addNewItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View V) {
-                writeItemsToFirestore();
+                if(!validateItemCategory() | !validateItemName()) {
+                    return;
+                } else {
+                    writeItemsToFirestore();
+                }
             }
         });
 
@@ -72,7 +70,7 @@ public class RegisterItems extends AppCompatActivity {
 
         // itemName
         EditText itemNameText = (EditText)findViewById(R.id.item_name_value);
-        String itemNameVal = itemNameText.getText().toString();
+        final String itemNameVal = itemNameText.getText().toString();
 
         // itemPrice
         EditText itemPriceText = (EditText)findViewById(R.id.item_price_value);
@@ -90,13 +88,41 @@ public class RegisterItems extends AppCompatActivity {
         smartyFirestore.collection("items").document(itemCategoryVal.toLowerCase() + "-item-" + itemId).set(newItem)
                 .addOnSuccessListener(new OnSuccessListener< Void >() {
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(RegisterItems.this, "New Item Added", Toast.LENGTH_SHORT).show();
+                        View contextView = findViewById(R.id.coordinatorLayout);
+                        Snackbar.make(contextView, "Added " + itemNameVal + " to bucket list!", Snackbar.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(RegisterItems.this, "ERROR" + e.toString(), Toast.LENGTH_SHORT).show();
-                        Log.d("TAG", e.toString());
-                    }
-                });
+            public void onFailure(@NonNull Exception e) {
+                View contextView = findViewById(R.id.coordinatorLayout);
+                Snackbar.make(contextView, "ERROR: " + e.toString(), Snackbar.LENGTH_LONG).show();
+                Log.d("TAG", e.toString());
+            }
+        });
+    }
+
+    private boolean validateItemName() {
+        EditText itemNameText = (EditText)findViewById(R.id.item_name_value);
+        String itemNameVal = itemNameText.getText().toString().trim();
+
+        if(itemNameVal.isEmpty()) {
+            itemNameText.setError("Please enter item name.");
+            return false;
+        } else {
+            itemNameText.setError(null);
+            return true;
+        }
+    }
+
+    private boolean validateItemCategory() {
+        EditText itemPriceText = (EditText)findViewById(R.id.item_price_value);
+        String itemPriceVal = itemPriceText.getText().toString().trim();
+
+        if(itemPriceVal.isEmpty()) {
+            itemPriceText.setError("Please enter item name.");
+            return false;
+        } else {
+            itemPriceText.setError(null);
+            return true;
+        }
     }
 }
