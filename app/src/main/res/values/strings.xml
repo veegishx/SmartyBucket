@@ -36,6 +36,8 @@
     <string name="register_items_name_label">Item</string>
     <string name="message_no_results">No Items Added Yet</string>
     <string name="item_price_hint">Item Price</string>
+    <string name="my_preferences">My Preferences</string>
+    <string name="configure_your_account_settings">Configure your account settings</string>
     <string-array name="item_categories_array">
         <item>Spices</item>
         <item>Juice</item>

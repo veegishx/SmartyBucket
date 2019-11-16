@@ -1,10 +1,9 @@
 package com.saphyrelabs.smartybucket;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -13,6 +12,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,9 +25,7 @@ import com.soundcloud.android.crop.Crop;
 import java.io.File;
 
 public class ChooseModel extends AppCompatActivity {
-    private Button inceptionFloat;
-    private Button inceptionQuant;
-
+    private Button startScanBtn;
     public static final int REQUEST_PERMISSION = 300;
     public static final int REQUEST_IMAGE = 100;
 
@@ -54,25 +52,35 @@ public class ChooseModel extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_PERMISSION);
         }
 
-        inceptionFloat = (Button) findViewById(R.id.inception_float);
-        inceptionFloat.setOnClickListener(new View.OnClickListener() {
+        startScanBtn = (Button) findViewById(R.id.start_scan_btn);
+        startScanBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                choice = "inception_float.tflite";
-                quant = false;
-                openCameraIntent();
+                SharedPreferences myPreferences = getSharedPreferences("myPreferences", MODE_PRIVATE);
+                String modelType = myPreferences.getString("modelType",null);
+
+                if (modelType.equals("float")) {
+                    choice = "inception_float.tflite";
+                    quant = false;
+                    openCameraIntent();
+                } else  {
+                    choice = "inception_quant.tflite";
+                    quant = true;
+                    openCameraIntent();
+                }
+
+
             }
         });
 
-        inceptionQuant = (Button)findViewById(R.id.inception_quant);
-        inceptionQuant.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                choice = "inception_quant.tflite";
-                quant = true;
-                openCameraIntent();
-            }
-        });
+
+        // Get the default model type
+        TextView modelTypeLabel = (TextView) findViewById(R.id.currentModel);
+        SharedPreferences myPreferences = getSharedPreferences("myPreferences", MODE_PRIVATE);
+
+        String modelType = myPreferences.getString("modelType",null);
+        modelTypeLabel.setText(modelType);
+
     }
 
     private void openCameraIntent() {

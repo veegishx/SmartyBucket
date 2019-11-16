@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +26,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        // Default Preferences
+//        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("myPreferences", MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.putString("modelType", "float");
+//        editor.commit();
 
         RelativeLayout addItemBanner = findViewById(R.id.add_more_items_banner);
         addItemBanner.setOnClickListener(new View.OnClickListener() {
@@ -55,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this,"Search Clicked",Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.app_bar_settings:
-                        Toast.makeText(MainActivity.this,"Settings Clicked",Toast.LENGTH_SHORT).show();
+                        Intent myPreferencesIntent = new Intent(MainActivity.this, Preferences.class);
+                        startActivity(myPreferencesIntent);
                         break;
                 }
                 return false;
