@@ -130,33 +130,6 @@
                         android:text="@string/money_spent_msg"
                         android:textSize="12sp" />
 
-                    <TextView
-                        android:id="@+id/date_range"
-                        android:layout_width="wrap_content"
-                        android:layout_height="13dp"
-                        android:layout_alignTop="@+id/cardDateView"
-                        android:layout_alignEnd="@+id/cardDateView"
-                        android:layout_alignBottom="@+id/cardDateView"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_marginBottom="1dp"
-                        android:gravity="center"
-                        android:text="@string/monthly_budget_date_range"
-                        android:textColor="#F8F8F8"
-                        android:textSize="8sp"
-                        android:textStyle="bold" />
-
-                    <View
-                        android:id="@+id/cardDateView"
-                        android:layout_width="52dp"
-                        android:layout_height="17dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginEnd="170dp"
-                        android:layout_marginBottom="70dp"
-                        android:background="#000000"
-                        android:fadeScrollbars="false" />
-
                     <View
                         android:id="@+id/view"
                         android:layout_width="2dp"
@@ -168,6 +141,18 @@
                         android:layout_marginEnd="234dp"
                         android:layout_marginBottom="21dp"
                         android:background="#36000000" />
+
+                    <TextView
+                        android:id="@+id/textView13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="21dp"
+                        android:layout_marginEnd="159dp"
+                        android:text="01 - 31 DEC"
+                        android:textColor="#304FFE"
+                        android:textSize="12sp" />
 
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>

@@ -27,11 +27,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        // Default Preferences
-//        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("myPreferences", MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putString("modelType", "float");
-//        editor.commit();
+        // Default Preferences
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("myPreferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("modelType", "float");
+        editor.commit();
 
         RelativeLayout addItemBanner = findViewById(R.id.add_more_items_banner);
         addItemBanner.setOnClickListener(new View.OnClickListener() {
