@@ -148,16 +148,6 @@ public class Classify extends AppCompatActivity {
         // initialize array to hold top probabilities
         topConfidence = new String[RESULTS_TO_SHOW];
 
-        // allows user to go back to activity to select a different image
-        back_button = (Button)findViewById(R.id.back_button);
-        back_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(Classify.this, ChooseModel.class);
-                startActivity(i);
-            }
-        });
-
         // classify current dispalyed image
         classify_button = (Button)findViewById(R.id.classify_image);
         classify_button.setOnClickListener(new View.OnClickListener() {
