@@ -148,16 +148,6 @@ public class Classify extends AppCompatActivity {
         // initialize array to hold top probabilities
         topConfidence = new String[RESULTS_TO_SHOW];
 
-        // allows user to go back to activity to select a different image
-        back_button = (Button)findViewById(R.id.back_button);
-        back_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(Classify.this, ChooseModel.class);
-                startActivity(i);
-            }
-        });
-
         // classify current dispalyed image
         classify_button = (Button)findViewById(R.id.classify_image);
         classify_button.setOnClickListener(new View.OnClickListener() {
@@ -271,10 +261,14 @@ public class Classify extends AppCompatActivity {
             topConfidence[i] = String.format("%.0f%%",label.getValue()*100);
         }
 
+        String item1 = topLables[2].substring(0,1).toUpperCase() + topLables[2].substring(1);
+        String item2 = topLables[1].substring(0,1).toUpperCase() + topLables[1].substring(1);
+        String item3 = topLables[0].substring(0,1).toUpperCase() + topLables[0].substring(1);
+
         // set the corresponding textviews with the results
-        label1.setText("1. "+topLables[2]);
-        label2.setText("2. "+topLables[1]);
-        label3.setText("3. "+topLables[0]);
+        label1.setText(item1);
+        label2.setText(item2);
+        label3.setText(item3);
         Confidence1.setText(topConfidence[2]);
         Confidence2.setText(topConfidence[1]);
         Confidence3.setText(topConfidence[0]);
