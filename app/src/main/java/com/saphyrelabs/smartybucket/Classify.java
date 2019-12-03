@@ -148,7 +148,7 @@ public class Classify extends AppCompatActivity {
         // initialize array to hold top probabilities
         topConfidence = new String[RESULTS_TO_SHOW];
 
-        // classify current dispalyed image
+        // classify current displayed image
         classify_button = (Button)findViewById(R.id.classify_image);
         classify_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,6 +169,28 @@ public class Classify extends AppCompatActivity {
                 printTopKLabels();
             }
         });
+
+        // Wait 100ms to load captured image before performing inference on activity startup
+        selected_image.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // get current bitmap from imageView
+                Bitmap bitmap_orig = ((BitmapDrawable)selected_image.getDrawable()).getBitmap();
+                // resize the bitmap to the required input size to the CNN
+                Bitmap bitmap = getResizedBitmap(bitmap_orig, DIM_IMG_SIZE_X, DIM_IMG_SIZE_Y);
+                // convert bitmap to byte array
+                convertBitmapToByteBuffer(bitmap);
+                // pass byte data to the graph
+                if(quant){
+                    tflite.run(imgData, labelProbArrayB);
+                } else {
+                    tflite.run(imgData, labelProbArray);
+                }
+                // display the results
+                printTopKLabels();
+            }
+
+        }, 100); // 100ms delay seems reasonable
 
         // get image from previous activity to show in the imageView
         Uri uri = (Uri)getIntent().getParcelableExtra("resID_uri");
