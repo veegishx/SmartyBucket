@@ -21,7 +21,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/back_button"
+        android:id="@+id/findRecipesBtn"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
         android:layout_below="@id/classify_image"
@@ -29,7 +29,7 @@
         android:layout_marginEnd="92dp"
         android:layout_marginBottom="28dp"
         android:backgroundTint="#0011FD"
-        android:text="Back"
+        android:text="Find Recipes"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

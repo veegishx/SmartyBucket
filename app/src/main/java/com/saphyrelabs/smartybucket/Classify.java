@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -73,13 +74,14 @@ public class Classify extends AppCompatActivity {
     // activity elements
     private ImageView selected_image;
     private Button classify_button;
-    private Button back_button;
     private TextView label1;
     private TextView label2;
     private TextView label3;
-    private TextView Confidence1;
-    private TextView Confidence2;
-    private TextView Confidence3;
+    private CheckBox Confidence1;
+    private CheckBox Confidence2;
+    private CheckBox Confidence3;
+    private Button findRecipesBtn;
+    private ArrayList<String> ingredients = new ArrayList<String>();
 
     // priority queue that will hold the top results from the CNN
     private PriorityQueue<Map.Entry<String, Float>> sortedLabels =
@@ -137,9 +139,9 @@ public class Classify extends AppCompatActivity {
         label2 = (TextView) findViewById(R.id.label2);
         label3 = (TextView) findViewById(R.id.label3);
         // displays the probabilities of top labels
-        Confidence1 = (TextView) findViewById(R.id.Confidence1);
-        Confidence2 = (TextView) findViewById(R.id.Confidence2);
-        Confidence3 = (TextView) findViewById(R.id.Confidence3);
+        Confidence1 = (CheckBox) findViewById(R.id.Confidence1);
+        Confidence2 = (CheckBox) findViewById(R.id.Confidence2);
+        Confidence3 = (CheckBox) findViewById(R.id.Confidence3);
         // initialize imageView that displays selected image to the user
         selected_image = (ImageView) findViewById(R.id.selected_image);
 
@@ -294,6 +296,31 @@ public class Classify extends AppCompatActivity {
         Confidence1.setText(topConfidence[2]);
         Confidence2.setText(topConfidence[1]);
         Confidence3.setText(topConfidence[0]);
+
+        findRecipesBtn = (Button) findViewById(R.id.findRecipesBtn);
+        findRecipesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Confidence1.isChecked()) {
+                    String ingredient = (String) label1.getText();
+                    ingredients.add(ingredient);
+                }
+
+                if (Confidence2.isChecked()) {
+                    String ingredient = (String) label2.getText();
+                    ingredients.add(ingredient);
+                }
+
+                if (Confidence3.isChecked()) {
+                    String ingredient = (String) label3.getText();
+                    ingredients.add(ingredient);
+                }
+
+                for (int i = 0; i < ingredients.size(); i++) {
+                    System.out.println(ingredients.get(i));
+                }
+            }
+        });
     }
 
 
