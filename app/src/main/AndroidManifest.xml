@@ -11,6 +11,7 @@
         android:required="true" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -23,6 +24,7 @@
         <activity android:name=".Classify" />
         <activity android:name=".RegisterItems" />
         <activity android:name=".Preferences" />
+        <activity android:name=".DisplayRecipes" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -319,6 +319,10 @@ public class Classify extends AppCompatActivity {
                 for (int i = 0; i < ingredients.size(); i++) {
                     System.out.println(ingredients.get(i));
                 }
+
+                Intent displayRecipeActivity = new Intent(Classify.this, DisplayRecipes.class);
+                displayRecipeActivity.putExtra("ingredients", ingredients);
+                startActivity(displayRecipeActivity);
             }
         });
     }

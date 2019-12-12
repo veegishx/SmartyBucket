@@ -38,6 +38,7 @@
     <string name="item_price_hint">Item Price</string>
     <string name="my_preferences">My Preferences</string>
     <string name="configure_your_account_settings">Configure your account settings</string>
+    <string name="recipes_available">Recipes Available</string>
     <string-array name="item_categories_array">
         <item>Spices</item>
         <item>Juice</item>
