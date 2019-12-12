@@ -1,5 +1,8 @@
 package com.saphyrelabs.smartybucket.api;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
@@ -17,9 +20,13 @@ public class RecipeApiClient {
 
     public static Retrofit getRecipeApi() {
         if (retrofit == null) {
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.setLenient();
+            Gson gson = gsonBuilder.create();
+
             retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
                     .client(getNullOkHttpClient().build())
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
         }
         return retrofit;

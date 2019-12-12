@@ -19,6 +19,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ChooseModel" />
         <activity android:name=".Classify" />
@@ -35,6 +36,5 @@
         <!--cropping activity-->
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" android:screenOrientation="portrait"/>
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

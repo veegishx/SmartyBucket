@@ -23,6 +23,11 @@ android {
         noCompress "tflite"
         noCompress "lite"
     }
+
+    compileOptions {
+        targetCompatibility = "8"
+        sourceCompatibility = "8"
+    }
 }
 
 dependencies {

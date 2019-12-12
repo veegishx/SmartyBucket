@@ -20,6 +20,18 @@ public class Recipe {
     @Expose
     private String ingredients;
 
+    public String getUrlToImage() {
+        return urlToImage;
+    }
+
+    public void setUrlToImage(String urlToImage) {
+        this.urlToImage = urlToImage;
+    }
+
+    @SerializedName("urlToImage")
+    @Expose
+    private String urlToImage;
+
     Recipe() {}
     Recipe(String link, String thumbnail, String title, String ingredients) {
         this.link = link;
