@@ -2,11 +2,10 @@ package com.saphyrelabs.smartybucket;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Adapter;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,7 +13,7 @@ import com.saphyrelabs.smartybucket.adapter.RecipeAdapter;
 import com.saphyrelabs.smartybucket.api.RecipeApiClient;
 import com.saphyrelabs.smartybucket.api.RecipeApiInterface;
 import com.saphyrelabs.smartybucket.model.Recipe;
-import com.saphyrelabs.smartybucket.model.RecipeList;
+import com.saphyrelabs.smartybucket.model.RecipeResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,17 +21,15 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class DisplayRecipes extends AppCompatActivity {
-    private static final String apiUrl = "http://www.recipepuppy.com/api/?i=";
+    private static final String apiUrl = "http://www.recipepuppy.com/api/";
+    private static final String TAG = DisplayRecipes.class.getSimpleName();
     String apiParameters = "";
 
-    private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
-    private List<Recipe> recipes = new ArrayList<>();
     private RecipeAdapter recipeAdapter;
-    private String TAG = DisplayRecipes.class.getSimpleName();
+    private RecyclerView recyclerView;
+    private List<Recipe> recipes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,49 +42,62 @@ public class DisplayRecipes extends AppCompatActivity {
             apiParameters = apiParameters + "," + ingredients.get(i);
         }
 
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         System.out.println(apiParameters);
 
-        recyclerView = findViewById(R.id.recyclerView);
-        layoutManager = new LinearLayoutManager(DisplayRecipes.this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setNestedScrollingEnabled(false);
-        System.out.println("REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
-        loadJson();
-    }
-
-    public void loadJson() {
         RecipeApiInterface apiInterface = RecipeApiClient.getRecipeApi().create(RecipeApiInterface.class);
-        Call<RecipeList> call;
-        call = apiInterface.getRecipes(apiParameters);
-
-        call.enqueue(new Callback<RecipeList>() {
+        Call<RecipeResponse> call = apiInterface.getRecipes(apiParameters);
+        call.enqueue(new Callback<RecipeResponse>() {
             @Override
-            public void onResponse(Call<RecipeList> call, Response<RecipeList> response) {
-                if (response.isSuccessful()) {
-                    System.out.println("SUUUUUUUUUUUUUUUUUUUUUUUCCCCCCCCCCCCCCCCCCCCCCCC");
-                    System.out.println(response.body().getResults());
-                    if (!recipes.isEmpty()) {
-                        recipes.clear();
-                    }
-
-                    recipes = response.body().getResults();
-                    recipeAdapter = new RecipeAdapter(recipes, DisplayRecipes.this);
-                    recyclerView.setAdapter(recipeAdapter);
-                    recipeAdapter.notifyDataSetChanged();
-                    Toast.makeText(DisplayRecipes.this, "Recipes Fetched", Toast.LENGTH_LONG);
-                } else {
-                    System.out.println("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
-                    System.out.println(response);
-                    Toast.makeText(DisplayRecipes.this, "No Result", Toast.LENGTH_LONG);
-                }
+            public void onResponse(Call<RecipeResponse>call, Response<RecipeResponse> response) {
+                int statusCode = response.code();
+                List<Recipe> recipes = response.body().getResults();
+                recyclerView.setAdapter(new RecipeAdapter(recipes, R.layout.item, getApplicationContext()));
             }
 
             @Override
-            public void onFailure(Call<RecipeList> call, Throwable t) {
-                System.out.println("ERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRREREREREREREREERE");
-                t.printStackTrace();
+            public void onFailure(Call<RecipeResponse>call, Throwable t) {
+                // Log error here since request failed
+                Log.e(TAG, t.toString());
             }
         });
+
     }
+
+//    public void loadJson() {
+//        RecipeApiInterface apiInterface = RecipeApiClient.getRecipeApi().create(RecipeApiInterface.class);
+//        Call<RecipeResponse> call;
+//        call = apiInterface.getRecipes(apiParameters);
+//
+//        call.enqueue(new Callback<RecipeResponse>() {
+//            @Override
+//            public void onResponse(Call<RecipeResponse> call, Response<RecipeResponse> response) {
+//                if (response.isSuccessful() && response.body().getResults() != null) {
+//                    System.out.println("-------------- DEBUG: SUCCESSFUL API CALL WITH RESULTS --------------");
+//                    System.out.println(response.body().getResults());
+//
+//                    List<Recipe> list= response.body().getResults();
+//                    recipeAdapter.setData(list);
+//
+//                    recipes = response.body().getResults();
+//                    RecipeAdapter recipeAdapter = new RecipeAdapter(DisplayRecipes.this);
+//                    recyclerView.setAdapter(recipeAdapter);
+//                    recipeAdapter.notifyDataSetChanged();
+//                    Toast.makeText(DisplayRecipes.this, "Recipes Fetched", Toast.LENGTH_LONG);
+//                } else {
+//                    System.out.println("-------------- DEBUG: SUCCESSFUL API CALL WITH NO RESULT --------------");
+//                    System.out.println(response);
+//                    Toast.makeText(DisplayRecipes.this, "No Result", Toast.LENGTH_LONG);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<RecipeResponse> call, Throwable t) {
+//                System.out.println("-------------- DEBUG: FAILED API CALL --------------");
+//                t.printStackTrace();
+//            }
+//        });
+//    }
 }

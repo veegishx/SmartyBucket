@@ -20,13 +20,10 @@ public class RecipeApiClient {
 
     public static Retrofit getRecipeApi() {
         if (retrofit == null) {
-            GsonBuilder gsonBuilder = new GsonBuilder();
-            gsonBuilder.setLenient();
-            Gson gson = gsonBuilder.create();
-
-            retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
                     .client(getNullOkHttpClient().build())
-                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
         return retrofit;

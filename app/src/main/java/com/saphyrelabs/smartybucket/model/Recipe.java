@@ -32,7 +32,7 @@ public class Recipe {
     @Expose
     private String urlToImage;
 
-    Recipe() {}
+    public Recipe() {}
     Recipe(String link, String thumbnail, String title, String ingredients) {
         this.link = link;
         this.thumbnail = thumbnail;
