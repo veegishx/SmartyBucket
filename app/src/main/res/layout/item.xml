@@ -18,45 +18,43 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/recipe_thumbnail"
-                android:transitionName="img"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="122dp"
                 android:scaleType="centerCrop"
-                tools:ignore="UnusedAttribute">
-            </ImageView>
+                android:transitionName="img"
+                tools:ignore="UnusedAttribute"></ImageView>
 
             <ProgressBar
                 android:id="@+id/progress_load_photo"
-                android:layout_marginTop="60dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </ProgressBar>
+                android:layout_height="29dp"
+                android:layout_marginTop="60dp"></ProgressBar>
 
             <TextView
                 android:id="@+id/recipe_title"
+                android:layout_width="376dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="130dp"
                 android:text="Recipe Title"
-                android:textSize="30dp"
                 android:textColor="@color/colorPrimary"
                 android:textColorHint="@color/colorPrimary"
-                android:layout_marginTop="130dp"
-                android:layout_marginLeft="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="50dp">
-            </TextView>
+                android:textSize="18sp"
+                android:textStyle="bold"></TextView>
 
             <TextView
                 android:id="@+id/recipe_ingredients"
-                android:text="Ingredients"
-                android:textColor="@color/colorPrimary"
-                android:textColorHint="@color/colorPrimary"
-                android:layout_marginTop="0dp"
-                android:layout_marginLeft="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_below="@id/recipe_title">
-            </TextView>
+                android:layout_below="@id/recipe_title"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="0dp"
+                android:text="Ingredients"
+                android:textColor="#000000"
+                android:textColorHint="#000000"></TextView>
 
             <TextView
                 android:id="@+id/recipe_href"

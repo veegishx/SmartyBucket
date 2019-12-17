@@ -10,7 +10,18 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.saphyrelabs.smartybucket.R;
 import com.saphyrelabs.smartybucket.model.Recipe;
 
@@ -54,6 +65,29 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     @Override
     public void onBindViewHolder(RecipeViewHolder holder, final int position) {
+        Recipe model = recipes.get(position);
+        RequestOptions requestOptions = new RequestOptions();
+        requestOptions.diskCacheStrategy(DiskCacheStrategy.ALL);
+        requestOptions.centerCrop();
+
+        Glide.with(context)
+                .load(model.getThumbnail())
+                .apply(requestOptions)
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        holder.progressBar.setVisibility(View.GONE);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        holder.progressBar.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(holder.thumbnail);
         holder.title.setText(recipes.get(position).getTitle());
         holder.ingredients.setText(recipes.get(position).getIngredients());
         holder.source.setText(recipes.get(position).getLink());
