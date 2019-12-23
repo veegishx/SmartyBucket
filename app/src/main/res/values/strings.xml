@@ -1,4 +1,8 @@
 <resources>
+    <!-- Facebook Auth -->
+    <string name="facebook_app_id">975045039543644</string>
+    <string name="fb_login_protocol_scheme">fb975045039543644</string>
+    <!-- App Strings -->
     <string name="app_name">Smarty Bucket</string>
     <string name="app_tagline">Tracking expenses the smart way.</string>
     <string name="home">Home</string>
