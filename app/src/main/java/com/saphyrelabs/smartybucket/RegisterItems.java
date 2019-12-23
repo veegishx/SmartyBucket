@@ -3,6 +3,7 @@ package com.saphyrelabs.smartybucket;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -81,7 +82,8 @@ public class RegisterItems extends AppCompatActivity {
         String itemId = uuid.toString();
 
         // user
-        String user = "Veegish Ramdani";
+        SharedPreferences myAccount = getSharedPreferences("myAccount", MODE_PRIVATE);
+        String user = myAccount.getString("facebookEmail",null);
 
         Item newItem = new Item(user, itemId, itemNameVal, itemCategoryVal, itemPriceVal);
 
