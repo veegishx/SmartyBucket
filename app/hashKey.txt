@@ -1,0 +1,2 @@
+
+keytool -exportcert -alias my-key-alias -keystore C:\Users\veegi\.android\debug.keystore | "C:\Program Files\openssl\bin\openssl" sha1 -binary | "C:\Program Files\openssl\bin\openssl" base64
