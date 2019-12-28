@@ -24,8 +24,10 @@ import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
 
-public class ChooseModel extends AppCompatActivity {
-    private Button startScanBtn;
+public class ScanType extends AppCompatActivity {
+    private Button parseItemBtn;
+    private Button parseListBtn;
+    private int scanType = 0;
     public static final int REQUEST_PERMISSION = 300;
     public static final int REQUEST_IMAGE = 100;
 
@@ -38,7 +40,7 @@ public class ChooseModel extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choose_model);
+        setContentView(R.layout.activity_scan_options);
 
         if(ActivityCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, REQUEST_PERMISSION);
@@ -52,13 +54,13 @@ public class ChooseModel extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_PERMISSION);
         }
 
-        startScanBtn = (Button) findViewById(R.id.start_scan_btn);
-        startScanBtn.setOnClickListener(new View.OnClickListener() {
+        parseItemBtn = (Button) findViewById(R.id.scan_item_btn);
+        parseItemBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SharedPreferences myPreferences = getSharedPreferences("myPreferences", MODE_PRIVATE);
                 String modelType = myPreferences.getString("modelType",null);
-
+                scanType = 2;
                 if (modelType.equals("float")) {
                     choice = "inception_float.tflite";
                     quant = false;
@@ -70,6 +72,15 @@ public class ChooseModel extends AppCompatActivity {
                 }
 
 
+            }
+        });
+
+        parseListBtn = (Button) findViewById(R.id.scan_list_btn);
+        parseListBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openCameraIntent();
+                scanType = 1;
             }
         });
 
@@ -109,30 +120,43 @@ public class ChooseModel extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        // if the camera activity is finished, obtained the uri, crop it to make it square, and send it to 'Classify' activity
+        // if the camera activity is finished, obtained the uri, crop it to make it square, and send it to 'parseItemImage' activity
         if(requestCode == REQUEST_IMAGE && resultCode == RESULT_OK) {
             try {
                 Uri source_uri = imageUri;
                 Uri dest_uri = Uri.fromFile(new File(getCacheDir(), "cropped"));
                 // need to crop it to square image as CNN's always required square input
-                Crop.of(source_uri, dest_uri).asSquare().start(ChooseModel.this);
+                Crop.of(source_uri, dest_uri).asSquare().start(ScanType.this);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        // if cropping acitivty is finished, get the resulting cropped image uri and send it to 'Classify' activity
+        // if cropping acitivty is finished, get the resulting cropped image uri and send it to 'parseItemImage' or 'parseListImage' activity, depending on user choice of scan
         else if(requestCode == Crop.REQUEST_CROP && resultCode == RESULT_OK){
-            imageUri = Crop.getOutput(data);
-            Intent i = new Intent(ChooseModel.this, Classify.class);
-            // put image data in extras to send
-            i.putExtra("resID_uri", imageUri);
-            // put filename in extras
-            i.putExtra("choice", choice);
-            // put model type in extras
-            i.putExtra("quant", quant);
-            // send other required data
-            startActivity(i);
+            if (scanType == 2) {
+                imageUri = Crop.getOutput(data);
+                Intent i = new Intent(ScanType.this, parseItemImage.class);
+                // put image data in extras to send
+                i.putExtra("resID_uri", imageUri);
+                // put filename in extras
+                i.putExtra("choice", choice);
+                // put model type in extras
+                i.putExtra("quant", quant);
+                // send other required data
+                startActivity(i);
+            } else {
+                imageUri = Crop.getOutput(data);
+                Intent i = new Intent(ScanType.this, parseListImage.class);
+                // put image data in extras to send
+                i.putExtra("resID_uri", imageUri);
+                // put filename in extras
+                i.putExtra("choice", choice);
+                // put model type in extras
+                i.putExtra("quant", quant);
+                // send other required data
+                startActivity(i);
+            }
         }
     }
 }

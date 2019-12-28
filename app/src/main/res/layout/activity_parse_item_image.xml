@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#000000"
     android:backgroundTint="#000000"
-    tools:context=".Classify">
+    tools:context=".parseItemImage">
 
     <Button
         android:id="@+id/classify_image"
@@ -44,7 +44,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/listImageView"
         android:layout_width="595dp"
         android:layout_height="802dp"
         app:layout_constraintBottom_toBottomOf="parent"

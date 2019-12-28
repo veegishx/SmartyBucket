@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.saphyrelabs.smartybucket">
-    <!-- Needed to use camera and store photos -->
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,9 +11,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AccountActivity"></activity>
-        <activity android:name=".ChooseModel" />
-        <activity android:name=".Classify" />
+        <activity android:name=".parseListImage"></activity>
+        <activity android:name=".AccountActivity" />
+        <activity android:name=".ScanType" />
+        <activity android:name=".parseItemImage" />
         <activity android:name=".RegisterItems" />
         <activity android:name=".Preferences" />
         <activity android:name=".DisplayRecipes" />
@@ -31,7 +32,6 @@
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
-
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
@@ -44,21 +44,22 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"
             tools:replace="android:value" />
     </application>
     <uses-feature
-        android:name="android.hardware.camera.any"
+        android:name="android.hardware.camera"
         android:required="true" />
 
     <uses-feature
-        android:name="android.hardware.camera"
+        android:name="android.hardware.camera.any"
         android:required="true" />
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
 
 </manifest>

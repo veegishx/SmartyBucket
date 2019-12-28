@@ -8,21 +8,35 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:backgroundTint="#FFFFFF"
-    tools:context=".ChooseModel">
+    tools:context=".ScanType">
 
 
     <Button
-        android:id="@+id/start_scan_btn"
+        android:id="@+id/scan_item_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
         android:layout_marginEnd="144dp"
         android:background="#0011FD"
         android:backgroundTint="#0011FD"
-        android:text="Get Started"
+        android:text="Item Scan"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.993"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+    <Button
+        android:id="@+id/scan_list_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="268dp"
+        android:background="#0011FD"
+        android:backgroundTint="#0011FD"
+        android:text="List Scan"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.993"
+        app:layout_constraintStart_toStartOf="@+id/scan_item_btn"
         app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
     <TextView
@@ -108,8 +122,7 @@
         android:text="Your ingredient detection model is currently set to "
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11"
-        tools:targetApi="Your ingredient detection model is currently set to" />
+        app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
     <TextView
         android:id="@+id/currentModel"

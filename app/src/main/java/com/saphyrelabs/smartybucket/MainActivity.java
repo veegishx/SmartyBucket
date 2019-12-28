@@ -3,7 +3,6 @@ package com.saphyrelabs.smartybucket;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,8 +17,6 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -129,15 +126,18 @@ public class MainActivity extends AppCompatActivity {
 
     public void init() {
         setContentView(R.layout.activity_main);
-        // Default User Settings
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("myPreferences", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("modelType", "float");
-        editor.commit();
 
         // Retrieving persistent data
         SharedPreferences myPreferences = getSharedPreferences("myPreferences", MODE_PRIVATE);
         String modelType = myPreferences.getString("modelType",null);
+
+        if (modelType == null) {
+            // Default User Settings
+            SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("myPreferences", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("modelType", "float");
+            editor.commit();
+        }
 
         SharedPreferences myAccount = getSharedPreferences("myAccount", MODE_PRIVATE);
         String facebookEmail = myAccount.getString("facebookEmail",null);
@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent cameraIntent = new Intent(MainActivity.this, ChooseModel.class);
+                Intent cameraIntent = new Intent(MainActivity.this, ScanType.class);
                 startActivity(cameraIntent);
             }
         });

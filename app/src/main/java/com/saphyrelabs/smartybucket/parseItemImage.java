@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
-public class Classify extends AppCompatActivity {
+public class parseItemImage extends AppCompatActivity {
 
     // presets for rgb conversion
     private static final int RESULTS_TO_SHOW = 3;
@@ -132,7 +132,7 @@ public class Classify extends AppCompatActivity {
             labelProbArray = new float[1][labelList.size()];
         }
 
-        setContentView(R.layout.activity_classify);
+        setContentView(R.layout.activity_parse_item_image);
 
         // labels that hold top three results of CNN
         label1 = (TextView) findViewById(R.id.label1);
@@ -320,7 +320,7 @@ public class Classify extends AppCompatActivity {
                     System.out.println(ingredients.get(i));
                 }
 
-                Intent displayRecipeActivity = new Intent(Classify.this, DisplayRecipes.class);
+                Intent displayRecipeActivity = new Intent(parseItemImage.this, DisplayRecipes.class);
                 displayRecipeActivity.putExtra("ingredients", ingredients);
                 startActivity(displayRecipeActivity);
             }
