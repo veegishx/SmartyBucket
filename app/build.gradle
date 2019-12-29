@@ -5,7 +5,7 @@ android {
     buildToolsVersion "29.0.0"
     defaultConfig {
         applicationId "com.saphyrelabs.smartybucket"
-        minSdkVersion 22
+        minSdkVersion 26
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -54,6 +54,11 @@ dependencies {
     // Facebook SDK for login using FirebaseUI Auth
     implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
 
+    // Mircrosoft Azure Services
+    // implementation 'com.microsoft.projectoxford:vision:1.0.395'
+    implementation 'com.microsoft.azure.cognitiveservices:azure-cognitiveservices-computervision:1.0.2-beta'
+    annotationProcessor  'com.microsoft.azure.cognitiveservices:azure-cognitiveservices-computervision:1.0.2-beta'
+
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     // Tensorflow Lite
     implementation 'org.tensorflow:tensorflow-lite:+'
@@ -70,6 +75,8 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
 
     implementation 'com.squareup.picasso:picasso:2.71828'
+
+    implementation 'org.slf4j:slf4j-nop:1.7.25'
 }
 repositories {
     mavenCentral()
