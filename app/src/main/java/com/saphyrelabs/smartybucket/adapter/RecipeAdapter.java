@@ -2,10 +2,13 @@ package com.saphyrelabs.smartybucket.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -38,6 +41,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         ImageView thumbnail;
         ProgressBar progressBar;
         FrameLayout recipesLayout;
+        Button viewRecipeBtn, addToBudgetBtn;
 
         public RecipeViewHolder(View v) {
 
@@ -45,9 +49,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             recipesLayout = (FrameLayout) v.findViewById(R.id.recipes_layout);
             title = (TextView) v.findViewById(R.id.recipe_title);
             ingredients = (TextView) v.findViewById(R.id.recipe_ingredients);
-            //source = (TextView) v.findViewById(R.id.recipe_href);
             thumbnail = (ImageView) v.findViewById(R.id.recipe_thumbnail);
             progressBar =(ProgressBar) v.findViewById(R.id.progress_load_photo);
+            viewRecipeBtn = (Button) v.findViewById(R.id.viewRecipeBtn);
+            addToBudgetBtn = (Button) v.findViewById(R.id.addToBudgetBtn);
         }
     }
 
@@ -89,11 +94,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 })
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.thumbnail);
+
         String [] ingredients = recipes.get(position).getIngredients().split(",");
         String totalIngredients = ingredients.length + " ingredients";
+        String recipeLink = recipes.get(position).getLink();
+
         holder.title.setText(recipes.get(position).getTitle());
         holder.ingredients.setText(totalIngredients);
-        //holder.source.setText(recipes.get(position).getLink());
     }
 
     @Override

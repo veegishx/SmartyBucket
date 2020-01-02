@@ -1,6 +1,7 @@
 package com.saphyrelabs.smartybucket;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -37,6 +38,7 @@ public class DisplayRecipes extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_recipes);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         totalRecipes = (TextView) findViewById(R.id.totalRecipes);
 
         Intent intent = getIntent();
