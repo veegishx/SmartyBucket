@@ -45,7 +45,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             recipesLayout = (FrameLayout) v.findViewById(R.id.recipes_layout);
             title = (TextView) v.findViewById(R.id.recipe_title);
             ingredients = (TextView) v.findViewById(R.id.recipe_ingredients);
-            source = (TextView) v.findViewById(R.id.recipe_href);
+            //source = (TextView) v.findViewById(R.id.recipe_href);
             thumbnail = (ImageView) v.findViewById(R.id.recipe_thumbnail);
             progressBar =(ProgressBar) v.findViewById(R.id.progress_load_photo);
         }
@@ -73,6 +73,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         Glide.with(context)
                 .load(model.getThumbnail())
                 .apply(requestOptions)
+                .placeholder(R.drawable.ic_local_dining_black_24dp)
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -88,9 +89,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 })
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.thumbnail);
+        String [] ingredients = recipes.get(position).getIngredients().split(",");
+        String totalIngredients = ingredients.length + " ingredients";
         holder.title.setText(recipes.get(position).getTitle());
-        holder.ingredients.setText(recipes.get(position).getIngredients());
-        holder.source.setText(recipes.get(position).getLink());
+        holder.ingredients.setText(totalIngredients);
+        //holder.source.setText(recipes.get(position).getLink());
     }
 
     @Override

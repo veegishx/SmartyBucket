@@ -3,6 +3,7 @@ package com.saphyrelabs.smartybucket;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,11 +31,14 @@ public class DisplayRecipes extends AppCompatActivity {
     private RecipeAdapter recipeAdapter;
     private RecyclerView recyclerView;
     private List<Recipe> recipes;
+    private TextView totalRecipes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_recipes);
+        totalRecipes = (TextView) findViewById(R.id.totalRecipes);
+
         Intent intent = getIntent();
         ArrayList<String> ingredients = intent.getStringArrayListExtra("ingredients");
 
@@ -54,6 +58,8 @@ public class DisplayRecipes extends AppCompatActivity {
             public void onResponse(Call<RecipeResponse>call, Response<RecipeResponse> response) {
                 int statusCode = response.code();
                 List<Recipe> recipes = response.body().getResults();
+                String totalRecipesString = recipes.size() + " Recipes Found";
+                totalRecipes.setText(totalRecipesString);
                 recyclerView.setAdapter(new RecipeAdapter(recipes, R.layout.item, getApplicationContext()));
             }
 

@@ -17,56 +17,123 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="180dp">
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="10dp"
+                android:background="#F6F6F6"
+                android:backgroundTint="#F6F6F6"
+                android:text="View Recipe"
+                android:textColor="#010031"
+                android:textColorHighlight="#010031"
+                android:textColorHint="#010031"
+                android:textColorLink="#010031"
+                app:icon="@drawable/ic_open_in_new_black_24dp"
+                app:iconTint="#010031" />
+
+            <Button
+                android:id="@+id/button5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="10dp"
+                android:background="#4FFF80"
+                android:backgroundTint="#4FFF80"
+                android:text="Add To Budget"
+                android:textColor="#010031"
+                android:textColorHighlight="#010031"
+                android:textColorHint="#010031"
+                android:textColorLink="#010031"
+                app:icon="@drawable/ic_add_black_24dp"
+                app:iconTint="#010031" />
 
             <ImageView
                 android:id="@+id/recipe_thumbnail"
-                android:layout_width="match_parent"
-                android:layout_height="122dp"
+                android:layout_width="61dp"
+                android:layout_height="62dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="316dp"
+                android:background="#C4C4C4"
                 android:scaleType="centerCrop"
                 android:transitionName="img"
                 tools:ignore="UnusedAttribute"></ImageView>
 
             <ProgressBar
                 android:id="@+id/progress_load_photo"
-                android:layout_width="match_parent"
-                android:layout_height="29dp"
-                android:layout_marginTop="60dp"></ProgressBar>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/recipe_thumbnail"
+                android:layout_alignEnd="@+id/recipe_thumbnail"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="6dp"></ProgressBar>
 
             <TextView
                 android:id="@+id/recipe_title"
-                android:layout_width="376dp"
-                android:layout_height="48dp"
+                android:layout_width="217dp"
+                android:layout_height="35dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="130dp"
+                android:layout_marginTop="19dp"
+                android:layout_marginEnd="84dp"
                 android:text="Recipe Title"
-                android:textColor="@color/colorPrimary"
-                android:textColorHint="@color/colorPrimary"
-                android:textSize="18sp"
+                android:textColor="#010031"
+                android:textColorHint="#010031"
+                android:textSize="14sp"
                 android:textStyle="bold"></TextView>
 
             <TextView
                 android:id="@+id/recipe_ingredients"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_below="@id/recipe_title"
+                android:layout_width="144dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/recipe_title"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="90dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="0dp"
                 android:text="Ingredients"
-                android:textColor="#000000"
-                android:textColorHint="#000000"></TextView>
+                android:textColor="#3D3D49"
+                android:textColorHint="#3D3D49"></TextView>
 
             <TextView
-                android:id="@+id/recipe_href"
-                android:text="Source"
-                android:textColor="@color/colorPrimary"
-                android:textColorHint="@color/colorPrimary"
-                android:layout_marginTop="0dp"
-                android:layout_marginLeft="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_below="@id/recipe_ingredients">
-            </TextView>
+                android:id="@+id/textView20"
+                android:layout_width="47dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="141dp"
+                android:text="24"
+                android:textColor="#09BA10"
+                android:textColorHighlight="#09BA10"
+                android:textColorHint="#09BA10"
+                android:textColorLink="#09BA10" />
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="62dp"
+                android:layout_marginBottom="141dp"
+                android:text="$"
+                android:textColor="#010031"
+                android:textColorHighlight="#010031"
+                android:textColorHint="#010031"
+                android:textColorLink="#010031" />
+
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
