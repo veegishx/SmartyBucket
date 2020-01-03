@@ -13,12 +13,17 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.text.TextBlock;
+import com.google.android.gms.vision.text.TextRecognizer;
 import com.google.gson.Gson;
 import com.microsoft.azure.cognitiveservices.vision.computervision.ComputerVisionClient;
 import com.microsoft.azure.cognitiveservices.vision.computervision.ComputerVisionManager;
@@ -69,17 +74,53 @@ public class parseListImage extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
+        Bitmap bitmap2 = bitmapDrawable.getBitmap();
+
+
+
         // Create an authenticated Computer Vision client.
-        ComputerVisionClient compVisClient = ComputerVisionManager.authenticate(subscriptionKey).withEndpoint(endpoint);
-        System.out.println("Starting Authenticated Azure ComputerVisionClient...");
+        // ComputerVisionClient compVisClient = ComputerVisionManager.authenticate(subscriptionKey).withEndpoint(endpoint);
+        // System.out.println("Starting Authenticated Azure ComputerVisionClient...");
 
         extractText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Recognize printed text with OCR for a local and remote (URL) image
-                RecognizeTextOCRLocal(compVisClient);
+                //RecognizeTextOCRLocal(compVisClient);
+                performOCR(bitmap2);
             }
         });
+    }
+
+    // Perform Image Analysis on separate thread
+    public void performOCR(Bitmap bitmap2) {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    TextRecognizer recognizer = new TextRecognizer.Builder(getApplicationContext()).build();
+
+                    if (!recognizer.isOperational()) {
+                        Toast.makeText(parseListImage.this, "Error", Toast.LENGTH_LONG).show();
+                    } else {
+                        Frame frame = new Frame.Builder().setBitmap(bitmap2).build();
+                        SparseArray<TextBlock> items = recognizer.detect(frame);
+                        StringBuilder sb = new StringBuilder();
+
+                        System.out.println("TEXT DETECTION");
+                        for (int i = 0; i < items.size(); i++) {
+                            TextBlock myItem = items.valueAt(i);
+                            sb.append(myItem.getValue());
+                            sb.append("\n");
+                            System.out.println("TEXT DETECTED: " + sb.toString());
+                        }
+                    }
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     public void RecognizeTextOCRLocal(ComputerVisionClient client) {
