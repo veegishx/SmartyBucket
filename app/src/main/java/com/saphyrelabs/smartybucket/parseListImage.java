@@ -68,6 +68,7 @@ public class parseListImage extends AppCompatActivity {
         try {
             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
             imageView.setImageBitmap(bitmap);
+            // Image needs to be taken in landscape mode in order for OCR to work
             // not sure why this happens, but without this the image appears on its side
             imageView.setRotation(imageView.getRotation() + 90);
         } catch (IOException e) {
