@@ -44,6 +44,7 @@
     <string name="configure_your_account_settings">Configure your account settings</string>
     <string name="recipes_available">Recipes Found</string>
     <string name="login_with_email">Login with Email</string>
+    <string name="error_low_storage">You do not have enough storage on this device to use the Mobile Vision OCR API. Please free up some space and try again!</string>
     <string-array name="item_categories_array">
         <item>Spices</item>
         <item>Juice</item>

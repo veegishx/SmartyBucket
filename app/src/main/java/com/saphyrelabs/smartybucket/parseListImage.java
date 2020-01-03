@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -49,7 +51,7 @@ public class parseListImage extends AppCompatActivity {
     private TextView textView;
     private Bitmap bitmap;
     private String result;
-
+    private static final String TAG = parseListImage.class.getSimpleName();
     private String subscriptionKey = "d9d6ae59f7a345fe8f57b99436fbd556";
     private String endpoint = "https://smartybucketocrfeature.cognitiveservices.azure.com/";
 
@@ -69,8 +71,8 @@ public class parseListImage extends AppCompatActivity {
             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
             imageView.setImageBitmap(bitmap);
             // Image needs to be taken in landscape mode in order for OCR to work
-            // not sure why this happens, but without this the image appears on its side
-            imageView.setRotation(imageView.getRotation() + 90);
+           // May be related to this: https://stackoverflow.com/questions/14066038/why-does-an-image-captured-using-camera-intent-gets-rotated-on-some-devices-on-a
+            imageView.setRotation(imageView.getRotation() + 0);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -103,6 +105,13 @@ public class parseListImage extends AppCompatActivity {
 
                     if (!recognizer.isOperational()) {
                         Toast.makeText(parseListImage.this, "Error", Toast.LENGTH_LONG).show();
+                        IntentFilter lowstorageFilter = new IntentFilter(Intent.ACTION_DEVICE_STORAGE_LOW);
+                        boolean hasLowStorage = registerReceiver(null, lowstorageFilter) != null;
+
+                        if (hasLowStorage) {
+                            Toast.makeText(parseListImage.this, R.string.error_low_storage, Toast.LENGTH_LONG).show();
+                            Log.w(TAG, getString(R.string.error_low_storage));
+                        }
                     } else {
                         Frame frame = new Frame.Builder().setBitmap(bitmap2).build();
                         SparseArray<TextBlock> items = recognizer.detect(frame);
