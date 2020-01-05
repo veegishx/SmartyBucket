@@ -16,7 +16,7 @@
         android:layout_marginStart="80dp"
         android:layout_marginBottom="28dp"
         android:backgroundTint="#0011FD"
-        android:text="Extract Items"
+        android:text="ADD TO BASKET"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.348"

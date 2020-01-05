@@ -50,13 +50,13 @@ public class MyProfile extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser ==null) {
+        if(currentUser == null) {
             updateUI();
         }
     }
 
     public void updateUI() {
-        Intent mainActivity  = new Intent(MyProfile.this, SignIn.class);
+        Intent mainActivity = new Intent(MyProfile.this, SignIn.class);
         startActivity(mainActivity);
         Toast.makeText(this, "You have been logged out", Toast.LENGTH_LONG).show();
     }
