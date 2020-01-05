@@ -28,6 +28,7 @@ import com.bumptech.glide.request.target.Target;
 import com.saphyrelabs.smartybucket.R;
 import com.saphyrelabs.smartybucket.model.Recipe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
@@ -76,7 +77,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         requestOptions.centerCrop();
 
         Glide.with(context)
-                .load(model.getThumbnail())
+                .load(model.getImage())
                 .apply(requestOptions)
                 .placeholder(R.drawable.ic_local_dining_black_24dp)
                 .listener(new RequestListener<Drawable>() {
@@ -95,11 +96,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.thumbnail);
 
-        String [] ingredients = recipes.get(position).getIngredients().split(",");
-        String totalIngredients = ingredients.length + " ingredients";
-        String recipeLink = recipes.get(position).getLink();
+        int ingredients = recipes.get(position).getIncredientLines().size();
 
-        holder.title.setText(recipes.get(position).getTitle());
+        String totalIngredients = ingredients + " ingredients";
+        String recipeLink = recipes.get(position).getUrl();
+
+        holder.title.setText(recipes.get(position).getLabel());
         holder.ingredients.setText(totalIngredients);
     }
 

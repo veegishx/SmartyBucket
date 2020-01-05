@@ -5,7 +5,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.saphyrelabs.smartybucket.adapter.RecipeAdapter;
 import com.saphyrelabs.smartybucket.api.RecipeApiClient;
 import com.saphyrelabs.smartybucket.api.RecipeApiInterface;
+import com.saphyrelabs.smartybucket.model.Hits;
 import com.saphyrelabs.smartybucket.model.Recipe;
 import com.saphyrelabs.smartybucket.model.RecipeResponse;
 
@@ -25,9 +25,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DisplayRecipes extends AppCompatActivity {
-    private static final String apiUrl = "http://www.recipepuppy.com/api/";
+    private static final String apiUrl = "https://api.edamam.com/search/";
+    private static final String apiKeyParameter = BuildConfig.EDAMAM_API_KEY;
+    private static final String appIdParameter = BuildConfig.EDAMAM_APP_ID;
+
     private static final String TAG = DisplayRecipes.class.getSimpleName();
-    String apiParameters = "";
+    String ingredientsParameter = "";
 
     private RecipeAdapter recipeAdapter;
     private RecyclerView recyclerView;
@@ -45,21 +48,31 @@ public class DisplayRecipes extends AppCompatActivity {
         ArrayList<String> ingredients = intent.getStringArrayListExtra("ingredients");
 
         for (int i = 0; i < ingredients.size(); i++) {
-            apiParameters = apiParameters + "," + ingredients.get(i);
+            ingredientsParameter = ingredientsParameter + "," + ingredients.get(i);
         }
 
         final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        System.out.println(apiParameters);
+        System.out.println(ingredientsParameter);
 
         RecipeApiInterface apiInterface = RecipeApiClient.getRecipeApi().create(RecipeApiInterface.class);
-        Call<RecipeResponse> call = apiInterface.getRecipes(apiParameters);
+        Call<RecipeResponse> call = apiInterface.getRecipes(ingredientsParameter, appIdParameter, apiKeyParameter);
         call.enqueue(new Callback<RecipeResponse>() {
             @Override
             public void onResponse(Call<RecipeResponse>call, Response<RecipeResponse> response) {
+                System.out.println("-------------- EDAMAM API DEBUG INFO --------------");
+                System.out.println(response.body().getHits());
                 int statusCode = response.code();
-                List<Recipe> recipes = response.body().getResults();
+                System.out.println(call.request().url());
+                System.out.println(response.code());
+                List<Hits> hits = response.body().getHits();
+
+                List<Recipe> recipes = new ArrayList<>();
+                for (int i = 0; i < hits.size(); i++) {
+                    recipes.add(response.body().getHits().get(i).getRecipe());
+                }
+
                 String totalRecipesString = recipes.size() + " Recipes Found";
                 totalRecipes.setText(totalRecipesString);
                 recyclerView.setAdapter(new RecipeAdapter(recipes, R.layout.item, getApplicationContext()));
@@ -77,7 +90,7 @@ public class DisplayRecipes extends AppCompatActivity {
 //    public void loadJson() {
 //        RecipeApiInterface apiInterface = RecipeApiClient.getRecipeApi().create(RecipeApiInterface.class);
 //        Call<RecipeResponse> call;
-//        call = apiInterface.getRecipes(apiParameters);
+//        call = apiInterface.getRecipes(ingredientsParameter);
 //
 //        call.enqueue(new Callback<RecipeResponse>() {
 //            @Override

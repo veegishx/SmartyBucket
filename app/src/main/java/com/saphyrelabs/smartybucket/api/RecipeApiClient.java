@@ -15,7 +15,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RecipeApiClient {
-    public static final String BASE_URL = "http://www.recipepuppy.com/";
+    public static final String BASE_URL = "https://api.edamam.com/";
     public static Retrofit retrofit;
 
     public static Retrofit getRecipeApi() {

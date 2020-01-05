@@ -6,51 +6,75 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class RecipeResponse {
-    @SerializedName("title")
+    @SerializedName("q")
     @Expose
-    private String title;
+    private String q;
 
-    @SerializedName("version")
+    @SerializedName("from")
     @Expose
-    private double version;
+    private double from;
 
-    @SerializedName("href")
+    @SerializedName("to")
     @Expose
-    private String href;
+    private String to;
 
-    @SerializedName("results")
+    @SerializedName("more")
     @Expose
-    private List<Recipe> results;
+    private String more;
 
-    public String getTitle() {
-        return title;
+    @SerializedName("count")
+    @Expose
+    private String count;
+
+    @SerializedName("hits")
+    @Expose
+    private List<Hits> hits;
+
+    public String getQ() {
+        return q;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setQ(String q) {
+        this.q = q;
     }
 
-    public double getVersion() {
-        return version;
+    public double getFrom() {
+        return from;
     }
 
-    public void setVersion(double version) {
-        this.version = version;
+    public void setFrom(double from) {
+        this.from = from;
     }
 
-    public String getHref() {
-        return href;
+    public String getTo() {
+        return to;
     }
 
-    public void setHref(String href) {
-        this.href = href;
+    public void setTo(String to) {
+        this.to = to;
     }
 
-    public List<Recipe> getResults() {
-        return results;
+    public String getMore() {
+        return more;
     }
 
-    public void setResults(List<Recipe> results) {
-        this.results = results;
+    public void setMore(String more) {
+        this.more = more;
+    }
+
+    public String getCount() {
+        return count;
+    }
+
+    public void setCount(String count) {
+        this.count = count;
+    }
+
+    public List<Hits> getHits() {
+        return hits;
+    }
+
+    public void setHits(List<Hits> hits) {
+        this.hits = hits;
     }
 }
