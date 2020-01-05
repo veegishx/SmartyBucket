@@ -35,7 +35,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="565dp"
+                android:layout_height="608dp"
+                android:paddingBottom="50dp"
                 android:scrollbars="vertical"></androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -73,7 +73,7 @@ public class DisplayRecipes extends AppCompatActivity {
                     recipes.add(response.body().getHits().get(i).getRecipe());
                 }
 
-                String totalRecipesString = recipes.size() + " Recipes Found";
+                String totalRecipesString = response.body().getCount() + " Recipes Found";
                 totalRecipes.setText(totalRecipesString);
                 recyclerView.setAdapter(new RecipeAdapter(recipes, R.layout.item, getApplicationContext()));
             }
