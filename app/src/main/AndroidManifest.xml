@@ -14,7 +14,6 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".MyProfile" />
         <activity android:name=".parseListImage" />
-        <activity android:name=".AccountActivity" />
         <activity android:name=".ScanType" />
         <activity android:name=".parseItemImage" />
         <activity android:name=".RegisterItems" />

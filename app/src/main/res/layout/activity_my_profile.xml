@@ -33,13 +33,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
-    <view
-        android:id="@+id/view6"
-        class="com.facebook.login.widget.DeviceLoginButton"
+    <Button
+        android:id="@+id/logoutBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
+        android:background="#F6F6F6"
+        android:backgroundTint="#F6F6F6"
+        android:text="LOGOUT"
+        android:textColor="#010031"
+        android:textColorHighlight="#010031"
+        android:textColorLink="#010031"
+        app:icon="@drawable/ic_open_in_new_black_24dp"
+        app:iconTint="#010031"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/accountName" />
 
