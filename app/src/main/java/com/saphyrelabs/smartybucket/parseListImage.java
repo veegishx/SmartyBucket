@@ -56,14 +56,14 @@ import java.util.List;
 import static com.bumptech.glide.load.resource.bitmap.TransformationUtils.rotateImage;
 
 public class parseListImage extends AppCompatActivity {
+    private String edamamAppId = BuildConfig.EDAMAM_APP_ID;
+    private String adamamKey = BuildConfig.EDAMAM_API_KEY;
     private Button extractText;
     private ImageView imageView;
     private TextView textView;
     private Bitmap bitmap;
     private String result;
     private static final String TAG = parseListImage.class.getSimpleName();
-    private String subscriptionKey = "d9d6ae59f7a345fe8f57b99436fbd556";
-    private String endpoint = "https://smartybucketocrfeature.cognitiveservices.azure.com/";
     private ArrayList<String> listOfIngredients = new ArrayList<String>();
 
     @Override
