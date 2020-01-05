@@ -11,14 +11,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".parseListImage"></activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".MyProfile" />
+        <activity android:name=".parseListImage" />
         <activity android:name=".AccountActivity" />
         <activity android:name=".ScanType" />
         <activity android:name=".parseItemImage" />
         <activity android:name=".RegisterItems" />
         <activity android:name=".Preferences" />
         <activity android:name=".DisplayRecipes" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".SignIn">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,15 +53,15 @@
             tools:replace="android:value" />
     </application>
     <uses-feature
-        android:name="android.hardware.camera"
+        android:name="android.hardware.camera.any"
         android:required="true" />
 
     <uses-feature
-        android:name="android.hardware.camera.any"
+        android:name="android.hardware.camera"
         android:required="true" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

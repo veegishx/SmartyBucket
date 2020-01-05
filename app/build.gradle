@@ -57,7 +57,7 @@ dependencies {
     // Mircrosoft Azure Services
     // implementation 'com.microsoft.projectoxford:vision:1.0.395'
     implementation 'com.microsoft.azure.cognitiveservices:azure-cognitiveservices-computervision:1.0.2-beta'
-    annotationProcessor  'com.microsoft.azure.cognitiveservices:azure-cognitiveservices-computervision:1.0.2-beta'
+    annotationProcessor 'com.microsoft.azure.cognitiveservices:azure-cognitiveservices-computervision:1.0.2-beta'
 
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     // Tensorflow Lite

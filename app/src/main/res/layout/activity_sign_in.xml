@@ -16,46 +16,75 @@
             android:layout_height="101dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="50dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="10dp"
             app:srcCompat="@drawable/dissertation_project_logo_black" />
+
+        <TextView
+            android:id="@+id/textView19"
+            android:layout_width="267dp"
+            android:layout_height="46dp"
+            android:layout_marginStart="70dp"
+            android:gravity="center"
+            android:text="SMARTY"
+            android:textColor="#000000"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView21"
+            android:layout_width="267dp"
+            android:layout_height="46dp"
+            android:layout_marginStart="70dp"
+            android:layout_marginBottom="30dp"
+            android:gravity="center"
+            android:text="BUCKET"
+            android:textColor="#000000"
+            android:textSize="36sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp"
             android:text="Sign Up"
             android:textColor="#FFFFFF"
             android:textSize="30sp"
             android:textStyle="bold" />
 
         <TextView
-            android:layout_width="294dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_vertical"
+            android:layout_width="267dp"
+            android:layout_height="43dp"
+            android:layout_marginStart="70dp"
+            android:layout_marginBottom="30dp"
+            android:gravity="center"
             android:text="Create an account to keep track of your expenses anywhere you go"
             android:textColor="#FFFFFF"
             android:textSize="14sp" />
 
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/buttonFacebookLogin"
-            android:layout_width="372dp"
+
+        <Button
+            android:id="@+id/loginWithFacebook"
+            android:layout_width="285dp"
             android:layout_height="60dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="10dp" />
-
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/rounded_facebook_btn"
+            android:backgroundTint="#3C5A99"
+            android:text="@string/login_with_facebook"
+            android:textColor="#FFFFFF"
+            app:icon="@drawable/com_facebook_button_icon" />
 
         <Button
             android:id="@+id/buttonEmailLogin"
-            android:layout_width="372dp"
+            android:layout_width="285dp"
             android:layout_height="60dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp"
-            android:backgroundTint="#FFFFFF"
-            android:text="@string/login_with_email"
             android:background="@drawable/button_background"
-            android:textColor="#2979FF" />
+            android:backgroundTint="#FFFFFF"
+            android:text="@string/create_account_with_email"
+            android:textColor="#010031"
+            app:icon="@drawable/ic_email_black_24dp"
+            app:iconTint="#010031" />
+
     </LinearLayout>
 </FrameLayout>
