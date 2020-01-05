@@ -1,12 +1,7 @@
 package com.saphyrelabs.smartybucket;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.exifinterface.media.ExifInterface;
-
-import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,12 +10,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
@@ -33,27 +25,9 @@ import android.widget.Toast;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
-import com.google.gson.Gson;
-import com.microsoft.azure.cognitiveservices.vision.computervision.ComputerVisionClient;
-import com.microsoft.azure.cognitiveservices.vision.computervision.ComputerVisionManager;
-import com.microsoft.azure.cognitiveservices.vision.computervision.models.ImageAnalysis;
-import com.microsoft.azure.cognitiveservices.vision.computervision.models.OcrLanguages;
-import com.microsoft.azure.cognitiveservices.vision.computervision.models.OcrLine;
-import com.microsoft.azure.cognitiveservices.vision.computervision.models.OcrRegion;
-import com.microsoft.azure.cognitiveservices.vision.computervision.models.OcrResult;
-import com.microsoft.azure.cognitiveservices.vision.computervision.models.OcrWord;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.List;
-
-import static com.bumptech.glide.load.resource.bitmap.TransformationUtils.rotateImage;
 
 public class parseListImage extends AppCompatActivity {
     private String edamamAppId = BuildConfig.EDAMAM_APP_ID;
@@ -92,12 +66,6 @@ public class parseListImage extends AppCompatActivity {
 
         BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
         Bitmap bitmap2 = bitmapDrawable.getBitmap();
-
-
-
-        // Create an authenticated Computer Vision client.
-        // ComputerVisionClient compVisClient = ComputerVisionManager.authenticate(subscriptionKey).withEndpoint(endpoint);
-        // System.out.println("Starting Authenticated Azure ComputerVisionClient...");
 
         extractText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,58 +137,6 @@ public class parseListImage extends AppCompatActivity {
                     }
                 });
         alertDialog.show();
-    }
-
-    public void RecognizeTextOCRLocal(ComputerVisionClient client) {
-        System.out.println("-----------------------------------------------");
-        System.out.println("RECOGNIZE PRINTED TEXT");
-
-        // Replace this string with the path to your own image.
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
-                    bitmap.recycle();
-
-                    // Recognize printed text in local image
-                    OcrResult ocrResultLocal = client.computerVision().recognizePrintedTextInStream()
-                            .withDetectOrientation(true).withImage(byteArray).withLanguage(OcrLanguages.EN).execute();
-
-                    // Print results of local image
-                    System.out.println();
-                    System.out.println("Recognizing printed text from a local image with OCR ...");
-                    System.out.println("\nLanguage: " + ocrResultLocal.language());
-                    System.out.printf("Text angle: %1.3f\n", ocrResultLocal.textAngle());
-                    System.out.println("Orientation: " + ocrResultLocal.orientation());
-
-                    boolean firstWord = true;
-                    // Gets entire region of text block
-                    for (OcrRegion reg : ocrResultLocal.regions()) {
-                        // Get one line in the text block
-                        for (OcrLine line : reg.lines()) {
-                            for (OcrWord word : line.words()) {
-                                // get bounding box of first word recognized (just to demo)
-                                if (firstWord) {
-                                    System.out.println("\nFirst word in first line is \"" + word.text()
-                                            + "\" with  bounding box: " + word.boundingBox());
-                                    firstWord = false;
-                                    System.out.println();
-                                }
-                                System.out.print(" " + word.text() + " ");
-                                textView.append(word.text() + " ");
-                            }
-                            System.out.println();
-                        }
-                    }
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
     }
 
     /**
