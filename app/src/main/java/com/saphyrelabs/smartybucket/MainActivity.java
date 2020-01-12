@@ -37,12 +37,22 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
     BottomAppBar bab;
+    Button test1;
     private BottomSheetDialog bottomSheetDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        test1 = (Button) findViewById(R.id.test1);
+        test1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, ReviewListImageItems.class);
+                startActivity(i);
+            }
+        });
 
         // Retrieving persistent data
         SharedPreferences myPreferences = getSharedPreferences("myPreferences", MODE_PRIVATE);
