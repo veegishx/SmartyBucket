@@ -193,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         SharedPreferences.Editor editor = myAccount.edit();
         editor.putFloat("budget", userBudget);
         editor.commit();
-        monthlyBudgetValue.setText(String.valueOf(monthlyBudgetValue));
+        String budgetString = Float.toString(userBudget);
+        monthlyBudgetValue.setText(budgetString);
     }
 }
