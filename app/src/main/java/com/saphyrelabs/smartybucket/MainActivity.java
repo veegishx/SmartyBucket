@@ -45,6 +45,10 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Retrieving persistent data
+        SharedPreferences myPreferences = getSharedPreferences("myPreferences", MODE_PRIVATE);
+        SharedPreferences myAccount = getSharedPreferences("myAccount", MODE_PRIVATE);
+
         test1 = (Button) findViewById(R.id.test1);
         test1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,9 +58,9 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
             }
         });
 
-        // Retrieving persistent data
-        SharedPreferences myPreferences = getSharedPreferences("myPreferences", MODE_PRIVATE);
         String modelType = myPreferences.getString("modelType",null);
+        String facebookEmail = myAccount.getString("facebookEmail",null);
+        float budget = myAccount.getFloat("budget",0);
 
         if (modelType == null) {
             // Default User Settings
@@ -66,15 +70,13 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
             editor.commit();
         }
 
-        SharedPreferences myAccount = getSharedPreferences("myAccount", MODE_PRIVATE);
-        String facebookEmail = myAccount.getString("facebookEmail",null);
-        String budget = myAccount.getString("accountBudget",null);
 
-        if (budget == null) {
-            System.out.println("BUDGET IS NULL!");
+        if (budget == 0) {
+            // New user is prompted to enter budget
             callSetBudgetPrompt();
+        } else {
+            System.out.println("Budget is set to: " + myAccount.getFloat("budget", 0));
         }
-
 
 
         System.out.println();
@@ -183,6 +185,10 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
     @Override
     public void setData(float userBudget) {
         // Code to set budget data in firestore
-        //System.out.println("Budget is " + userBudget);
+        SharedPreferences myAccount = getSharedPreferences("myAccount", MODE_PRIVATE);
+        SharedPreferences.Editor editor = myAccount.edit();
+        editor.putFloat("budget", userBudget);
+        editor.commit();
+        System.out.println("SETDATA");
     }
 }
