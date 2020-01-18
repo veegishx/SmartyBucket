@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#192a56</color>
     <color name="colorAccent">#0097E6</color>
     <color name="white">#FFFFFF</color>
-    <color name="colorGradientStart">#4A00E0</color>
-    <color name="colorGradienEnd">#8E2DE2</color>
+    <color name="colorPromptGradientStart">#4A00E0</color>
+    <color name="colorPromptGradienEnd">#8E2DE2</color>
+    <color name="colorMainGradientStart">#0072ff</color>
+    <color name="colorMainGradientEnd">#00c6ff</color>
 </resources>

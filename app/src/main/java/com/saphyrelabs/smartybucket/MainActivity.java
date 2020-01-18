@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
     BottomAppBar bab;
     Button test1;
     private BottomSheetDialog bottomSheetDialog;
+    private TextView monthlyBudgetValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         SharedPreferences myAccount = getSharedPreferences("myAccount", MODE_PRIVATE);
 
         test1 = (Button) findViewById(R.id.test1);
+        monthlyBudgetValue = (TextView) findViewById(R.id.monthlyBudgetValue);
+
         test1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -189,6 +193,6 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         SharedPreferences.Editor editor = myAccount.edit();
         editor.putFloat("budget", userBudget);
         editor.commit();
-        System.out.println("SETDATA");
+        monthlyBudgetValue.setText(String.valueOf(monthlyBudgetValue));
     }
 }
