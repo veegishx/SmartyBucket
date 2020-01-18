@@ -22,17 +22,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".SetBudget"></activity>
-        <activity android:name=".ReviewListImageItems" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".MyProfile" />
-        <activity android:name=".parseListImage" />
-        <activity android:name=".ScanType" />
-        <activity android:name=".parseItemImage" />
-        <activity android:name=".RegisterItems" />
-        <activity android:name=".Preferences" />
-        <activity android:name=".DisplayRecipes" />
-        <activity android:name=".SignIn">
+        <activity android:name=".SetBudget" android:screenOrientation="portrait"></activity>
+        <activity android:name=".ReviewListImageItems" android:screenOrientation="portrait"/>
+        <activity android:name=".MainActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".MyProfile" android:screenOrientation="portrait"/>
+        <activity android:name=".parseListImage" android:screenOrientation="portrait"/>
+        <activity android:name=".ScanType" android:screenOrientation="portrait"/>
+        <activity android:name=".parseItemImage" android:screenOrientation="portrait"/>
+        <activity android:name=".RegisterItems" android:screenOrientation="portrait"/>
+        <activity android:name=".Preferences" android:screenOrientation="portrait"/>
+        <activity android:name=".DisplayRecipes" android:screenOrientation="portrait"/>
+        <activity android:name=".SignIn" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

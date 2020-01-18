@@ -79,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
             // New user is prompted to enter budget
             callSetBudgetPrompt();
         } else {
+            String budgetString = Float.toString(budget);
+            monthlyBudgetValue.setText(budgetString);
             System.out.println("Budget is set to: " + myAccount.getFloat("budget", 0));
         }
 
@@ -195,5 +197,6 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         editor.commit();
         String budgetString = Float.toString(userBudget);
         monthlyBudgetValue.setText(budgetString);
+        System.out.println("Budget is set to: " + myAccount.getFloat("budget", 0));
     }
 }
