@@ -35,7 +35,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SetBudget.SetBudgetListenerInterface {
     BottomAppBar bab;
     Button test1;
     private BottomSheetDialog bottomSheetDialog;
@@ -68,6 +68,14 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences myAccount = getSharedPreferences("myAccount", MODE_PRIVATE);
         String facebookEmail = myAccount.getString("facebookEmail",null);
+        String budget = myAccount.getString("accountBudget",null);
+
+        if (budget == null) {
+            System.out.println("BUDGET IS NULL!");
+            callSetBudgetPrompt();
+        }
+
+
 
         System.out.println();
         System.out.println("---------------------- DEBUG INFO ----------------------");
@@ -165,5 +173,16 @@ public class MainActivity extends AppCompatActivity {
                 return MainActivity.super.onOptionsItemSelected(menuItem);
             }
         });
+    }
+
+    public void callSetBudgetPrompt() {
+        SetBudget budgetPrompt = new SetBudget();
+        budgetPrompt.show(getSupportFragmentManager(), "Set Budget Dialog");
+    }
+
+    @Override
+    public void setData(float userBudget) {
+        // Code to set budget data in firestore
+        //System.out.println("Budget is " + userBudget);
     }
 }

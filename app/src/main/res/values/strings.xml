@@ -59,5 +59,6 @@
         <item>Salad</item>
         <item>Seasoning</item>
     </string-array>
+    <string name="set_budget_desc">Setting a monthly spending target is important as it helps in the forecasting and planning process!</string>
 
 </resources>
