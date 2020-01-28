@@ -75,7 +75,7 @@ public class DisplayRecipes extends AppCompatActivity {
 
                 String totalRecipesString = response.body().getCount() + " Recipes Found";
                 totalRecipes.setText(totalRecipesString);
-                recyclerView.setAdapter(new RecipeAdapter(recipes, R.layout.item, getApplicationContext()));
+                recyclerView.setAdapter(new RecipeAdapter(ingredientsParameter, recipes, R.layout.item, getApplicationContext()));
             }
 
             @Override
