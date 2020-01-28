@@ -29,10 +29,13 @@ import com.saphyrelabs.smartybucket.R;
 import com.saphyrelabs.smartybucket.model.Recipe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
+    private final String ingredientParameters;
     private List<Recipe> recipes;
     private Context context;
     private int rowLayout;
@@ -57,7 +60,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         }
     }
 
-    public RecipeAdapter(List<Recipe> recipes, int rowLayout, Context context) {
+    public RecipeAdapter(String ingredientParameters, List<Recipe> recipes, int rowLayout, Context context) {
+        this.ingredientParameters = ingredientParameters;
         this.recipes = recipes;
         this.rowLayout = rowLayout;
         this.context = context;
@@ -95,6 +99,41 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 })
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.thumbnail);
+
+        Map<String, String> ingredientMap = new HashMap<String, String>();
+
+        /*
+        Here's the problem we are trying to solve:
+        The API returns very specific ingredients.
+         */
+
+        // Get the ingredient labels without any numeric value. Eg: "2 Tomatoes, 3 Onions becomes "Tomatoes, Onions"
+        String [] ingredientParamsLabels = ingredientParameters.replaceAll("\\d", "").split(",");
+
+        // Get the numeric values without any ingredient labels. Eg: "2 Tomatoes, 3 Onions" becomes "2, 3"
+        String [] ingredientParamsQuantity = ingredientParameters.replaceAll("[^\\d.]", "").split(",");
+
+        /*
+        Map the ingredient labels and numeric values together
+        "Tomato" => "2"
+        "Onions" => "3"
+         */
+//        for (int i = 0; i < ingredientParamsLabels.length; i++) {
+//            ingredientMap.put(ingredientParamsLabels[i], ingredientParamsQuantity[i]);
+//        }
+
+        System.out.println("DEBUG");
+        System.out.println("Ingredients Labels: " + ingredientParamsLabels);
+        System.out.println("Ingredients Labels: " + ingredientParamsQuantity);
+
+//       List<String> ingredientsRetrieved = new ArrayList<String>();
+//       for (int i = 0; i < recipes.get(position).getIncredientLines().size(); i++) {
+//           ingredientsRetrieved.add(recipes.get(position).getIncredientLines().get(i));
+//       }
+//
+//       for (int i = 0; i < ingredientsRetrieved.size(); i++) {
+//           if (ingredientsRetrieved.get(i).contains());
+//       }
 
         int ingredients = recipes.get(position).getIncredientLines().size();
 

@@ -51,6 +51,7 @@ public class parseListImage extends AppCompatActivity {
 
         textView.setText("");
 
+        // Get image data
         Uri uri = (Uri) getIntent().getParcelableExtra("resID_uri");
         System.out.println("URL: " + uri);
         try {
@@ -64,6 +65,7 @@ public class parseListImage extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        // Convert Data to Bitmap Drawbale
         BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
         Bitmap bitmap2 = bitmapDrawable.getBitmap();
 
@@ -86,6 +88,7 @@ public class parseListImage extends AppCompatActivity {
         Thread t1 = new Thread(new Runnable() {
             public void run() {
                 try {
+                    // Create a new TextRecognizer
                     TextRecognizer recognizer = new TextRecognizer.Builder(getApplicationContext()).build();
 
                     if (!recognizer.isOperational()) {
@@ -98,6 +101,7 @@ public class parseListImage extends AppCompatActivity {
                             Log.w(TAG, getString(R.string.error_low_storage));
                         }
                     } else {
+                        // Build a new Frame using Bitmap data and extract text to SparseArray
                         Frame frame = new Frame.Builder().setBitmap(bitmap2).build();
                         SparseArray<TextBlock> items = recognizer.detect(frame);
                         StringBuilder sb = new StringBuilder();
@@ -121,22 +125,26 @@ public class parseListImage extends AppCompatActivity {
         t1.start();
         t1.join();
 
-        StringBuilder line = new StringBuilder();
+        Intent displayRecipeActivity = new Intent(parseListImage.this, DisplayRecipes.class);
+        displayRecipeActivity.putExtra("ingredients", listOfIngredients);
+        startActivity(displayRecipeActivity);
 
-        for (int i = 0; i < listOfIngredients.size(); i++) {
-            line.append(listOfIngredients.get(i) + ", ");
-        }
-
-        AlertDialog alertDialog = new AlertDialog.Builder(parseListImage.this).create();
-        alertDialog.setTitle("Alert");
-        alertDialog.setMessage(line);
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        alertDialog.show();
+//        StringBuilder line = new StringBuilder();
+//
+//        for (int i = 0; i < listOfIngredients.size(); i++) {
+//            line.append(listOfIngredients.get(i) + ", ");
+//        }
+//
+//        AlertDialog alertDialog = new AlertDialog.Builder(parseListImage.this).create();
+//        alertDialog.setTitle("Alert");
+//        alertDialog.setMessage(line);
+//        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
+//                    }
+//                });
+//        alertDialog.show();
     }
 
     /**
