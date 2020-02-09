@@ -1,0 +1,14 @@
+name: Create File for API Keys
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Create uncommited file containing API Keys to pass build workflow
+      run: |
+        touch apikey.properties
