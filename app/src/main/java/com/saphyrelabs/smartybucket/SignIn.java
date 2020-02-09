@@ -41,37 +41,34 @@ public class SignIn extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-        facebookLoginBtn = (Button) findViewById(R.id.loginWithFacebook);
+        facebookLoginBtn = findViewById(R.id.loginWithFacebook);
 
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
 
-        facebookLoginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LoginManager.getInstance().logInWithReadPermissions(SignIn.this, Arrays.asList("email", "public_profile"));
-                LoginManager.getInstance().registerCallback(
-                        mCallbackManager, new FacebookCallback<LoginResult>() {
-                            @Override
-                            public void onSuccess(LoginResult loginResult) {
-                                Log.d(TAG, "facebook:onSuccess:" + loginResult);
-                                handleFacebookAccessToken(loginResult.getAccessToken());
-                            }
-
-                            @Override
-                            public void onCancel() {
-                                Log.d(TAG, "facebook:onCancel");
-                                // ...
-                            }
-
-                            @Override
-                            public void onError(FacebookException error) {
-                                Log.d(TAG, "facebook:onError", error);
-                                // ...
-                            }
+        facebookLoginBtn.setOnClickListener(view -> {
+            LoginManager.getInstance().logInWithReadPermissions(SignIn.this, Arrays.asList("email", "public_profile"));
+            LoginManager.getInstance().registerCallback(
+                    mCallbackManager, new FacebookCallback<LoginResult>() {
+                        @Override
+                        public void onSuccess(LoginResult loginResult) {
+                            Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                            handleFacebookAccessToken(loginResult.getAccessToken());
                         }
-                );
-            }
+
+                        @Override
+                        public void onCancel() {
+                            Log.d(TAG, "facebook:onCancel");
+                            // ...
+                        }
+
+                        @Override
+                        public void onError(FacebookException error) {
+                            Log.d(TAG, "facebook:onError", error);
+                            // ...
+                        }
+                    }
+            );
         });
     }
 
@@ -104,29 +101,26 @@ public class SignIn extends AppCompatActivity {
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-
-                            SharedPreferences sharedPreferencesMyAccount = getApplicationContext().getSharedPreferences("myAccount", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferencesMyAccount.edit();
-                            editor.putString("facebookEmail", user.getEmail());
-                            editor.putString("facebookName", user.getDisplayName());
-                            editor.commit();
-                            updateUI();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(SignIn.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-                        // ...
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "signInWithCredential:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        SharedPreferences sharedPreferencesMyAccount = getApplicationContext().getSharedPreferences("userConfigurations", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferencesMyAccount.edit();
+                        editor.putString("facebookEmail", user.getEmail());
+                        editor.putString("facebookName", user.getDisplayName());
+                        editor.putString("facebookUid", user.getUid());
+                        editor.apply();
+                        updateUI();
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "signInWithCredential:failure", task.getException());
+                        Toast.makeText(SignIn.this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
                     }
+
+                    // ...
                 });
     }
 }
