@@ -35,45 +35,41 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         // Retrieving persistent data
         SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
 
-        test1 = (Button) findViewById(R.id.test1);
-        monthlyBudgetValue = (TextView) findViewById(R.id.monthlyBudgetValue);
+        test1 = findViewById(R.id.test1);
+        monthlyBudgetValue = findViewById(R.id.monthlyBudgetValue);
 
-        test1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, ReviewListImageItems.class);
-                startActivity(i);
-            }
+        test1.setOnClickListener(view -> {
+            Intent i = new Intent(MainActivity.this, ReviewListImageItems.class);
+            startActivity(i);
         });
 
         String modelType = userConfigurations.getString("modelType",null);
         String facebookEmail = userConfigurations.getString("facebookEmail",null);
+        String facebookUid = userConfigurations.getString("facebookUid",null);
         float budget = userConfigurations.getFloat("budget",0);
         boolean userMealPreferencesStatus = userConfigurations.getBoolean("userMealPreferencesStatus", false);
 
-        Thread t1 = new Thread(new Runnable() {
-            public void run() {
-                if (modelType == null) {
-                    // Default User Settings
-                    SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("myPreferences", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("modelType", "float");
-                    editor.commit();
-                }
+        Thread t1 = new Thread(() -> {
+            if (modelType == null) {
+                // Default User Settings
+                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("userConfigurations", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("modelType", "float");
+                editor.apply();
+            }
 
 
-                if (budget == 0) {
-                    // New user is prompted to enter budget
-                    callSetBudgetPrompt();
-                } else {
-                    String budgetString = Float.toString(budget);
-                    monthlyBudgetValue.setText(budgetString);
-                    System.out.println("Budget is set to: " + userConfigurations.getFloat("budget", 0));
-                }
+            if (budget == 0) {
+                // New user is prompted to enter budget
+                callSetBudgetPrompt();
+            } else {
+                String budgetString = Float.toString(budget);
+                monthlyBudgetValue.setText(budgetString);
+                System.out.println("Budget is set to: " + userConfigurations.getFloat("budget", 0));
+            }
 
-                if (userMealPreferencesStatus == false) {
-                    callSetUserMealPreferencesPrompt();
-                }
+            if (!userMealPreferencesStatus) {
+                callSetUserMealPreferencesPrompt();
             }
         });
 
@@ -89,15 +85,13 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         System.out.println("---------------------- DEBUG INFO ----------------------");
         System.out.println("ModelType: " + modelType);
         System.out.println("FacebookEmail: " + facebookEmail);
+        System.out.println("FacebookUserId: " + facebookUid);
         System.out.println("--------------------------------------------------------");
 
         RelativeLayout addItemBanner = findViewById(R.id.add_more_items_banner);
-        addItemBanner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View V) {
-                Intent registerItems = new Intent(MainActivity.this, RegisterItems.class);
-                startActivity(registerItems);
-            }
+        addItemBanner.setOnClickListener(V -> {
+            Intent registerItems = new Intent(MainActivity.this, RegisterItems.class);
+            startActivity(registerItems);
         });
 
 
@@ -108,42 +102,31 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         bab.replaceMenu(R.menu.menu_items);
 
         // Handle onClick event
-        bab.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                int id = item.getItemId();
-                switch (id){
-                    case R.id.app_bar_inventory:
-                        Toast.makeText(MainActivity.this,"Inventory Clicked",Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.app_bar_search:
-                        Toast.makeText(MainActivity.this,"Search Clicked",Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.app_bar_settings:
-                        Intent myPreferencesIntent = new Intent(MainActivity.this, UserConfigurations.class);
-                        startActivity(myPreferencesIntent);
-                        break;
-                }
-                return false;
+        bab.setOnMenuItemClickListener(item -> {
+            int id = item.getItemId();
+            switch (id){
+                case R.id.app_bar_inventory:
+                    Toast.makeText(MainActivity.this,"Inventory Clicked",Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.app_bar_search:
+                    Toast.makeText(MainActivity.this,"Search Clicked",Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.app_bar_settings:
+                    Intent myPreferencesIntent = new Intent(MainActivity.this, UserConfigurations.class);
+                    startActivity(myPreferencesIntent);
+                    break;
             }
+            return false;
         });
 
         // Register click event for BottomAppBar drawer icon
-        bab.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openNavigationMenu();
-            }
-        });
+        bab.setNavigationOnClickListener(v -> openNavigationMenu());
 
         // Register click event for BottomAppBar FloatingActionButton icon
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent cameraIntent = new Intent(MainActivity.this, ScanType.class);
-                startActivity(cameraIntent);
-            }
+        fab.setOnClickListener(v -> {
+            Intent cameraIntent = new Intent(MainActivity.this, ScanType.class);
+            startActivity(cameraIntent);
         });
     }
 
@@ -159,27 +142,24 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         NavigationView navigationView = bottomAppBarDrawer.findViewById(R.id.fragment_bottomsheet);
 
         //This will handle the onClick Action for the menu item
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                int id = menuItem.getItemId();
-                switch (id){
-                    case R.id.nav1:
-                        Intent profileIntent = new Intent(MainActivity.this, MyProfile.class);
-                        startActivity(profileIntent);
-                        bottomSheetDialog.dismiss();
-                        break;
-                    case R.id.nav2:
-                        Toast.makeText(MainActivity.this,"Item 2 Clicked",Toast.LENGTH_SHORT).show();
-                        bottomSheetDialog.dismiss();
-                        break;
-                    case R.id.nav3:
-                        Toast.makeText(MainActivity.this,"Item 3 Clicked",Toast.LENGTH_SHORT).show();
-                        bottomSheetDialog.dismiss();
-                        break;
-                }
-                return MainActivity.super.onOptionsItemSelected(menuItem);
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
+            int id = menuItem.getItemId();
+            switch (id){
+                case R.id.nav1:
+                    Intent profileIntent = new Intent(MainActivity.this, MyProfile.class);
+                    startActivity(profileIntent);
+                    bottomSheetDialog.dismiss();
+                    break;
+                case R.id.nav2:
+                    Toast.makeText(MainActivity.this,"Item 2 Clicked",Toast.LENGTH_SHORT).show();
+                    bottomSheetDialog.dismiss();
+                    break;
+                case R.id.nav3:
+                    Toast.makeText(MainActivity.this,"Item 3 Clicked",Toast.LENGTH_SHORT).show();
+                    bottomSheetDialog.dismiss();
+                    break;
             }
+            return MainActivity.super.onOptionsItemSelected(menuItem);
         });
     }
 
@@ -199,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
         SharedPreferences.Editor editor = userConfigurations.edit();
         editor.putFloat("budget", userBudget);
-        editor.commit();
+        editor.apply();
         String budgetString = Float.toString(userBudget);
         monthlyBudgetValue.setText(budgetString);
         System.out.println("Budget is set to: " + userConfigurations.getFloat("budget", 0));
@@ -211,6 +191,6 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
         SharedPreferences.Editor editor = userConfigurations.edit();
         editor.putBoolean("userMealPreferencesStatus", true);
-        editor.commit();
+        editor.apply();
     }
 }

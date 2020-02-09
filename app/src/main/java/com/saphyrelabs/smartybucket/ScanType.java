@@ -58,7 +58,7 @@ public class ScanType extends AppCompatActivity {
         parseItemBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences myPreferences = getSharedPreferences("myPreferences", MODE_PRIVATE);
+                SharedPreferences myPreferences = getSharedPreferences("userConfigurations", MODE_PRIVATE);
                 String modelType = myPreferences.getString("modelType",null);
                 scanType = 2;
                 if (modelType.equals("float")) {
@@ -87,7 +87,7 @@ public class ScanType extends AppCompatActivity {
 
         // Get the default model type
         TextView modelTypeLabel = (TextView) findViewById(R.id.currentModel);
-        SharedPreferences myPreferences = getSharedPreferences("myPreferences", MODE_PRIVATE);
+        SharedPreferences myPreferences = getSharedPreferences("userConfigurations", MODE_PRIVATE);
 
         String modelType = myPreferences.getString("modelType",null);
         modelTypeLabel.setText(modelType);
