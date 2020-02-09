@@ -35,8 +35,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity implements SetBudget.SetBudgetListenerInterface {
+public class MainActivity extends AppCompatActivity implements SetBudget.SetBudgetListenerInterface, SetPreferences.SetPreferencesListenerInterface{
     BottomAppBar bab;
     Button test1;
     private BottomSheetDialog bottomSheetDialog;
@@ -65,23 +66,39 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         String modelType = myPreferences.getString("modelType",null);
         String facebookEmail = myAccount.getString("facebookEmail",null);
         float budget = myAccount.getFloat("budget",0);
+        boolean userMealPreferencesStatus = myPreferences.getBoolean("userMealPreferencesStatus", false);
 
-        if (modelType == null) {
-            // Default User Settings
-            SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("myPreferences", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("modelType", "float");
-            editor.commit();
-        }
+        Thread t1 = new Thread(new Runnable() {
+            public void run() {
+                if (modelType == null) {
+                    // Default User Settings
+                    SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("myPreferences", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("modelType", "float");
+                    editor.commit();
+                }
 
 
-        if (budget == 0) {
-            // New user is prompted to enter budget
-            callSetBudgetPrompt();
-        } else {
-            String budgetString = Float.toString(budget);
-            monthlyBudgetValue.setText(budgetString);
-            System.out.println("Budget is set to: " + myAccount.getFloat("budget", 0));
+                if (budget == 0) {
+                    // New user is prompted to enter budget
+                    callSetBudgetPrompt();
+                } else {
+                    String budgetString = Float.toString(budget);
+                    monthlyBudgetValue.setText(budgetString);
+                    System.out.println("Budget is set to: " + myAccount.getFloat("budget", 0));
+                }
+
+                if (userMealPreferencesStatus == false) {
+                    callSetUserMealPreferencesPrompt();
+                }
+            }
+        });
+
+        t1.start();
+        try {
+            t1.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
 
@@ -188,6 +205,11 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         budgetPrompt.show(getSupportFragmentManager(), "Set Budget Dialog");
     }
 
+    public void callSetUserMealPreferencesPrompt() {
+        SetPreferences userMealPreferencesPrompt = new SetPreferences();
+        userMealPreferencesPrompt.show(getSupportFragmentManager(), "Set User Meal Preferences Dialog");
+    }
+
     @Override
     public void setData(float userBudget) {
         // Code to set budget data in firestore
@@ -198,5 +220,14 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         String budgetString = Float.toString(userBudget);
         monthlyBudgetValue.setText(budgetString);
         System.out.println("Budget is set to: " + myAccount.getFloat("budget", 0));
+    }
+
+    @Override
+    public void setData(HashMap<String, Boolean> userMealPreferences) {
+        // Code to set user meal preferences in firestore
+        SharedPreferences myPreferences = getSharedPreferences("myPreferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = myPreferences.edit();
+        editor.putBoolean("userMealPreferencesStatus", true);
+        editor.commit();
     }
 }

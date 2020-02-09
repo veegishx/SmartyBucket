@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".setPreferences"></activity>
+        <activity android:name=".SetPreferences"></activity>
         <activity
             android:name=".SetBudget"
             android:screenOrientation="portrait" />

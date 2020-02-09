@@ -1,6 +1,5 @@
 package com.saphyrelabs.smartybucket;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import android.app.AlertDialog;
@@ -11,13 +10,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.EditText;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-public class setPreferences extends AppCompatDialogFragment {
-    private setPreferences.SetPreferencesListenerInterface listener;
+public class SetPreferences extends AppCompatDialogFragment {
+    private SetPreferences.SetPreferencesListenerInterface listener;
     private CheckBox balancedDiet, highProteinDiet, sugarDiet, vegetarianDiet, veganDiet, lowFatDiet;
     private HashMap<String, Boolean> userMealPreferences = new HashMap<String, Boolean>();
 
@@ -26,7 +23,7 @@ public class setPreferences extends AppCompatDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.activity_set_budget, null);
+        View view = inflater.inflate(R.layout.activity_set_preferences, null);
 
         balancedDiet = (CheckBox) view.findViewById(R.id.balancedDiet);
         highProteinDiet = (CheckBox) view.findViewById(R.id.highProteinDiet);
@@ -90,7 +87,7 @@ public class setPreferences extends AppCompatDialogFragment {
         super.onAttach(context);
 
         try {
-            listener = (setPreferences.SetPreferencesListenerInterface) context;
+            listener = (SetPreferences.SetPreferencesListenerInterface) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + "Must implement SetPreferencesListenerInterface");
         }
