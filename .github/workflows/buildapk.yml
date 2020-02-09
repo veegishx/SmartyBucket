@@ -9,6 +9,16 @@ on:
       - 'master'
 
 jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Create uncommited file containing API Keys to pass build workflow
+      run: |
+        touch apikey.properties
+        
   test:
     name: Run Unit Tests
     runs-on: ubuntu-18.04
