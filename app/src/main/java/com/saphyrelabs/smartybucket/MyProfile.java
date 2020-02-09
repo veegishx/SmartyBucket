@@ -24,24 +24,21 @@ public class MyProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_profile);
 
-        SharedPreferences myAccount = getSharedPreferences("myAccount", MODE_PRIVATE);
-        String facebookName = myAccount.getString("facebookName",null);
+        SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
+        String facebookName = userConfigurations.getString("facebookName",null);
 
-        facebookAccountName = (TextView) findViewById(R.id.accountName);
+        facebookAccountName = findViewById(R.id.accountName);
         facebookAccountName.setText(facebookName);
 
-        logoutBtn = (Button) findViewById(R.id.logoutBtn);
+        logoutBtn = findViewById(R.id.logoutBtn);
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mAuth.signOut();
-                LoginManager.getInstance().logOut();
-                updateUI();
-            }
+        logoutBtn.setOnClickListener(view -> {
+            mAuth.signOut();
+            LoginManager.getInstance().logOut();
+            updateUI();
         });
     }
 

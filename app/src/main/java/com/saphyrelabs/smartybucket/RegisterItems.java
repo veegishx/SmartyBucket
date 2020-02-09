@@ -39,21 +39,18 @@ public class RegisterItems extends AppCompatActivity {
         initFirestore();
 
         // Define & initialize spinner for item categories
-        Spinner spinner = (Spinner) findViewById(R.id.items_category_spinner);
+        Spinner spinner = findViewById(R.id.items_category_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.item_categories_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
         // Defining buttons & event listeners
-        Button addNewItem = (Button)findViewById(R.id.add_new_item);
-        addNewItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View V) {
-                if(!validateItemCategory() | !validateItemName()) {
-                    return;
-                } else {
-                    writeItemsToFirestore();
-                }
+        Button addNewItem = findViewById(R.id.add_new_item);
+        addNewItem.setOnClickListener(V -> {
+            if(!validateItemCategory() | !validateItemName()) {
+                return;
+            } else {
+                writeItemsToFirestore();
             }
         });
 
@@ -66,15 +63,15 @@ public class RegisterItems extends AppCompatActivity {
     private void writeItemsToFirestore() {
         // Get values from user input
         // itemCategory
-        Spinner spinner = (Spinner)findViewById(R.id.items_category_spinner);
+        Spinner spinner = findViewById(R.id.items_category_spinner);
         String itemCategoryVal  = spinner.getSelectedItem().toString();
 
         // itemName
-        EditText itemNameText = (EditText)findViewById(R.id.item_name_value);
+        EditText itemNameText = findViewById(R.id.item_name_value);
         final String itemNameVal = itemNameText.getText().toString();
 
         // itemPrice
-        EditText itemPriceText = (EditText)findViewById(R.id.item_price_value);
+        EditText itemPriceText = findViewById(R.id.item_price_value);
         double itemPriceVal = Double.parseDouble(itemPriceText.getText().toString());
 
         // itemId
@@ -82,28 +79,24 @@ public class RegisterItems extends AppCompatActivity {
         String itemId = uuid.toString();
 
         // user
-        SharedPreferences myAccount = getSharedPreferences("myAccount", MODE_PRIVATE);
+        SharedPreferences myAccount = getSharedPreferences("userConfigurations", MODE_PRIVATE);
         String user = myAccount.getString("facebookEmail",null);
 
         Item newItem = new Item(user, itemId, itemNameVal, itemCategoryVal, itemPriceVal);
 
         smartyFirestore.collection("items").document(itemCategoryVal.toLowerCase() + "-item-" + itemId).set(newItem)
-                .addOnSuccessListener(new OnSuccessListener< Void >() {
-                    public void onSuccess(Void aVoid) {
-                        View contextView = findViewById(R.id.coordinatorLayout);
-                        Snackbar.make(contextView, "Added " + itemNameVal + " to bucket list!", Snackbar.LENGTH_SHORT).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            public void onFailure(@NonNull Exception e) {
-                View contextView = findViewById(R.id.coordinatorLayout);
-                Snackbar.make(contextView, "ERROR: " + e.toString(), Snackbar.LENGTH_LONG).show();
-                Log.d("TAG", e.toString());
-            }
-        });
+                .addOnSuccessListener(aVoid -> {
+                    View contextView = findViewById(R.id.coordinatorLayout);
+                    Snackbar.make(contextView, "Added " + itemNameVal + " to bucket list!", Snackbar.LENGTH_SHORT).show();
+                }).addOnFailureListener(e -> {
+                    View contextView = findViewById(R.id.coordinatorLayout);
+                    Snackbar.make(contextView, "ERROR: " + e.toString(), Snackbar.LENGTH_LONG).show();
+                    Log.d("TAG", e.toString());
+                });
     }
 
     private boolean validateItemName() {
-        EditText itemNameText = (EditText)findViewById(R.id.item_name_value);
+        EditText itemNameText = findViewById(R.id.item_name_value);
         String itemNameVal = itemNameText.getText().toString().trim();
 
         if(itemNameVal.isEmpty()) {
@@ -116,7 +109,7 @@ public class RegisterItems extends AppCompatActivity {
     }
 
     private boolean validateItemCategory() {
-        EditText itemPriceText = (EditText)findViewById(R.id.item_price_value);
+        EditText itemPriceText = findViewById(R.id.item_price_value);
         String itemPriceVal = itemPriceText.getText().toString().trim();
 
         if(itemPriceVal.isEmpty()) {
