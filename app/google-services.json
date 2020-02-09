@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:123456789012:android:1234567890123456",
+        "mobilesdk_app_id": "1:153736827290:android:88b993341dc7da8f4bea23",
         "android_client_info": {
-          "package_name": "com.your.package"
+          "package_name": "com.saphyrelabs.smartybucket"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.your.package",
+            "package_name": "com.saphyrelabs.smartybucket",
             "certificate_hash": ""
           }
         },
