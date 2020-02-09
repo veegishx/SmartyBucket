@@ -22,17 +22,40 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".SetBudget" android:screenOrientation="portrait"></activity>
-        <activity android:name=".ReviewListImageItems" android:screenOrientation="portrait"/>
-        <activity android:name=".MainActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".MyProfile" android:screenOrientation="portrait"/>
-        <activity android:name=".parseListImage" android:screenOrientation="portrait"/>
-        <activity android:name=".ScanType" android:screenOrientation="portrait"/>
-        <activity android:name=".parseItemImage" android:screenOrientation="portrait"/>
-        <activity android:name=".RegisterItems" android:screenOrientation="portrait"/>
-        <activity android:name=".Preferences" android:screenOrientation="portrait"/>
-        <activity android:name=".DisplayRecipes" android:screenOrientation="portrait"/>
-        <activity android:name=".SignIn" android:screenOrientation="portrait">
+        <activity android:name=".setPreferences"></activity>
+        <activity
+            android:name=".SetBudget"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ReviewListImageItems"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MyProfile"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".parseListImage"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ScanType"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".parseItemImage"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RegisterItems"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Preferences"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".DisplayRecipes"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SignIn"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
