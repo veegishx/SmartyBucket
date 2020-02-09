@@ -9,15 +9,6 @@ on:
       - 'master'
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Create uncommited file containing API Keys to pass build workflow
-      run: |
-        touch apikey.properties
         
   test:
     name: Run Unit Tests
@@ -29,6 +20,9 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      - name: Create uncommited file containing API Keys to pass build workflow
+        run: |
+          touch /home/runner/work/SmartyBucket/SmartyBucket/apikey.properties 
       - name: Unit tests
         run: bash ./gradlew test --stacktrace
 
