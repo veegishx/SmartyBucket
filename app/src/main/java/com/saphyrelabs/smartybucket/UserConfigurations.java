@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class Preferences extends AppCompatActivity {
+public class UserConfigurations extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,13 +33,13 @@ public class Preferences extends AppCompatActivity {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("modelType", "float");
                     editor.commit();
-                    Toast.makeText(Preferences.this, "Float Model will be used.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserConfigurations.this, "Float Model will be used.", Toast.LENGTH_SHORT).show();
                 } else {
                     SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("myPreferences", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("modelType", "quantized");
                     editor.commit();
-                    Toast.makeText(Preferences.this, "Quantized Model will be used.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserConfigurations.this, "Quantized Model will be used.", Toast.LENGTH_SHORT).show();
                 }
             }
         });

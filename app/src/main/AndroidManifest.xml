@@ -48,7 +48,7 @@
             android:name=".RegisterItems"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Preferences"
+            android:name=".UserConfigurations"
             android:screenOrientation="portrait" />
         <activity
             android:name=".DisplayRecipes"

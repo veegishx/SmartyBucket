@@ -7,7 +7,6 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -15,26 +14,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FacebookAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements SetBudget.SetBudgetListenerInterface, SetPreferences.SetPreferencesListenerInterface{
@@ -49,8 +33,7 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         setContentView(R.layout.activity_main);
 
         // Retrieving persistent data
-        SharedPreferences myPreferences = getSharedPreferences("myPreferences", MODE_PRIVATE);
-        SharedPreferences myAccount = getSharedPreferences("myAccount", MODE_PRIVATE);
+        SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
 
         test1 = (Button) findViewById(R.id.test1);
         monthlyBudgetValue = (TextView) findViewById(R.id.monthlyBudgetValue);
@@ -63,10 +46,10 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
             }
         });
 
-        String modelType = myPreferences.getString("modelType",null);
-        String facebookEmail = myAccount.getString("facebookEmail",null);
-        float budget = myAccount.getFloat("budget",0);
-        boolean userMealPreferencesStatus = myPreferences.getBoolean("userMealPreferencesStatus", false);
+        String modelType = userConfigurations.getString("modelType",null);
+        String facebookEmail = userConfigurations.getString("facebookEmail",null);
+        float budget = userConfigurations.getFloat("budget",0);
+        boolean userMealPreferencesStatus = userConfigurations.getBoolean("userMealPreferencesStatus", false);
 
         Thread t1 = new Thread(new Runnable() {
             public void run() {
@@ -85,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
                 } else {
                     String budgetString = Float.toString(budget);
                     monthlyBudgetValue.setText(budgetString);
-                    System.out.println("Budget is set to: " + myAccount.getFloat("budget", 0));
+                    System.out.println("Budget is set to: " + userConfigurations.getFloat("budget", 0));
                 }
 
                 if (userMealPreferencesStatus == false) {
@@ -137,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
                         Toast.makeText(MainActivity.this,"Search Clicked",Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.app_bar_settings:
-                        Intent myPreferencesIntent = new Intent(MainActivity.this, Preferences.class);
+                        Intent myPreferencesIntent = new Intent(MainActivity.this, UserConfigurations.class);
                         startActivity(myPreferencesIntent);
                         break;
                 }
@@ -207,26 +190,26 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
 
     public void callSetUserMealPreferencesPrompt() {
         SetPreferences userMealPreferencesPrompt = new SetPreferences();
-        userMealPreferencesPrompt.show(getSupportFragmentManager(), "Set User Meal Preferences Dialog");
+        userMealPreferencesPrompt.show(getSupportFragmentManager(), "Set User Meal UserConfigurations Dialog");
     }
 
     @Override
     public void setData(float userBudget) {
         // Code to set budget data in firestore
-        SharedPreferences myAccount = getSharedPreferences("myAccount", MODE_PRIVATE);
-        SharedPreferences.Editor editor = myAccount.edit();
+        SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
+        SharedPreferences.Editor editor = userConfigurations.edit();
         editor.putFloat("budget", userBudget);
         editor.commit();
         String budgetString = Float.toString(userBudget);
         monthlyBudgetValue.setText(budgetString);
-        System.out.println("Budget is set to: " + myAccount.getFloat("budget", 0));
+        System.out.println("Budget is set to: " + userConfigurations.getFloat("budget", 0));
     }
 
     @Override
     public void setData(HashMap<String, Boolean> userMealPreferences) {
         // Code to set user meal preferences in firestore
-        SharedPreferences myPreferences = getSharedPreferences("myPreferences", MODE_PRIVATE);
-        SharedPreferences.Editor editor = myPreferences.edit();
+        SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
+        SharedPreferences.Editor editor = userConfigurations.edit();
         editor.putBoolean("userMealPreferencesStatus", true);
         editor.commit();
     }
