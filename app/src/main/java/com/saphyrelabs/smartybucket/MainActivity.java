@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
 
     /**
      * This function uploads data to Cloud Firestore
-     * @params HashMap<String, Boolean>
+     * @params HashMap<String, Boolean> userMealPreferences
      *
      */
     public void sendDataToFirestore(HashMap<String, Boolean> userMealPreferences) {
