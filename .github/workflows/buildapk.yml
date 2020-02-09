@@ -1,4 +1,4 @@
-name: Final Year Undergraduate Project PR & Master CI
+name: Smarty Bucket Master Branch CI
 
 on:
   pull_request:
