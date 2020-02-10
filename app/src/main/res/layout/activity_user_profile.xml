@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#651FFF"
     android:backgroundTint="#FFFFFF"
-    tools:context=".MyProfile">
+    tools:context=".UserProfile">
 
     <ImageView
         android:id="@+id/imageView3"

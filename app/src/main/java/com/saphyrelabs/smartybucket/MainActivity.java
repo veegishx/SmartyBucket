@@ -2,14 +2,12 @@ package com.saphyrelabs.smartybucket;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -163,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
             int id = menuItem.getItemId();
             switch (id){
                 case R.id.nav1:
-                    Intent profileIntent = new Intent(MainActivity.this, MyProfile.class);
+                    Intent profileIntent = new Intent(MainActivity.this, UserProfile.class);
                     startActivity(profileIntent);
                     bottomSheetDialog.dismiss();
                     break;
