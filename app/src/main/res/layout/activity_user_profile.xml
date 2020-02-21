@@ -9,47 +9,92 @@
     tools:context=".UserProfile">
 
     <TextView
-        android:id="@+id/accountName"
+        android:id="@+id/textView28"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="92dp"
-        android:text="Account Full Name"
-        android:textColor="#010031"
-        android:textColorHighlight="#010031"
-        android:textColorLink="#010031"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.142"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="40dp"
+        android:text="Diet Preferences"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/logoutBtn" />
+
+    <TextView
+        android:id="@+id/textView32"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Update your diet preferences"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView28" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="89dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars[3]" />
+
+    <TextView
+        android:id="@+id/textView33"
+        android:layout_width="64dp"
+        android:layout_height="13dp"
+        android:layout_marginStart="20dp"
+        android:text="ACCOUNT ID"
+        android:textColor="#000000"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:typeface="normal"
+        app:layout_constraintBottom_toTopOf="@+id/accountName"
+        app:layout_constraintStart_toEndOf="@+id/imageView3" />
+
+    <TextView
+        android:id="@+id/accountId"
+        android:layout_width="122dp"
+        android:layout_height="13dp"
+        android:text="TextView"
+        android:textColor="#A4D7FF"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/accountName"
+        app:layout_constraintStart_toEndOf="@+id/textView33" />
 
     <Button
         android:id="@+id/logoutBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_width="91dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="4dp"
         android:background="#F6F6F6"
         android:backgroundTint="#F6F6F6"
         android:text="LOGOUT"
         android:textColor="#010031"
         android:textColorHighlight="#010031"
         android:textColorLink="#010031"
-        app:icon="@drawable/ic_open_in_new_black_24dp"
+        android:textSize="12sp"
         app:iconTint="#010031"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.136"
+        app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/accountName" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
     <TextView
-        android:id="@+id/accountId"
+        android:id="@+id/accountName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:text="TextView"
-        android:textColor="#A4D7FF"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toTopOf="@+id/accountName"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginTop="28dp"
+        android:text="Account Full Name"
+        android:textColor="#010031"
+        android:textColorHighlight="#010031"
+        android:textColorLink="#010031"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.166"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
