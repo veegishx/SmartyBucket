@@ -79,12 +79,12 @@ public class RegisterItems extends AppCompatActivity {
         String itemId = uuid.toString();
 
         // user
-        SharedPreferences myAccount = getSharedPreferences("userConfigurations", MODE_PRIVATE);
-        String user = myAccount.getString("facebookEmail",null);
+        SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
+        String userId = userConfigurations.getString("facebookUid","0");
 
-        Item newItem = new Item(user, itemId, itemNameVal, itemCategoryVal, itemPriceVal);
+        Item newItem = new Item(userId, itemId, itemNameVal, itemCategoryVal, itemPriceVal);
 
-        smartyFirestore.collection("items").document(itemCategoryVal.toLowerCase() + "-item-" + itemId).set(newItem)
+        smartyFirestore.collection("items").document(itemNameVal.toLowerCase().replaceAll("//s+", "")).set(newItem)
                 .addOnSuccessListener(aVoid -> {
                     View contextView = findViewById(R.id.coordinatorLayout);
                     Snackbar.make(contextView, "Added " + itemNameVal + " to bucket list!", Snackbar.LENGTH_SHORT).show();
