@@ -3,6 +3,10 @@ package com.saphyrelabs.smartybucket;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
@@ -13,6 +17,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
@@ -46,6 +53,27 @@ public class RecipeDetails extends AppCompatActivity implements AppBarLayout.OnO
         appbar_title = findViewById(R.id.title_on_appbar);
         appbar_subtitle = findViewById(R.id.subtitle_on_appbar);
         title = findViewById(R.id.title);
+
+        Intent intent = getIntent();
+        mUrl = intent.getStringExtra("url");
+        mImg = intent.getStringExtra("img");
+        mTitle = intent.getStringExtra("label");
+        mSource = intent.getStringExtra("source");
+
+        RequestOptions requestOptions = new RequestOptions();
+
+        Glide.with(this)
+                .load(mImg)
+                .apply(requestOptions)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(imageView);
+
+        appbar_title.setText(mSource);
+        appbar_subtitle.setText(mUrl);
+        title.setText(mTitle);
+
+        initWebView(mUrl);
+
     }
 
     private void initWebView(String url) {
