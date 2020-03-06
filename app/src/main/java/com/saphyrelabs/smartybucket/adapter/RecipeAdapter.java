@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -25,9 +26,10 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.saphyrelabs.smartybucket.DisplayRecipes;
 import com.saphyrelabs.smartybucket.R;
+import com.saphyrelabs.smartybucket.RecipeDetails;
 import com.saphyrelabs.smartybucket.model.Recipe;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,17 +41,28 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     private List<Recipe> recipes;
     private Context context;
     private int rowLayout;
+    private OnItemClickListener onItemClickListener;
 
-    public class RecipeViewHolder extends RecyclerView.ViewHolder {
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    public class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView title, ingredients, source;
         ImageView thumbnail;
         ProgressBar progressBar;
+        OnItemClickListener onItemClickListener;
         FrameLayout recipesLayout;
         Button viewRecipeBtn, addToBudgetBtn;
 
-        public RecipeViewHolder(View v) {
+        public RecipeViewHolder(View v, OnItemClickListener onItemClickListener) {
 
             super(v);
+            itemView.setOnClickListener(this);
             recipesLayout = (FrameLayout) v.findViewById(R.id.recipes_layout);
             title = (TextView) v.findViewById(R.id.recipe_title);
             ingredients = (TextView) v.findViewById(R.id.recipe_ingredients);
@@ -57,6 +70,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             progressBar =(ProgressBar) v.findViewById(R.id.progress_load_photo);
             viewRecipeBtn = (Button) v.findViewById(R.id.viewRecipeBtn);
             addToBudgetBtn = (Button) v.findViewById(R.id.addToBudgetBtn);
+
+            this.onItemClickListener = onItemClickListener;
+        }
+
+        @Override
+        public void onClick(View v) {
+            onItemClickListener.onItemClick(v, getAdapterPosition());
         }
     }
 
@@ -70,7 +90,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     @Override
     public RecipeAdapter.RecipeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
-        return new RecipeViewHolder(view);
+        return new RecipeViewHolder(view, onItemClickListener);
     }
 
     @Override
@@ -142,10 +162,25 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
         holder.title.setText(recipes.get(position).getLabel());
         holder.ingredients.setText(totalIngredients);
+
+        holder.viewRecipeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), RecipeDetails.class);
+
+                Recipe recipe = recipes.get(position);
+                intent.putExtra("url", recipe.getUrl());
+                intent.putExtra("label", recipe.getLabel());
+                intent.putExtra("img", recipe.getImage());
+                intent.putExtra("source", recipe.getSource());
+
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return recipes.size();
     }
-}
+ }
