@@ -41,7 +41,6 @@ public class DisplayRecipes extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_recipes);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         totalRecipes = (TextView) findViewById(R.id.totalRecipes);
 
         Intent intent = getIntent();
