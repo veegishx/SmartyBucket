@@ -77,18 +77,6 @@ public class DisplayRecipes extends AppCompatActivity {
                 String totalRecipesString = response.body().getCount() + " Recipes Found";
                 totalRecipes.setText(totalRecipesString);
                 recyclerView.setAdapter(new RecipeAdapter(ingredientsParameter, recipes, R.layout.item, getApplicationContext()));
-
-//                recipeAdapter.setOnItemClickListener((view, position) -> {
-//                    Intent intent = new Intent(DisplayRecipes.this, RecipeDetails.class);
-//
-//                    Recipe recipe = recipes.get(position);
-//                    intent.putExtra("url", recipe.getUrl());
-//                    intent.putExtra("label", recipe.getLabel());
-//                    intent.putExtra("img", recipe.getImage());
-//                    intent.putExtra("source", recipe.getSource());
-//
-//                    startActivity(intent);
-//                });
             }
 
             @Override

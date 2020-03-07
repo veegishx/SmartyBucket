@@ -104,15 +104,20 @@ public class parseListImage extends AppCompatActivity {
                         // Build a new Frame using Bitmap data and extract text to SparseArray
                         Frame frame = new Frame.Builder().setBitmap(bitmap2).build();
                         SparseArray<TextBlock> items = recognizer.detect(frame);
-                        StringBuilder sb = new StringBuilder();
+
 
                         System.out.println("TEXT DETECTION");
                         for (int i = 0; i < items.size(); i++) {
+                            StringBuilder sb = new StringBuilder();
                             TextBlock myItem = items.valueAt(i);
                             sb.append(myItem.getValue());
                             sb.append("\n");
                             System.out.println("TEXT DETECTED: " + sb.toString());
-                            listOfIngredients.add(sb.toString());
+                            String str[] = sb.toString().split("\\r?\\n");
+                            for (int j = 0; j < str.length; j++) {
+                                listOfIngredients.add(str[j].toLowerCase());
+                                 System.out.println("STR[" + j + "]: " + str[j]);
+                            }
                         }
                     }
                 } catch (Exception e) {
@@ -125,26 +130,9 @@ public class parseListImage extends AppCompatActivity {
         t1.start();
         t1.join();
 
-        Intent displayRecipeActivity = new Intent(parseListImage.this, DisplayRecipes.class);
+        Intent displayRecipeActivity = new Intent(parseListImage.this, ReviewListImageItems.class);
         displayRecipeActivity.putExtra("ingredients", listOfIngredients);
         startActivity(displayRecipeActivity);
-
-//        StringBuilder line = new StringBuilder();
-//
-//        for (int i = 0; i < listOfIngredients.size(); i++) {
-//            line.append(listOfIngredients.get(i) + ", ");
-//        }
-//
-//        AlertDialog alertDialog = new AlertDialog.Builder(parseListImage.this).create();
-//        alertDialog.setTitle("Alert");
-//        alertDialog.setMessage(line);
-//        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-//                new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                    }
-//                });
-//        alertDialog.show();
     }
 
     /**
