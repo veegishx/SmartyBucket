@@ -112,7 +112,11 @@ public class parseListImage extends AppCompatActivity {
                             sb.append(myItem.getValue());
                             sb.append("\n");
                             System.out.println("TEXT DETECTED: " + sb.toString());
-                            listOfIngredients.add(sb.toString());
+                            String str[] = sb.toString().split("\\s+");
+                            for (int j = 0; j < str.length; j++) {
+                                listOfIngredients.add(str[j]);
+                                // System.out.println("STR[" + j + "]: " + str[j]);
+                            }
                         }
                     }
                 } catch (Exception e) {
@@ -125,7 +129,7 @@ public class parseListImage extends AppCompatActivity {
         t1.start();
         t1.join();
 
-        Intent displayRecipeActivity = new Intent(parseListImage.this, DisplayRecipes.class);
+        Intent displayRecipeActivity = new Intent(parseListImage.this, ReviewListImageItems.class);
         displayRecipeActivity.putExtra("ingredients", listOfIngredients);
         startActivity(displayRecipeActivity);
 
