@@ -8,12 +8,14 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.saphyrelabs.smartybucket.R;
+import com.saphyrelabs.smartybucket.model.Ingredient;
+
 import java.util.ArrayList;
 
 
 public class ReviewIngredientAdapter extends RecyclerView.Adapter<ReviewIngredientAdapter.ReviewIngredientViewHolder> {
 
-    private ArrayList<String> ingredients;
+    private ArrayList<Ingredient> ingredients;
     private Context context;
     private int rowLayout;
 
@@ -31,7 +33,7 @@ public class ReviewIngredientAdapter extends RecyclerView.Adapter<ReviewIngredie
         }
     }
 
-    public ReviewIngredientAdapter(ArrayList<String> ingredients, int rowLayout, Context context) {
+    public ReviewIngredientAdapter(ArrayList<Ingredient> ingredients, int rowLayout, Context context) {
         this.ingredients = ingredients;
         this.rowLayout = rowLayout;
         this.context = context;
@@ -45,7 +47,7 @@ public class ReviewIngredientAdapter extends RecyclerView.Adapter<ReviewIngredie
 
     @Override
     public void onBindViewHolder(ReviewIngredientViewHolder holder, final int position) {
-        String ingredientTitle = ingredients.get(position);
+        String ingredientTitle = ingredients.get(position).getIngredientName();
         holder.title.setText(ingredientTitle);
     }
 
