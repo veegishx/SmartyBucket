@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.saphyrelabs.smartybucket.adapter.ReviewIngredientAdapter;
 import com.saphyrelabs.smartybucket.model.Ingredient;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class ReviewListImageItems extends AppCompatActivity {
@@ -51,7 +52,11 @@ public class ReviewListImageItems extends AppCompatActivity {
         searchRecipes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reviewIngredientAdapter.notifyDataSetChanged();
+                Intent displayRecipeActivity = new Intent(ReviewListImageItems.this, DisplayRecipes.class);
+                Bundle args = new Bundle();
+                args.putSerializable("ingredients",(Serializable) reviewIngredientAdapter.getIngredients());
+                displayRecipeActivity.putExtra("BUNDLE",args);
+                startActivity(displayRecipeActivity);
             }
         });
 
