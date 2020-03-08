@@ -25,8 +25,11 @@ import android.widget.Toast;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
+import com.saphyrelabs.smartybucket.model.Ingredient;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class parseListImage extends AppCompatActivity {
@@ -38,7 +41,7 @@ public class parseListImage extends AppCompatActivity {
     private Bitmap bitmap;
     private String result;
     private static final String TAG = parseListImage.class.getSimpleName();
-    private ArrayList<String> listOfIngredients = new ArrayList<String>();
+    private ArrayList<Ingredient> listOfIngredients = new ArrayList<Ingredient>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +118,7 @@ public class parseListImage extends AppCompatActivity {
                             System.out.println("TEXT DETECTED: " + sb.toString());
                             String str[] = sb.toString().split("\\r?\\n");
                             for (int j = 0; j < str.length; j++) {
-                                listOfIngredients.add(str[j].toLowerCase());
+                                listOfIngredients.add(new Ingredient(str[j].toLowerCase()));
                                  System.out.println("STR[" + j + "]: " + str[j]);
                             }
                         }
@@ -131,7 +134,9 @@ public class parseListImage extends AppCompatActivity {
         t1.join();
 
         Intent displayRecipeActivity = new Intent(parseListImage.this, ReviewListImageItems.class);
-        displayRecipeActivity.putExtra("ingredients", listOfIngredients);
+        Bundle args = new Bundle();
+        args.putSerializable("ingredients",(Serializable) listOfIngredients);
+        displayRecipeActivity.putExtra("BUNDLE",args);
         startActivity(displayRecipeActivity);
     }
 

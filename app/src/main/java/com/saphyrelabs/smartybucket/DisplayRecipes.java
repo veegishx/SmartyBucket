@@ -15,6 +15,7 @@ import com.saphyrelabs.smartybucket.adapter.RecipeAdapter;
 import com.saphyrelabs.smartybucket.api.RecipeApiClient;
 import com.saphyrelabs.smartybucket.api.RecipeApiInterface;
 import com.saphyrelabs.smartybucket.model.Hits;
+import com.saphyrelabs.smartybucket.model.Ingredient;
 import com.saphyrelabs.smartybucket.model.Recipe;
 import com.saphyrelabs.smartybucket.model.RecipeResponse;
 
@@ -46,10 +47,10 @@ public class DisplayRecipes extends AppCompatActivity {
         totalRecipes = (TextView) findViewById(R.id.totalRecipes);
 
         Intent intent = getIntent();
-        ArrayList<String> ingredients = intent.getStringArrayListExtra("ingredients");
-
+        Bundle args = intent.getBundleExtra("BUNDLE");
+        ArrayList<Ingredient> ingredients = (ArrayList<Ingredient>) args.getSerializable("ingredients");
         for (int i = 0; i < ingredients.size(); i++) {
-            ingredientsParameter = ingredientsParameter + "," + ingredients.get(i);
+            ingredientsParameter = ingredientsParameter + "," + ingredients.get(i).getIngredientName();
         }
 
         final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);

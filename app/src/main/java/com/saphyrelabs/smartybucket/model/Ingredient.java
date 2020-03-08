@@ -1,16 +1,34 @@
 package com.saphyrelabs.smartybucket.model;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Data Model for Ingredients
  * This data model contains all the properties and getters/setters to allow this application to store and retrieve ingredients.
  */
-public class Ingredient {
+public class Ingredient implements Parcelable {
     private String ingredientName;
-    private String ingredientQty;
 
-    public Ingredient(String ingredientName, String ingredientQty) {
+    public Ingredient(String ingredientName) {
         this.ingredientName = ingredientName;
-        this.ingredientQty = ingredientQty;
     }
+
+    protected Ingredient(Parcel in) {
+        ingredientName = in.readString();
+    }
+
+    public static final Creator<Ingredient> CREATOR = new Creator<Ingredient>() {
+        @Override
+        public Ingredient createFromParcel(Parcel in) {
+            return new Ingredient(in);
+        }
+
+        @Override
+        public Ingredient[] newArray(int size) {
+            return new Ingredient[size];
+        }
+    };
 
     public String getIngredientName() {
         return ingredientName;
@@ -20,11 +38,13 @@ public class Ingredient {
         this.ingredientName = ingredientName;
     }
 
-    public String getIngredientQty() {
-        return ingredientQty;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setIngredientQty(String ingredientQty) {
-        this.ingredientQty = ingredientQty;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(ingredientName);
     }
 }
