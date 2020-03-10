@@ -1,23 +1,21 @@
 package com.saphyrelabs.smartybucket.adapter;
 
-import android.annotation.SuppressLint;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -26,14 +24,10 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.saphyrelabs.smartybucket.DisplayRecipes;
 import com.saphyrelabs.smartybucket.R;
 import com.saphyrelabs.smartybucket.RecipeDetails;
 import com.saphyrelabs.smartybucket.model.Recipe;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
@@ -58,11 +52,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         OnItemClickListener onItemClickListener;
         FrameLayout recipesLayout;
         Button viewRecipeBtn, addToBudgetBtn;
+        CardView recipeCard;
 
         public RecipeViewHolder(View v, OnItemClickListener onItemClickListener) {
 
             super(v);
-            itemView.setOnClickListener(this);
+            recipeCard = (CardView) v.findViewById(R.id.recipeCard);
             recipesLayout = (FrameLayout) v.findViewById(R.id.recipes_layout);
             title = (TextView) v.findViewById(R.id.recipe_title);
             ingredients = (TextView) v.findViewById(R.id.recipe_ingredients);
@@ -70,6 +65,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             progressBar =(ProgressBar) v.findViewById(R.id.progress_load_photo);
             viewRecipeBtn = (Button) v.findViewById(R.id.viewRecipeBtn);
             addToBudgetBtn = (Button) v.findViewById(R.id.addToBudgetBtn);
+
+            recipeCard.setOnClickListener(this);
 
             this.onItemClickListener = onItemClickListener;
         }
@@ -120,62 +117,35 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.thumbnail);
 
-        Map<String, String> ingredientMap = new HashMap<String, String>();
-
-        /*
-        Here's the problem we are trying to solve:
-        The API returns very specific ingredients.
-         */
-
-        // Get the ingredient labels without any numeric value. Eg: "2 Tomatoes, 3 Onions becomes "Tomatoes, Onions"
-        String [] ingredientParamsLabels = ingredientParameters.replaceAll("\\d", "").split(",");
-
-        // Get the numeric values without any ingredient labels. Eg: "2 Tomatoes, 3 Onions" becomes "2, 3"
-        String [] ingredientParamsQuantity = ingredientParameters.replaceAll("[^\\d.]", "").split(",");
-
-        /*
-        Map the ingredient labels and numeric values together
-        "Tomato" => "2"
-        "Onions" => "3"
-         */
-//        for (int i = 0; i < ingredientParamsLabels.length; i++) {
-//            ingredientMap.put(ingredientParamsLabels[i], ingredientParamsQuantity[i]);
-//        }
-
-        System.out.println("DEBUG");
-        System.out.println("Ingredients Labels: " + ingredientParamsLabels);
-        System.out.println("Ingredients Labels: " + ingredientParamsQuantity);
-
-//       List<String> ingredientsRetrieved = new ArrayList<String>();
-//       for (int i = 0; i < recipes.get(position).getIncredientLines().size(); i++) {
-//           ingredientsRetrieved.add(recipes.get(position).getIncredientLines().get(i));
-//       }
-//
-//       for (int i = 0; i < ingredientsRetrieved.size(); i++) {
-//           if (ingredientsRetrieved.get(i).contains());
-//       }
 
         int ingredients = recipes.get(position).getIncredientLines().size();
 
         String totalIngredients = ingredients + " ingredients";
-        String recipeLink = recipes.get(position).getUrl();
 
         holder.title.setText(recipes.get(position).getLabel());
         holder.ingredients.setText(totalIngredients);
 
-        holder.viewRecipeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), RecipeDetails.class);
+        holder.viewRecipeBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), RecipeDetails.class);
 
-                Recipe recipe = recipes.get(position);
-                intent.putExtra("url", recipe.getUrl());
-                intent.putExtra("label", recipe.getLabel());
-                intent.putExtra("img", recipe.getImage());
-                intent.putExtra("source", recipe.getSource());
+            Recipe recipe = recipes.get(position);
+            intent.putExtra("url", recipe.getUrl());
+            intent.putExtra("label", recipe.getLabel());
+            intent.putExtra("img", recipe.getImage());
+            intent.putExtra("source", recipe.getSource());
 
-                v.getContext().startActivity(intent);
-            }
+            v.getContext().startActivity(intent);
+        });
+
+        holder.recipeCard.setOnClickListener(v -> {
+            System.out.println("Tapped!");
+            System.out.println(ingredientParameters);
+            AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext(), R.style.IngredientSummary);
+            builder.setTitle("Ingredient Summary");
+            // Hardcoding values for now
+            builder.setMessage("You are missing the following ingredients: Onions, Black Pepper, Tomatoes");
+            builder.setPositiveButton("OK", null);
+            builder.show();
         });
     }
 

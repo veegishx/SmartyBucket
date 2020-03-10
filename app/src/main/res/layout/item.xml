@@ -5,15 +5,17 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <androidx.cardview.widget.CardView
+        android:id="@+id/recipeCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="5dp"
-        android:layout_marginLeft="10dp"
-        app:cardElevation="@dimen/cardview_compat_inset_shadow"
-        app:cardCornerRadius="10dp">
+        app:cardCornerRadius="10dp"
+        app:cardElevation="@dimen/cardview_compat_inset_shadow">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -109,7 +111,7 @@
                 android:textColorHint="#3D3D49"></TextView>
 
             <TextView
-                android:id="@+id/textView20"
+                android:id="@+id/totalPrice"
                 android:layout_width="36dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -135,6 +137,17 @@
                 android:textColorHighlight="#010031"
                 android:textColorHint="#010031"
                 android:textColorLink="#010031" />
+
+            <TextView
+                android:id="@+id/gotAllIngredients"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/recipe_ingredients"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="90dp"
+                android:layout_marginTop="4dp"
+                android:text="You have all the ingredients"
+                android:textSize="12sp" />
 
         </RelativeLayout>
 
