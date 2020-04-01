@@ -2,8 +2,11 @@ package com.saphyrelabs.smartybucket.adapter;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
@@ -24,9 +30,20 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.saphyrelabs.smartybucket.R;
 import com.saphyrelabs.smartybucket.RecipeDetails;
+import com.saphyrelabs.smartybucket.model.Item;
 import com.saphyrelabs.smartybucket.model.Recipe;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
@@ -36,6 +53,17 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     private Context context;
     private int rowLayout;
     private OnItemClickListener onItemClickListener;
+    private FirebaseFirestore smartyFirestore;
+    private static final String TAG = "RecipeAdapterFirestore";
+
+
+    private void initFirestore() {
+        smartyFirestore = FirebaseFirestore.getInstance();
+    }
+
+    private void queryIngredientInFirestore(String ingredient) {
+        int count = 0;
+    }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
@@ -46,13 +74,15 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     }
 
     public class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView title, ingredients, source;
+        TextView title, ingredients, source, totalPrice;
         ImageView thumbnail;
         ProgressBar progressBar;
         OnItemClickListener onItemClickListener;
         FrameLayout recipesLayout;
         Button viewRecipeBtn, addToBudgetBtn;
         CardView recipeCard;
+
+        String [] measurementLabels = {"pound", "pounds", "cup", "cups", "tablespoon", "tablespoons", "ounce", "ounces", "teaspoon", "teaspoons", "tsp", "tbsp"};
 
         public RecipeViewHolder(View v, OnItemClickListener onItemClickListener) {
 
@@ -65,6 +95,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             progressBar =(ProgressBar) v.findViewById(R.id.progress_load_photo);
             viewRecipeBtn = (Button) v.findViewById(R.id.viewRecipeBtn);
             addToBudgetBtn = (Button) v.findViewById(R.id.addToBudgetBtn);
+            totalPrice = (TextView) v.findViewById(R.id.totalPrice);
 
             recipeCard.setOnClickListener(this);
 
@@ -92,6 +123,19 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     @Override
     public void onBindViewHolder(RecipeViewHolder holder, final int position) {
+        // Enable Firestore logging
+        FirebaseFirestore.setLoggingEnabled(true);
+        String [] ingredientParametersArray = ingredientParameters.split(",");
+        ArrayList<Item> dbItemList = new ArrayList<>();
+
+        // Based on https://htmlpreview.github.io/?https://github.com/kulsoom-abdullah/kulsoom-abdullah.github.io/blob/master/AWS-lambda-implementation/model_implementation/recipe%20binary%20classification/recipe%20binary%20classification.html#Easy-method-of-removing-%22useless%22-words
+        String [] measures = {"litres","liter","millilitres","mL","grams","g", "kg","teaspoon","tsp", "tablespoon","tbsp","fluid", "ounce","oz","fl.oz", "cup","pint","pt","quart","qt","gallon","gal","smidgen","drop","pinch","dash","scruple","dessertspoon","teacup","cup","c","pottle","gill","dram","wineglass","coffeespoon","pound","lb","tbsp","plus","firmly", "packed","lightly","level","even","rounded","heaping","heaped","sifted","bushel","peck","stick","chopped","sliced","halves", "shredded","slivered","sliced","whole","paste","whole"," fresh", "peeled", "diced","mashed","dried","frozen","fresh","peeled","candied","no", "pulp","crystallized","canned","crushed","minced","julienned","clove","head", "small","large","medium"};
+        String [] common_remove = {"ground","to","taste", "and", "or", "powder","black","white","red","green","yellow", "can", "seed", "into", "cut", "grated", "leaf","package","finely","divided","a","piece","optional","inch","needed","more","drained","for","flake","juice","dry","breast","extract","yellow","thinly","boneless","skinless","cubed","bell","bunch","cube","slice","pod","beaten","seeded","broth","uncooked","root","plain","baking","heavy","halved","crumbled","sweet","with","hot","confectioner","room","temperature","trimmed","allpurpose","sauce","crumb","deveined","bulk","seasoning","jar","food","sundried","italianstyle","if","bag","mix","in","each","roll","instant","double",
+                "such","extravirgin","frying","thawed","whipping","stock","rinsed","mild","sprig","brown","freshly","toasted","link","boiling","cooked","basmati","unsalted","container","split",
+                "cooking","thin","lengthwise","warm","softened","thick","quartered","juiced","pitted","chunk","melted","cold","coloring","puree","cored","stewed","gingergarlic","floret","coarsely","the","clarified","blanched","zested","sweetened","powdered","longgrain","garnish","indian","dressing","soup","at","active","french","lean","chip","sour","condensed","long","smoked","ripe","skinned","fillet","from","stem","flaked","removed","zest","stalk","unsweetened","baby","cover","crust", "extra", "prepared", "blend", "of", "ring"};
+
+        initFirestore();
+
         Recipe model = recipes.get(position);
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.diskCacheStrategy(DiskCacheStrategy.ALL);
@@ -118,12 +162,53 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 .into(holder.thumbnail);
 
 
-        int ingredients = recipes.get(position).getIncredientLines().size();
+        List<String> ingredients = recipes.get(position).getIncredientLines();
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < ingredients.size(); i++) {
+            for (int j = 0; j < measures.length; j++) {
+                builder = new StringBuilder(removeWord(ingredients.get(i), measures[j]));
+            }
+//            for (int k = 0; k < common_remove.length; k++) {
+//                builder.append(removeWord(ingredients.get(i), measures[k]));
+//            }
+            System.out.println("Builder: " + builder);
+        }
 
-        String totalIngredients = ingredients + " ingredients";
+        String totalIngredients = recipes.get(position).getIncredientLines().size() + " ingredients";
 
         holder.title.setText(recipes.get(position).getLabel());
         holder.ingredients.setText(totalIngredients);
+
+        for (int i = 0; i < ingredientParametersArray.length; i++) {
+            smartyFirestore.collection("items")
+                    .whereEqualTo("itemName", ingredientParametersArray[i])
+                    .limit(20)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                Double totalItemsPrice = 0.0;
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    // Get price of ingredient
+                                    totalItemsPrice += Double.parseDouble(document.getData().get("itemPrice").toString());
+                                    Log.d(TAG, document.getId() + " => " + document.getData().get("itemPrice").toString());
+
+                                }
+
+                                holder.totalPrice.setText(String.valueOf(totalItemsPrice));
+
+                                System.out.println("TOTAL PRICE:" + totalItemsPrice);
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
+                            //notifyDataSetChanged();
+                        }
+                    });
+        }
+
+        System.out.println("DBITEMS:" + dbItemList.toString());
+
 
         holder.viewRecipeBtn.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), RecipeDetails.class);
@@ -137,15 +222,36 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             v.getContext().startActivity(intent);
         });
 
+
         holder.recipeCard.setOnClickListener(v -> {
+
+            Recipe recipe = recipes.get(position);
             System.out.println("Tapped!");
+            System.out.println(recipe.getIncredientLines().toString());
             System.out.println(ingredientParameters);
-            AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext(), R.style.IngredientSummary);
-            builder.setTitle("Ingredient Summary");
-            // Hardcoding values for now
-            builder.setMessage("You are missing the following ingredients: Onions, Black Pepper, Tomatoes");
-            builder.setPositiveButton("OK", null);
-            builder.show();
+
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext(), R.style.IngredientSummary);
+                    builder.setTitle("Ingredient Summary");
+                    // Hardcoding values for now
+                    builder.setMessage("You are missing the following ingredients: Onions, Black Pepper, Tomatoes. Total price is: ");
+                    builder.setPositiveButton("OK", null);
+                    builder.show();
+
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            //totalCost[0] = 0.0;
+                        }
+                    });
+                    Log.d("Handler", "Running Handler");
+                }
+            }, 1000);
+
+
         });
     }
 
@@ -153,4 +259,29 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     public int getItemCount() {
         return recipes.size();
     }
- }
+
+    public static String removeWord(String string, String word)
+    {
+
+        // Check if the word is present in string
+        // If found, remove it using removeAll()
+        if (string.contains(word)) {
+
+            // To cover the case
+            // if the word is at the
+            // beginning of the string
+            // or anywhere in the middle
+            String tempWord = word + " ";
+            string = string.replaceAll(tempWord, "");
+
+            // To cover the edge case
+            // if the word is at the
+            // end of the string
+            tempWord = " " + word;
+            string = string.replaceAll(tempWord, "");
+        }
+
+        // Return the resultant string
+        return string;
+    }
+}

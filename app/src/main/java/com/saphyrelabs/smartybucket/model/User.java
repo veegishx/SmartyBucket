@@ -16,12 +16,16 @@ public class User {
     private String userEmail;
     private HashMap<String, Boolean> userMealPreferences;
     private String userMealPreferencesString;
+    private float budget;
+    private float expenses;
 
-    public User(String userId, String userName, String userEmail, HashMap<String, Boolean> userMealPreferences) {
+    public User(String userId, String userName, String userEmail, HashMap<String, Boolean> userMealPreferences, float budget, float expenses) {
         this.userId = userId;
         this.userName = userName;
         this.userEmail = userEmail;
         this.userMealPreferences = userMealPreferences;
+        this.budget = budget;
+        this.expenses = expenses;
     }
 
     public User(String userId, String userName, String userEmail, String userMealPreferencesString) {
@@ -63,5 +67,21 @@ public class User {
 
     public void setUserMealPreferences(HashMap<String, Boolean> userMealPrefereces) {
         this.userMealPreferences = userMealPrefereces;
+    }
+
+    public double getBudget() {
+        return budget;
+    }
+
+    public void setBudget(float budget) {
+        this.budget = budget;
+    }
+
+    public double getExpenses() {
+        return expenses;
+    }
+
+    public void setExpenses(float expenses) {
+        this.expenses = expenses;
     }
 }
