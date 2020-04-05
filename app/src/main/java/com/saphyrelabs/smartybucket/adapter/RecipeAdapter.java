@@ -249,8 +249,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             }, 1000);
         });
 
+        /**
+         * Add recipe expense to user model and send to Firestore
+         */
         holder.addToBudgetBtn.setOnClickListener(v -> {
-
+            System.out.println("PRICE OF EXPENSE:" + holder.totalPrice.getText());
         });
     }
 
