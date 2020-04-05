@@ -1,6 +1,7 @@
 package com.saphyrelabs.smartybucket;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,12 +40,14 @@ public class DisplayRecipes extends AppCompatActivity {
     private List<Recipe> recipes;
     private TextView totalRecipes;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_recipes);
         totalRecipes = (TextView) findViewById(R.id.totalRecipes);
+
+        SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
+        String userId = userConfigurations.getString("facebookUid","0");
 
         Intent intent = getIntent();
         Bundle args = intent.getBundleExtra("BUNDLE");
@@ -77,7 +80,7 @@ public class DisplayRecipes extends AppCompatActivity {
 
                 String totalRecipesString = response.body().getCount() + " Recipes Found";
                 totalRecipes.setText(totalRecipesString);
-                recyclerView.setAdapter(new RecipeAdapter(ingredientsParameter, recipes, R.layout.item, getApplicationContext()));
+                recyclerView.setAdapter(new RecipeAdapter(userId, ingredientsParameter, recipes, R.layout.item, getApplicationContext()));
             }
 
             @Override

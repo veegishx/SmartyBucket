@@ -4,6 +4,7 @@ package com.saphyrelabs.smartybucket.adapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.Log;
@@ -34,6 +35,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -41,14 +45,22 @@ import com.saphyrelabs.smartybucket.R;
 import com.saphyrelabs.smartybucket.RecipeDetails;
 import com.saphyrelabs.smartybucket.model.Item;
 import com.saphyrelabs.smartybucket.model.Recipe;
+import com.saphyrelabs.smartybucket.model.User;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
     private final String ingredientParameters;
+    private final String userId;
     private List<Recipe> recipes;
     private Context context;
     private int rowLayout;
@@ -106,7 +118,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         }
     }
 
-    public RecipeAdapter(String ingredientParameters, List<Recipe> recipes, int rowLayout, Context context) {
+    public RecipeAdapter(String userId, String ingredientParameters, List<Recipe> recipes, int rowLayout, Context context) {
+        this.userId = userId;
         this.ingredientParameters = ingredientParameters;
         this.recipes = recipes;
         this.rowLayout = rowLayout;
@@ -254,6 +267,46 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
          */
         holder.addToBudgetBtn.setOnClickListener(v -> {
             System.out.println("PRICE OF EXPENSE:" + holder.totalPrice.getText());
+            DocumentReference docRef = smartyFirestore.collection("users").document(userId);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d(TAG, "DocumentSnapshot data: " + document.get("expenses"));
+                            Map<String, String> currentExpense = (HashMap<String, String>) document.get("expenses");
+                            Date date = new Date();
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                            if (currentExpense.get(formatter.format(date)) != null) {
+                                float updatedExpense = Float.parseFloat((String) holder.totalPrice.getText()) + Float.parseFloat(currentExpense.get(formatter.format(date)));
+                                currentExpense.put(formatter.format(date), String.valueOf(updatedExpense));
+                            } else {
+                                currentExpense.put(formatter.format(date), (String) holder.totalPrice.getText());
+                            }
+
+                            smartyFirestore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (DocumentSnapshot document : task.getResult()) {
+                                            User user = document.toObject(User.class);
+                                            user.setExpenses(currentExpense);
+                                            String id = document.getId();
+                                            smartyFirestore.collection("users").document(id).set(user); //Set student object
+                                        }
+                                    }
+                                }
+                            });
+
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
         });
     }
 
