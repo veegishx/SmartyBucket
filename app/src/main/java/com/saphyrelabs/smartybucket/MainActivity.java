@@ -26,6 +26,8 @@ import com.saphyrelabs.smartybucket.model.User;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -72,8 +74,9 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
                 editor.putString("modelType", "float");
                 editor.apply();
             }
+        });
 
-
+        Thread t2 = new Thread(() -> {
             if (budget == 0) {
                 // New user is prompted to enter budget
                 callSetBudgetPrompt();
@@ -82,19 +85,24 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
                 monthlyBudgetValue.setText(budgetString);
                 System.out.println("Budget is set to: " + userConfigurations.getFloat("budget", 0));
             }
+        });
 
+        Thread t3 = new Thread(() -> {
             if (!userMealPreferencesStatus) {
                 callSetUserMealPreferencesPrompt();
             }
         });
 
-        t1.start();
+        t2.start();
         try {
+            t2.join();
+            t1.start();
             t1.join();
+            t3.start();
+            t3.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
 
         System.out.println();
         System.out.println("---------------------- DEBUG INFO ----------------------");
@@ -201,7 +209,8 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         editor.apply();
         String budgetString = Float.toString(userBudget);
         monthlyBudgetValue.setText(budgetString);
-        System.out.println("Budget is set to: " + userConfigurations.getFloat("budget", 0));
+
+        sendDataToFirestore();
     }
 
     @Override
@@ -212,12 +221,13 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         editor.putBoolean("userMealPreferencesStatus", true);
 
         // Converting userMealPreferences into a JSON string to be stored in SharedPreferences
-        // JSONObject jsonObject = new JSONObject(userMealPreferences);
-        // String jsonString = jsonObject.toString();
-        // editor.putString("userMealPreferences", jsonString);
-        editor.apply();
+        JSONObject jsonObject = new JSONObject(userMealPreferences);
+        String jsonString = jsonObject.toString();
+        editor.remove("userMealPreferences").commit();
+        editor.putString("userMealPreferences", jsonString);
+        editor.commit();
 
-        sendDataToFirestore(userMealPreferences);
+        sendDataToFirestore();
     }
 
     /**
@@ -251,15 +261,18 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
      * @params HashMap<String, Boolean> userMealPreferences
      *
      */
-    public void sendDataToFirestore(HashMap<String, Boolean> userMealPreferences) {
+    public void sendDataToFirestore() {
         SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
         String userId = userConfigurations.getString("facebookUid","0");
         String userName = userConfigurations.getString("facebookName","0");
         String userEmail = userConfigurations.getString("facebookEmail","0");
+        float budget = userConfigurations.getFloat("budget",0);
+        Map<String, String> expenses = new HashMap<>();
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        expenses.put(formatter.format(date), "0");
 
-        System.out.println("MEAL: " + userMealPreferences);
-
-        User newUser = new User(userId, userName, userEmail, userMealPreferences);
+        User newUser = new User(userId, userName, userEmail, (HashMap<String, Boolean>) loadMap(), budget, expenses);
 
         smartyFirestore.collection("users").document(userId).set(newUser)
                 .addOnSuccessListener(new OnSuccessListener< Void >() {
@@ -274,5 +287,12 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
                 Log.d("TAG", e.toString());
             }
         });
+
+        System.out.println("userId is set to: " + userId);
+        System.out.println("userName is set to: " + userName);
+        System.out.println("userEmail is set to: " + userEmail);
+        System.out.println("meal preferences is set to: " + loadMap());
+        System.out.println("budget is set to: " + budget);
+        System.out.println("expenses is set to: " + expenses);
     }
 }

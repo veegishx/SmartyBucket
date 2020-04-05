@@ -34,6 +34,8 @@ public class Item {
         this.itemPrice = itemPrice;
     }
 
+    public Item () {}
+
     public String getAddedBy() {
         return addedBy;
     }
