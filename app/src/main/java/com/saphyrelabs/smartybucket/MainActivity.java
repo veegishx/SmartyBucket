@@ -26,6 +26,8 @@ import com.saphyrelabs.smartybucket.model.User;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -265,7 +267,10 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         String userName = userConfigurations.getString("facebookName","0");
         String userEmail = userConfigurations.getString("facebookEmail","0");
         float budget = userConfigurations.getFloat("budget",0);
-        float expenses = 0;
+        Map<String, String> expenses = new HashMap<>();
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        expenses.put(formatter.format(date), "0");
 
         User newUser = new User(userId, userName, userEmail, (HashMap<String, Boolean>) loadMap(), budget, expenses);
 

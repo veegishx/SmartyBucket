@@ -82,8 +82,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         Button viewRecipeBtn, addToBudgetBtn;
         CardView recipeCard;
 
-        String [] measurementLabels = {"pound", "pounds", "cup", "cups", "tablespoon", "tablespoons", "ounce", "ounces", "teaspoon", "teaspoons", "tsp", "tbsp"};
-
         public RecipeViewHolder(View v, OnItemClickListener onItemClickListener) {
 
             super(v);
@@ -161,7 +159,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.thumbnail);
 
-
+        /**
+         * Trying to get ingredients from ingredientLines
+         */
         List<String> ingredients = recipes.get(position).getIncredientLines();
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < ingredients.size(); i++) {
@@ -209,7 +209,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
         System.out.println("DBITEMS:" + dbItemList.toString());
 
-
         holder.viewRecipeBtn.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), RecipeDetails.class);
 
@@ -222,9 +221,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             v.getContext().startActivity(intent);
         });
 
-
         holder.recipeCard.setOnClickListener(v -> {
-
             Recipe recipe = recipes.get(position);
             System.out.println("Tapped!");
             System.out.println(recipe.getIncredientLines().toString());
@@ -250,7 +247,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                     Log.d("Handler", "Running Handler");
                 }
             }, 1000);
+        });
 
+        holder.addToBudgetBtn.setOnClickListener(v -> {
 
         });
     }

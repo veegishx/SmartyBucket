@@ -2,6 +2,7 @@ package com.saphyrelabs.smartybucket.model;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Data Model for User
@@ -17,9 +18,9 @@ public class User {
     private HashMap<String, Boolean> userMealPreferences;
     private String userMealPreferencesString;
     private float budget;
-    private float expenses;
+    private Map<String, String> expenses;
 
-    public User(String userId, String userName, String userEmail, HashMap<String, Boolean> userMealPreferences, float budget, float expenses) {
+    public User(String userId, String userName, String userEmail, HashMap<String, Boolean> userMealPreferences, float budget, Map<String, String> expenses) {
         this.userId = userId;
         this.userName = userName;
         this.userEmail = userEmail;
@@ -77,11 +78,11 @@ public class User {
         this.budget = budget;
     }
 
-    public double getExpenses() {
+    public Map<String, String> getExpenses() {
         return expenses;
     }
 
-    public void setExpenses(float expenses) {
+    public void setExpenses(Map<String, String> expenses) {
         this.expenses = expenses;
     }
 }
