@@ -78,13 +78,7 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         // Retrieving persistent data
         SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
 
-        test1 = findViewById(R.id.test1);
         monthlyBudgetValue = findViewById(R.id.monthlyBudgetValue);
-
-        test1.setOnClickListener(view -> {
-            Intent i = new Intent(MainActivity.this, ReviewListImageItems.class);
-            startActivity(i);
-        });
 
         String modelType = userConfigurations.getString("modelType",null);
         String facebookEmail = userConfigurations.getString("facebookEmail",null);
