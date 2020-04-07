@@ -192,13 +192,20 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         llXAxis.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
         llXAxis.setTextSize(10f);
 
+        LimitLine ll2 = new LimitLine(budget / 4, "Weekly Limit");
+        ll2.setLineWidth(4f);
+        ll2.enableDashedLine(5f, 5f, 0f);
+        ll2.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
+        ll2.setTextSize(10f);
+
+
         XAxis xAxis = mChart.getXAxis();
         xAxis.enableGridDashedLine(10f, 10f, 0f);
         xAxis.setAxisMaximum(30f);
         xAxis.setAxisMinimum(0f);
         xAxis.setDrawLimitLinesBehindData(true);
 
-        LimitLine ll1 = new LimitLine(500f, "Monthly Budget");
+        LimitLine ll1 = new LimitLine(budget, "Monthly Budget");
         ll1.setLineWidth(4f);
         ll1.enableDashedLine(10f, 10f, 0f);
         ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
@@ -207,7 +214,8 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.removeAllLimitLines();
         leftAxis.addLimitLine(ll1);
-        leftAxis.setAxisMaximum(budget + 500);
+        leftAxis.addLimitLine(ll2);
+        leftAxis.setAxisMaximum(budget + 200);
         leftAxis.setAxisMinimum(0f);
         leftAxis.enableGridDashedLine(10f, 10f, 0f);
         leftAxis.setDrawZeroLine(false);

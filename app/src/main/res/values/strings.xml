@@ -61,5 +61,5 @@
     </string-array>
     <string name="set_budget_desc">Setting a monthly spending target is important as it helps in the forecasting and planning process!</string>
     <string name="set_preferences_desc">Setting preferences will allow us to show the most suitable recipes for you</string>
-    <string name="main_activity_expenses_chart_label">Monthly Expenses</string>
+    <string name="main_activity_expenses_chart_label">Expenses Tracking</string>
 </resources>
