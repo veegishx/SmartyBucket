@@ -2,10 +2,14 @@ package com.saphyrelabs.smartybucket;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.DashPathEffect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,23 +18,43 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.saphyrelabs.smartybucket.model.User;
 
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
+
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.LimitLine;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.Utils;
+
 
 public class MainActivity extends AppCompatActivity implements SetBudget.SetBudgetListenerInterface, SetPreferences.SetPreferencesListenerInterface{
     BottomAppBar bab;
@@ -38,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
     private BottomSheetDialog bottomSheetDialog;
     private TextView monthlyBudgetValue;
     private FirebaseFirestore smartyFirestore;
+    private LineChart mChart;
+    private static final String TAG = "MainActivityFirestore";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,7 +177,119 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
             Intent cameraIntent = new Intent(MainActivity.this, ScanType.class);
             startActivity(cameraIntent);
         });
+
+        mChart = findViewById(R.id.chart);
+        mChart.setTouchEnabled(true);
+        mChart.setPinchZoom(true);
+        CustomChartMarkerView mv = new CustomChartMarkerView(getApplicationContext(), R.layout.activity_custom_chart_marker_view);
+        mv.setChartView(mChart);
+        mChart.setMarker(mv);
+        renderData();
+
     }
+
+    public void renderData() {
+        SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
+        float budget = userConfigurations.getFloat("budget",0);
+
+        LimitLine llXAxis = new LimitLine(30f, "Index 30");
+        llXAxis.setLineWidth(4f);
+        llXAxis.enableDashedLine(10f, 10f, 0f);
+        llXAxis.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
+        llXAxis.setTextSize(10f);
+
+        XAxis xAxis = mChart.getXAxis();
+        xAxis.enableGridDashedLine(10f, 10f, 0f);
+        xAxis.setAxisMaximum(30f);
+        xAxis.setAxisMinimum(0f);
+        xAxis.setDrawLimitLinesBehindData(true);
+
+        LimitLine ll1 = new LimitLine(500f, "Monthly Budget");
+        ll1.setLineWidth(4f);
+        ll1.enableDashedLine(10f, 10f, 0f);
+        ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
+        ll1.setTextSize(10f);
+
+        YAxis leftAxis = mChart.getAxisLeft();
+        leftAxis.removeAllLimitLines();
+        leftAxis.addLimitLine(ll1);
+        leftAxis.setAxisMaximum(budget + 500);
+        leftAxis.setAxisMinimum(0f);
+        leftAxis.enableGridDashedLine(10f, 10f, 0f);
+        leftAxis.setDrawZeroLine(false);
+        leftAxis.setDrawLimitLinesBehindData(false);
+
+        mChart.getAxisRight().setEnabled(false);
+        setData();
+    }
+
+    private void setData() {
+        SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
+        String userId = userConfigurations.getString("facebookUid","0");
+
+        ArrayList<Entry> values = new ArrayList<>();
+
+        DocumentReference docRef = smartyFirestore.collection("users").document(userId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document.get("expenses"));
+                        Map<String, String> currentExpense = (HashMap<String, String>) document.get("expenses");
+                        System.out.println(currentExpense);
+                        Random rand = new Random();
+                        currentExpense.forEach((k, v) -> {
+                            values.add(new Entry(Float.parseFloat(k.substring(0, 2)), Float.parseFloat(v)));
+                        });
+
+                        LineDataSet set1;
+                        if (mChart.getData() != null && mChart.getData().getDataSetCount() > 0) {
+                            set1 = (LineDataSet) mChart.getData().getDataSetByIndex(0);
+                            set1.setValues(values);
+                            mChart.getData().notifyDataChanged();
+                            mChart.notifyDataSetChanged();
+                        } else {
+                            set1 = new LineDataSet(values, "Monthly Expenses");
+                            set1.setDrawIcons(false);
+                            set1.enableDashedLine(10f, 5f, 0f);
+                            set1.enableDashedHighlightLine(10f, 5f, 0f);
+                            set1.setColor(Color.DKGRAY);
+                            set1.setCircleColor(Color.DKGRAY);
+                            set1.setLineWidth(1f);
+                            set1.setCircleRadius(3f);
+                            set1.setDrawCircleHole(false);
+                            set1.setValueTextSize(9f);
+                            set1.setDrawFilled(true);
+                            set1.setFormLineWidth(1f);
+                            set1.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
+                            set1.setFormSize(15.f);
+
+                            if (Utils.getSDKInt() >= 18) {
+                                Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.gradient_background_main);
+                                set1.setFillDrawable(drawable);
+                            } else {
+                                set1.setFillColor(Color.DKGRAY);
+                            }
+                            ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+                            dataSets.add(set1);
+                            LineData data = new LineData(dataSets);
+                            mChart.setData(data);
+                        }
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+
+
+    }
+
 
     private void openNavigationMenu() {
 

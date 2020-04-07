@@ -12,7 +12,7 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/gradient_background_main"
+        android:background="@color/MainActivityBackground"
         android:padding="5dp">
 
         <LinearLayout
@@ -219,6 +219,7 @@
                     android:src="@drawable/add_more_items_background"
                     app:srcCompat="@drawable/add_more_items_background" />
 
+
                 <RelativeLayout
                     android:id="@+id/add_more_items_banner"
                     android:layout_width="match_parent"
@@ -271,6 +272,17 @@
 
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="30dp">
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/test1"

@@ -8,4 +8,5 @@
     <color name="colorPromptGradienEnd">#8E2DE2</color>
     <color name="colorMainGradientStart">#0072ff</color>
     <color name="colorMainGradientEnd">#00c6ff</color>
+    <color name="MainActivityBackground">#F3F3F3</color>
 </resources>

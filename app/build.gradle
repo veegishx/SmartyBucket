@@ -81,9 +81,12 @@ dependencies {
     implementation 'org.slf4j:slf4j-nop:1.7.25'
 
     implementation 'com.google.android.gms:play-services-vision:19.0.0'
+
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 apply plugin: 'com.google.gms.google-services'
