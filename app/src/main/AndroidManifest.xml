@@ -100,6 +100,26 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ClassifierActivity"
+            android:label="@string/tfe_ic_app_name"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
+
+        <activity
+            android:name=".tflite.Classifier"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
+
+        <activity android:name=".tflite.ClassifierFloatMobileNet"></activity>
+        <activity android:name=".CameraActivity"></activity>
+        <activity android:name=".env.Logger"></activity>
+        <activity android:name=".env.ImageUtils"></activity>
+        <activity android:name=".env.BorderedText"></activity>
+        <activity android:name=".customview.AutoFitTextureView"></activity>
+        <activity android:name=".customview.OverlayView"></activity>
+        <activity android:name=".customview.RecognitionScoreView"></activity>
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"

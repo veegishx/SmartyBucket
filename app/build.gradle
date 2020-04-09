@@ -63,7 +63,9 @@ dependencies {
 
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     // Tensorflow Lite
-    implementation 'org.tensorflow:tensorflow-lite:+'
+    implementation('org.tensorflow:tensorflow-lite:0.0.0-nightly') { changing = true }
+    implementation('org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly') { changing = true }
+    implementation('org.tensorflow:tensorflow-lite-support:0.0.0-nightly') { changing = true }
     // Cropping Library
     implementation 'com.soundcloud.android:android-crop:1.0.1@aar'
     // Gif Library

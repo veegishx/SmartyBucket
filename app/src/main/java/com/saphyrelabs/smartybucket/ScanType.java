@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.saphyrelabs.smartybucket.tflite.Classifier;
 import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
@@ -61,15 +62,17 @@ public class ScanType extends AppCompatActivity {
                 SharedPreferences myPreferences = getSharedPreferences("userConfigurations", MODE_PRIVATE);
                 String modelType = myPreferences.getString("modelType",null);
                 scanType = 2;
-                if (modelType.equals("float")) {
-                    choice = "inception_float.tflite";
-                    quant = false;
-                    openCameraIntent();
-                } else  {
-                    choice = "inception_quant.tflite";
-                    quant = true;
-                    openCameraIntent();
-                }
+                Intent i = new Intent(ScanType.this, ClassifierActivity.class);
+                startActivity(i);
+//                if (modelType.equals("float")) {
+//                    choice = "new_mobile_model.tflite";
+//                    quant = false;
+//                    openCameraIntent();
+//                } else  {
+//                    choice = "inception_quant.tflite";
+//                    quant = true;
+//                    openCameraIntent();
+//                }
 
 
             }

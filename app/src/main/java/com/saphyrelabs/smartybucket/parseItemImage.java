@@ -249,7 +249,7 @@ public class parseItemImage extends AppCompatActivity {
         List<String> labelList = new ArrayList<String>();
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new InputStreamReader(this.getAssets().open("labels.txt")));
+            reader = new BufferedReader(new InputStreamReader(this.getAssets().open("class_labels.txt")));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

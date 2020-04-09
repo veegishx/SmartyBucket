@@ -9,4 +9,10 @@
     <color name="colorMainGradientStart">#0072ff</color>
     <color name="colorMainGradientEnd">#00c6ff</color>
     <color name="MainActivityBackground">#F3F3F3</color>
+
+    <color name="tfe_color_primary">#ffa800</color>
+    <color name="tfe_color_primary_dark">#ff6f00</color>
+    <color name="tfe_color_accent">#425066</color>
+
+    <color name="tfe_semi_transparent">#66000000</color>
 </resources>
