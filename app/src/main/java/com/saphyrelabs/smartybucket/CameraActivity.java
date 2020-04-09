@@ -43,6 +43,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -50,9 +51,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.List;
 import com.saphyrelabs.smartybucket.env.ImageUtils;
 import com.saphyrelabs.smartybucket.env.Logger;
+import com.saphyrelabs.smartybucket.model.Ingredient;
 import com.saphyrelabs.smartybucket.tflite.Classifier.Device;
 import com.saphyrelabs.smartybucket.tflite.Classifier.Recognition;
 
@@ -91,6 +94,9 @@ public abstract class CameraActivity extends AppCompatActivity
       cameraResolutionTextView,
       rotationTextView,
       inferenceTimeTextView;
+  protected Button recognitionButton,
+      recognition1Button,
+      recognition2Button;
   protected ImageView bottomSheetArrowImageView;
   private ImageView plusImageView, minusImageView;
   private Spinner deviceSpinner;
@@ -98,6 +104,8 @@ public abstract class CameraActivity extends AppCompatActivity
 
   private Device device = Device.CPU;
   private int numThreads = -1;
+
+  private ArrayList<Ingredient> listOfIngredients = new ArrayList<Ingredient>();
 
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
@@ -171,10 +179,13 @@ public abstract class CameraActivity extends AppCompatActivity
 
     recognitionTextView = findViewById(R.id.detected_item);
     recognitionValueTextView = findViewById(R.id.detected_item_value);
+    recognitionButton = findViewById(R.id.detected_item_choose);
     recognition1TextView = findViewById(R.id.detected_item1);
     recognition1ValueTextView = findViewById(R.id.detected_item1_value);
+    recognition1Button = findViewById(R.id.detected_item1_choose);
     recognition2TextView = findViewById(R.id.detected_item2);
     recognition2ValueTextView = findViewById(R.id.detected_item2_value);
+    recognition2Button = findViewById(R.id.detected_item2_choose);
 
     frameValueTextView = findViewById(R.id.frame_info);
     cropValueTextView = findViewById(R.id.crop_info);
@@ -523,6 +534,13 @@ public abstract class CameraActivity extends AppCompatActivity
         if (recognition.getConfidence() != null)
           recognitionValueTextView.setText(
               String.format("%.2f", (100 * recognition.getConfidence())) + "%");
+        recognitionButton.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            listOfIngredients.add(new Ingredient(recognition.getTitle().toLowerCase()));
+            System.out.println(listOfIngredients);
+          }
+        });
       }
 
       Recognition recognition1 = results.get(1);
@@ -531,6 +549,13 @@ public abstract class CameraActivity extends AppCompatActivity
         if (recognition1.getConfidence() != null)
           recognition1ValueTextView.setText(
               String.format("%.2f", (100 * recognition1.getConfidence())) + "%");
+        recognition1Button.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            listOfIngredients.add(new Ingredient(recognition1.getTitle().toLowerCase()));
+            System.out.println(listOfIngredients);
+          }
+        });
       }
 
       Recognition recognition2 = results.get(2);
@@ -539,6 +564,13 @@ public abstract class CameraActivity extends AppCompatActivity
         if (recognition2.getConfidence() != null)
           recognition2ValueTextView.setText(
               String.format("%.2f", (100 * recognition2.getConfidence())) + "%");
+        recognition2Button.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            listOfIngredients.add(new Ingredient(recognition2.getTitle().toLowerCase()));
+            System.out.println(listOfIngredients);
+          }
+        });
       }
     }
   }

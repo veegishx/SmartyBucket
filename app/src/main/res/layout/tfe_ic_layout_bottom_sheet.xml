@@ -27,6 +27,13 @@
             android:layout_gravity="center"
             android:src="@drawable/icn_chevron_up" />
 
+        <Button
+            android:id="@+id/detected_item_complete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#2CC632"
+            android:text="@string/crop__done" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,18 +42,28 @@
 
             <TextView
                 android:id="@+id/detected_item"
-                android:layout_width="wrap_content"
+                android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/detected_item_value"
-                android:layout_width="match_parent"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:gravity="right"
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/detected_item_choose"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:background="#DFDFDF"
+                android:backgroundTint="#DFDFDF"
+                android:text="Choose"
+                android:textColor="#000000" />
 
         </LinearLayout>
 
@@ -58,18 +75,28 @@
 
             <TextView
                 android:id="@+id/detected_item1"
-                android:layout_width="wrap_content"
+                android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/detected_item1_value"
-                android:layout_width="match_parent"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:gravity="right"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/detected_item1_choose"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:background="#DFDFDF"
+                android:backgroundTint="#DFDFDF"
+                android:text="Choose"
+                android:textColor="#000000" />
 
         </LinearLayout>
 
@@ -81,18 +108,28 @@
 
             <TextView
                 android:id="@+id/detected_item2"
-                android:layout_width="wrap_content"
+                android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/detected_item2_value"
-                android:layout_width="match_parent"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:gravity="right"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/detected_item2_choose"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:background="#DFDFDF"
+                android:backgroundTint="#DFDFDF"
+                android:text="Choose"
+                android:textColor="#000000" />
 
         </LinearLayout>
 
