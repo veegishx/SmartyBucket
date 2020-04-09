@@ -242,10 +242,11 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
                         Log.d(TAG, "DocumentSnapshot data: " + document.get("expenses"));
                         Map<String, String> currentExpense = (HashMap<String, String>) document.get("expenses");
                         System.out.println(currentExpense);
-                        Random rand = new Random();
-                        currentExpense.forEach((k, v) -> {
-                            values.add(new Entry(Float.parseFloat(k.substring(0, 2)), Float.parseFloat(v)));
-                        });
+                        if (currentExpense != null) {
+                            currentExpense.forEach((k, v) -> {
+                                values.add(new Entry(Float.parseFloat(k.substring(0, 2)), Float.parseFloat(v)));
+                            });
+                        }
 
                         LineDataSet set1;
                         if (mChart.getData() != null && mChart.getData().getDataSetCount() > 0) {
@@ -407,24 +408,41 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         String userName = userConfigurations.getString("facebookName","0");
         String userEmail = userConfigurations.getString("facebookEmail","0");
         float budget = userConfigurations.getFloat("budget",0);
-        Map<String, String> expenses = new HashMap<>();
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        expenses.put(formatter.format(date), "0");
+//        Map<String, String> expenses = new HashMap<>();
+//        Date date = new Date();
+//        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+//        expenses.put(formatter.format(date), "0");
 
-        User newUser = new User(userId, userName, userEmail, (HashMap<String, Boolean>) loadMap(), budget, expenses);
+        DocumentReference docRef = smartyFirestore.collection("users").document(userId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        docRef.update("budget", budget);
+                        docRef.update("userMealPreferences", (HashMap<String, Boolean>) loadMap());
+                    } else {
+                        Log.d(TAG, "No such document");
+                        User newUser = new User(userId, userName, userEmail, (HashMap<String, Boolean>) loadMap(), budget);
 
-        smartyFirestore.collection("users").document(userId).set(newUser)
-                .addOnSuccessListener(new OnSuccessListener< Void >() {
-                    public void onSuccess(Void aVoid) {
-                        View contextView = findViewById(R.id.scrollView);
-                        Snackbar.make(contextView, "You are all set! ", Snackbar.LENGTH_SHORT).show();
+                        smartyFirestore.collection("users").document(userId).set(newUser)
+                                .addOnSuccessListener(new OnSuccessListener< Void >() {
+                                    public void onSuccess(Void aVoid) {
+                                        View contextView = findViewById(R.id.scrollView);
+                                        Snackbar.make(contextView, "You are all set! ", Snackbar.LENGTH_SHORT).show();
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                            public void onFailure(@NonNull Exception e) {
+                                View contextView = findViewById(R.id.scrollView);
+                                Snackbar.make(contextView, "ERROR: " + e.toString(), Snackbar.LENGTH_LONG).show();
+                                Log.d("TAG", e.toString());
+                            }
+                        });
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-            public void onFailure(@NonNull Exception e) {
-                View contextView = findViewById(R.id.scrollView);
-                Snackbar.make(contextView, "ERROR: " + e.toString(), Snackbar.LENGTH_LONG).show();
-                Log.d("TAG", e.toString());
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
             }
         });
 
@@ -433,6 +451,6 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         System.out.println("userEmail is set to: " + userEmail);
         System.out.println("meal preferences is set to: " + loadMap());
         System.out.println("budget is set to: " + budget);
-        System.out.println("expenses is set to: " + expenses);
+//        System.out.println("expenses is set to: " + expenses);
     }
 }

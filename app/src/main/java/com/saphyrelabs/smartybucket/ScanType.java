@@ -136,29 +136,16 @@ public class ScanType extends AppCompatActivity {
 
         // if cropping acitivty is finished, get the resulting cropped image uri and send it to 'parseItemImage' or 'parseListImage' activity, depending on user choice of scan
         else if(requestCode == Crop.REQUEST_CROP && resultCode == RESULT_OK){
-            if (scanType == 2) {
-                imageUri = Crop.getOutput(data);
-                Intent i = new Intent(ScanType.this, parseItemImage.class);
-                // put image data in extras to send
-                i.putExtra("resID_uri", imageUri);
-                // put filename in extras
-                i.putExtra("choice", choice);
-                // put model type in extras
-                i.putExtra("quant", quant);
-                // send other required data
-                startActivity(i);
-            } else {
-                imageUri = Crop.getOutput(data);
-                Intent i = new Intent(ScanType.this, parseListImage.class);
-                // put image data in extras to send
-                i.putExtra("resID_uri", imageUri);
-                // put filename in extras
-                i.putExtra("choice", choice);
-                // put model type in extras
-                i.putExtra("quant", quant);
-                // send other required data
-                startActivity(i);
-            }
+            imageUri = Crop.getOutput(data);
+            Intent i = new Intent(ScanType.this, parseListImage.class);
+            // put image data in extras to send
+            i.putExtra("resID_uri", imageUri);
+            // put filename in extras
+            i.putExtra("choice", choice);
+            // put model type in extras
+            i.putExtra("quant", quant);
+            // send other required data
+            startActivity(i);
         }
     }
 }
