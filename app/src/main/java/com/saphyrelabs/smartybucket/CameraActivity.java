@@ -534,45 +534,48 @@ public abstract class CameraActivity extends AppCompatActivity
   protected void showResultsInBottomSheet(List<Recognition> results) {
     if (results != null && results.size() >= 3) {
       Recognition recognition = results.get(0);
+      String recognitionClean = recognition.getTitle().replace("_", " ");
       if (recognition != null) {
-        if (recognition.getTitle() != null) recognitionTextView.setText(recognition.getTitle());
+        if (recognition.getTitle() != null) recognitionTextView.setText(recognitionClean);
         if (recognition.getConfidence() != null)
           recognitionValueTextView.setText(
               String.format("%.2f", (100 * recognition.getConfidence())) + "%");
         recognitionButton.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-            listOfIngredients.add(new Ingredient(recognition.getTitle().toLowerCase()));
+            listOfIngredients.add(new Ingredient(recognitionClean));
             System.out.println(listOfIngredients);
           }
         });
       }
 
       Recognition recognition1 = results.get(1);
+      String recognition1Clean = recognition1.getTitle().replace("_", " ");
       if (recognition1 != null) {
-        if (recognition1.getTitle() != null) recognition1TextView.setText(recognition1.getTitle());
+        if (recognition1.getTitle() != null) recognition1TextView.setText(recognition1Clean);
         if (recognition1.getConfidence() != null)
           recognition1ValueTextView.setText(
               String.format("%.2f", (100 * recognition1.getConfidence())) + "%");
         recognition1Button.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-            listOfIngredients.add(new Ingredient(recognition1.getTitle().toLowerCase()));
+            listOfIngredients.add(new Ingredient(recognition1Clean));
             System.out.println(listOfIngredients);
           }
         });
       }
 
       Recognition recognition2 = results.get(2);
+      String recognition2Clean = recognition2.getTitle().replace("_", " ");
       if (recognition2 != null) {
-        if (recognition2.getTitle() != null) recognition2TextView.setText(recognition2.getTitle());
+        if (recognition2.getTitle() != null) recognition2TextView.setText(recognition2Clean);
         if (recognition2.getConfidence() != null)
           recognition2ValueTextView.setText(
               String.format("%.2f", (100 * recognition2.getConfidence())) + "%");
         recognition2Button.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-            listOfIngredients.add(new Ingredient(recognition2.getTitle().toLowerCase()));
+            listOfIngredients.add(new Ingredient(recognition2Clean));
             System.out.println(listOfIngredients);
           }
         });
