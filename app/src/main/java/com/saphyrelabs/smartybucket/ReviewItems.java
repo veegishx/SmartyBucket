@@ -6,13 +6,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import com.saphyrelabs.smartybucket.adapter.ReviewIngredientAdapter;
 import com.saphyrelabs.smartybucket.model.Ingredient;
@@ -20,7 +17,7 @@ import com.saphyrelabs.smartybucket.model.Ingredient;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ReviewListImageItems extends AppCompatActivity {
+public class ReviewItems extends AppCompatActivity {
     private RecyclerView listItemsRecyclerView;
     private Button searchRecipes;
     private ArrayList<Ingredient> reviewedIngredients;
@@ -29,7 +26,7 @@ public class ReviewListImageItems extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_review_list_image_items);
+        setContentView(R.layout.activity_review_items);
 
         searchRecipes = findViewById(R.id.searchRecipes);
         ingredientTitle = findViewById(R.id.ingredientTitle);
@@ -52,7 +49,7 @@ public class ReviewListImageItems extends AppCompatActivity {
         searchRecipes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent displayRecipeActivity = new Intent(ReviewListImageItems.this, DisplayRecipes.class);
+                Intent displayRecipeActivity = new Intent(ReviewItems.this, DisplayRecipes.class);
                 Bundle args = new Bundle();
                 args.putSerializable("ingredients",(Serializable) reviewIngredientAdapter.getIngredients());
                 displayRecipeActivity.putExtra("BUNDLE",args);

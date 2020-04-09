@@ -19,6 +19,7 @@ package com.saphyrelabs.smartybucket;
 import android.Manifest;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.hardware.camera2.CameraAccessException;
@@ -50,6 +51,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -96,7 +99,8 @@ public abstract class CameraActivity extends AppCompatActivity
       inferenceTimeTextView;
   protected Button recognitionButton,
       recognition1Button,
-      recognition2Button;
+      recognition2Button,
+      recognitionCompleteButton;
   protected ImageView bottomSheetArrowImageView;
   private ImageView plusImageView, minusImageView;
   private Spinner deviceSpinner;
@@ -186,6 +190,7 @@ public abstract class CameraActivity extends AppCompatActivity
     recognition2TextView = findViewById(R.id.detected_item2);
     recognition2ValueTextView = findViewById(R.id.detected_item2_value);
     recognition2Button = findViewById(R.id.detected_item2_choose);
+    recognitionCompleteButton = findViewById(R.id.detected_item_complete);
 
     frameValueTextView = findViewById(R.id.frame_info);
     cropValueTextView = findViewById(R.id.crop_info);
@@ -572,6 +577,19 @@ public abstract class CameraActivity extends AppCompatActivity
           }
         });
       }
+
+      recognitionCompleteButton.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          Intent reviewItems = new Intent(CameraActivity.this, ReviewItems.class);
+          Bundle args = new Bundle();
+          args.putSerializable("ingredients",(Serializable) listOfIngredients);
+          reviewItems.putExtra("BUNDLE",args);
+          startActivity(reviewItems);
+        }
+      });
+
+
     }
   }
 
