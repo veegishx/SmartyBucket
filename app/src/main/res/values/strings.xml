@@ -24,6 +24,14 @@
     <string name="navigation_home">Home</string>
     <string name="navigation_recipes">My Preferences</string>
 
+    <string name="hello_message">Hello</string>
+    <string name="currency">$</string>
+    <string name="monthly_budget_label">Monthly Budget</string>
+    <string name="daily_expense_label">Daily Expenses</string>
+    <string name="default_daily_expense">0.00</string>
+    <string name="last_meal_added_label">Last Meal Added</string>
+    <string name="default_last_meal_added">Loading Last Meal Added</string>
+
     <!-- Register new Items and prices -->
     <string name="register_items_title">Your Bucket List</string>
     <string name="register_items_description">Add items that you usually buy &amp; their prices.</string>

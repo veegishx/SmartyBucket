@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
     BottomAppBar bab;
     Button test1;
     private BottomSheetDialog bottomSheetDialog;
-    private TextView monthlyBudgetValue;
+    private TextView monthlyBudgetValue, userGreeting, dailyExpensesValue;
     private FirebaseFirestore smartyFirestore;
     private LineChart mChart;
     private static final String TAG = "MainActivityFirestore";
@@ -79,12 +79,17 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
 
         monthlyBudgetValue = findViewById(R.id.monthlyBudgetValue);
+        userGreeting = findViewById(R.id.userGreeting);
+        dailyExpensesValue = findViewById(R.id.dailyExpensesValue);
 
         String modelType = userConfigurations.getString("modelType",null);
         String facebookEmail = userConfigurations.getString("facebookEmail",null);
         String facebookUid = userConfigurations.getString("facebookUid",null);
+        String userName = userConfigurations.getString("facebookName","0");
         float budget = userConfigurations.getFloat("budget",0);
         boolean userMealPreferencesStatus = userConfigurations.getBoolean("userMealPreferencesStatus", false);
+
+        userGreeting.setText("Hello, " + userName + ".");
 
         Thread t1 = new Thread(() -> {
             if (modelType == null) {
@@ -246,6 +251,10 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
                             currentExpense.forEach((k, v) -> {
                                 values.add(new Entry(Float.parseFloat(k.substring(0, 2)), Float.parseFloat(v)));
                             });
+
+                            Date date = new Date();
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                            dailyExpensesValue.setText(currentExpense.get(formatter.format(date)));
                         }
 
                         LineDataSet set1;
