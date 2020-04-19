@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.utils.EntryXComparator;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,6 +41,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -254,6 +256,8 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
                                 dailyExpensesValue.setText(currentExpense.get(formatter.format(date)));
                             }
                         }
+
+                        Collections.sort(values, new EntryXComparator());
 
                         LineDataSet set1;
                         if (mChart.getData() != null && mChart.getData().getDataSetCount() > 0) {
