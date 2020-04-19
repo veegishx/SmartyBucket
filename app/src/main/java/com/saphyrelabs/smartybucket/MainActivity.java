@@ -12,6 +12,7 @@ import android.graphics.DashPathEffect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -23,6 +24,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomnavigation.LabelVisibilityMode;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -57,9 +60,7 @@ import com.github.mikephil.charting.utils.Utils;
 
 
 public class MainActivity extends AppCompatActivity implements SetBudget.SetBudgetListenerInterface, SetPreferences.SetPreferencesListenerInterface{
-    BottomAppBar bab;
-    Button test1;
-    private BottomSheetDialog bottomSheetDialog;
+    BottomNavigationView bottomNav;
     private TextView monthlyBudgetValue, userGreeting, dailyExpensesValue;
     private FirebaseFirestore smartyFirestore;
     private LineChart mChart;
@@ -144,38 +145,33 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
 
 
         // Initialize BottomAppBar
-        bab = findViewById(R.id.bottom_app_bar);
-
-        // Append menu items to BottomAppBar
-        bab.replaceMenu(R.menu.menu_items);
+        bottomNav = findViewById(R.id.bottom_navigation);
 
         // Handle onClick event
-        bab.setOnMenuItemClickListener(item -> {
-            int id = item.getItemId();
-            switch (id){
-                case R.id.app_bar_inventory:
-                    Toast.makeText(MainActivity.this,"Inventory Clicked",Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.app_bar_search:
-                    Toast.makeText(MainActivity.this,"Search Clicked",Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.app_bar_settings:
-                    Intent myPreferencesIntent = new Intent(MainActivity.this, UserConfigurations.class);
-                    startActivity(myPreferencesIntent);
-                    break;
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch (id){
+                    case R.id.homeNav:
+                        Intent home = new Intent(MainActivity.this, MainActivity.class);
+                        startActivity(home);
+                        break;
+                    case R.id.scanNav:
+                        Intent scanType = new Intent(MainActivity.this, ScanType.class);
+                        startActivity(scanType);
+                        break;
+                }
+                return false;
             }
-            return false;
         });
-
-        // Register click event for BottomAppBar drawer icon
-        bab.setNavigationOnClickListener(v -> openNavigationMenu());
 
         // Register click event for BottomAppBar FloatingActionButton icon
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(v -> {
-            Intent cameraIntent = new Intent(MainActivity.this, ScanType.class);
-            startActivity(cameraIntent);
-        });
+//        FloatingActionButton fab = findViewById(R.id.fab);
+//        fab.setOnClickListener(v -> {
+//            Intent cameraIntent = new Intent(MainActivity.this, ScanType.class);
+//            startActivity(cameraIntent);
+//        });
 
         mChart = findViewById(R.id.chart);
         mChart.setTouchEnabled(true);
@@ -301,38 +297,7 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
     }
 
 
-    private void openNavigationMenu() {
 
-        //this will get the menu layout
-        final View bottomAppBarDrawer = getLayoutInflater().inflate(R.layout.fragment_bottomsheet,null);
-        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(MainActivity.this);
-        bottomSheetDialog.setContentView(bottomAppBarDrawer);
-        bottomSheetDialog.show();
-
-        //this will find NavigationView from id
-        NavigationView navigationView = bottomAppBarDrawer.findViewById(R.id.fragment_bottomsheet);
-
-        //This will handle the onClick Action for the menu item
-        navigationView.setNavigationItemSelectedListener(menuItem -> {
-            int id = menuItem.getItemId();
-            switch (id){
-                case R.id.nav1:
-                    Intent profileIntent = new Intent(MainActivity.this, UserProfile.class);
-                    startActivity(profileIntent);
-                    bottomSheetDialog.dismiss();
-                    break;
-                case R.id.nav2:
-                    Toast.makeText(MainActivity.this,"Item 2 Clicked",Toast.LENGTH_SHORT).show();
-                    bottomSheetDialog.dismiss();
-                    break;
-                case R.id.nav3:
-                    Toast.makeText(MainActivity.this,"Item 3 Clicked",Toast.LENGTH_SHORT).show();
-                    bottomSheetDialog.dismiss();
-                    break;
-            }
-            return MainActivity.super.onOptionsItemSelected(menuItem);
-        });
-    }
 
     private void initFirestore() {
         smartyFirestore = FirebaseFirestore.getInstance();

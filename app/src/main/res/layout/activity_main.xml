@@ -10,9 +10,11 @@
 
     <ScrollView
         android:id="@+id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/MainActivityBackground">
+        android:layout_width="409dp"
+        android:layout_height="676dp"
+        android:background="@color/MainActivityBackground"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -231,6 +233,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="85dp"
                 android:layout_margin="15dp"
+                android:layout_marginBottom="100dp"
                 app:cardCornerRadius="12dp"
                 app:cardPreventCornerOverlap="false"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -304,32 +307,26 @@
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
 
-            <androidx.coordinatorlayout.widget.CoordinatorLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <com.google.android.material.bottomappbar.BottomAppBar
-                    android:id="@+id/bottom_app_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    app:backgroundTint="@color/colorPrimary"
-                    app:fabAlignmentMode="center"
-                    app:hideOnScroll="true"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    app:navigationIcon="@drawable/ic_menu_white_24dp" />
-
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/fab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_camera_alt_white_24dp"
-                    app:layout_anchor="@id/bottom_app_bar" />
-
-            </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
         </LinearLayout>
     </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Main content -->
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="#000000"
+            app:itemIconTint="@color/white"
+            app:itemTextColor="@color/white"
+            app:menu="@menu/bottom_nav_drawer_menu" />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
