@@ -205,7 +205,6 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
 
 
         XAxis xAxis = mChart.getXAxis();
-        xAxis.enableGridDashedLine(10f, 10f, 0f);
         xAxis.setAxisMaximum(30f);
         xAxis.setAxisMinimum(0f);
         xAxis.setDrawLimitLinesBehindData(true);
@@ -222,7 +221,6 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         leftAxis.addLimitLine(ll2);
         leftAxis.setAxisMaximum(budget + 200);
         leftAxis.setAxisMinimum(0f);
-        leftAxis.enableGridDashedLine(10f, 10f, 0f);
         leftAxis.setDrawZeroLine(false);
         leftAxis.setDrawLimitLinesBehindData(false);
 
