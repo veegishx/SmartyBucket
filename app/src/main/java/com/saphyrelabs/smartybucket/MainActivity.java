@@ -2,42 +2,71 @@ package com.saphyrelabs.smartybucket;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.DashPathEffect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.utils.EntryXComparator;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomnavigation.LabelVisibilityMode;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.saphyrelabs.smartybucket.model.User;
 
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
+
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.LimitLine;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.Utils;
+
 
 public class MainActivity extends AppCompatActivity implements SetBudget.SetBudgetListenerInterface, SetPreferences.SetPreferencesListenerInterface{
-    BottomAppBar bab;
-    Button test1;
-    private BottomSheetDialog bottomSheetDialog;
-    private TextView monthlyBudgetValue;
+    BottomNavigationView bottomNav;
+    private TextView monthlyBudgetValue, userGreeting, dailyExpensesValue;
     private FirebaseFirestore smartyFirestore;
+    private LineChart mChart;
+    private static final String TAG = "MainActivityFirestore";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,19 +81,18 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         // Retrieving persistent data
         SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
 
-        test1 = findViewById(R.id.test1);
         monthlyBudgetValue = findViewById(R.id.monthlyBudgetValue);
-
-        test1.setOnClickListener(view -> {
-            Intent i = new Intent(MainActivity.this, ReviewListImageItems.class);
-            startActivity(i);
-        });
+        userGreeting = findViewById(R.id.userGreeting);
+        dailyExpensesValue = findViewById(R.id.dailyExpensesValue);
 
         String modelType = userConfigurations.getString("modelType",null);
         String facebookEmail = userConfigurations.getString("facebookEmail",null);
         String facebookUid = userConfigurations.getString("facebookUid",null);
+        String userName = userConfigurations.getString("facebookName","0");
         float budget = userConfigurations.getFloat("budget",0);
         boolean userMealPreferencesStatus = userConfigurations.getBoolean("userMealPreferencesStatus", false);
+
+        userGreeting.setText("Hello, " + userName + ".");
 
         Thread t1 = new Thread(() -> {
             if (modelType == null) {
@@ -119,72 +147,165 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
 
 
         // Initialize BottomAppBar
-        bab = findViewById(R.id.bottom_app_bar);
-
-        // Append menu items to BottomAppBar
-        bab.replaceMenu(R.menu.menu_items);
+        bottomNav = findViewById(R.id.bottom_navigation);
 
         // Handle onClick event
-        bab.setOnMenuItemClickListener(item -> {
-            int id = item.getItemId();
-            switch (id){
-                case R.id.app_bar_inventory:
-                    Toast.makeText(MainActivity.this,"Inventory Clicked",Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.app_bar_search:
-                    Toast.makeText(MainActivity.this,"Search Clicked",Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.app_bar_settings:
-                    Intent myPreferencesIntent = new Intent(MainActivity.this, UserConfigurations.class);
-                    startActivity(myPreferencesIntent);
-                    break;
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch (id){
+                    case R.id.homeNav:
+                        Intent home = new Intent(MainActivity.this, MainActivity.class);
+                        startActivity(home);
+                        break;
+                    case R.id.scanNav:
+                        Intent scanType = new Intent(MainActivity.this, ScanType.class);
+                        startActivity(scanType);
+                        break;
+                }
+                return false;
             }
-            return false;
         });
-
-        // Register click event for BottomAppBar drawer icon
-        bab.setNavigationOnClickListener(v -> openNavigationMenu());
 
         // Register click event for BottomAppBar FloatingActionButton icon
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(v -> {
-            Intent cameraIntent = new Intent(MainActivity.this, ScanType.class);
-            startActivity(cameraIntent);
-        });
+//        FloatingActionButton fab = findViewById(R.id.fab);
+//        fab.setOnClickListener(v -> {
+//            Intent cameraIntent = new Intent(MainActivity.this, ScanType.class);
+//            startActivity(cameraIntent);
+//        });
+
+        mChart = findViewById(R.id.chart);
+        mChart.setTouchEnabled(true);
+        mChart.setPinchZoom(true);
+        CustomChartMarkerView mv = new CustomChartMarkerView(getApplicationContext(), R.layout.activity_custom_chart_marker_view);
+        mv.setChartView(mChart);
+        mChart.setMarker(mv);
+        renderData();
+
     }
 
-    private void openNavigationMenu() {
+    public void renderData() {
+        SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
+        float budget = userConfigurations.getFloat("budget",0);
 
-        //this will get the menu layout
-        final View bottomAppBarDrawer = getLayoutInflater().inflate(R.layout.fragment_bottomsheet,null);
-        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(MainActivity.this);
-        bottomSheetDialog.setContentView(bottomAppBarDrawer);
-        bottomSheetDialog.show();
+        LimitLine llXAxis = new LimitLine(30f, "Index 30");
+        llXAxis.setLineWidth(4f);
+        llXAxis.enableDashedLine(10f, 10f, 0f);
+        llXAxis.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
+        llXAxis.setTextSize(10f);
 
-        //this will find NavigationView from id
-        NavigationView navigationView = bottomAppBarDrawer.findViewById(R.id.fragment_bottomsheet);
+        LimitLine ll2 = new LimitLine(budget / 4, "Weekly Limit");
+        ll2.setLineWidth(4f);
+        ll2.enableDashedLine(5f, 5f, 0f);
+        ll2.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
+        ll2.setTextSize(10f);
 
-        //This will handle the onClick Action for the menu item
-        navigationView.setNavigationItemSelectedListener(menuItem -> {
-            int id = menuItem.getItemId();
-            switch (id){
-                case R.id.nav1:
-                    Intent profileIntent = new Intent(MainActivity.this, UserProfile.class);
-                    startActivity(profileIntent);
-                    bottomSheetDialog.dismiss();
-                    break;
-                case R.id.nav2:
-                    Toast.makeText(MainActivity.this,"Item 2 Clicked",Toast.LENGTH_SHORT).show();
-                    bottomSheetDialog.dismiss();
-                    break;
-                case R.id.nav3:
-                    Toast.makeText(MainActivity.this,"Item 3 Clicked",Toast.LENGTH_SHORT).show();
-                    bottomSheetDialog.dismiss();
-                    break;
+
+        XAxis xAxis = mChart.getXAxis();
+        xAxis.setAxisMaximum(30f);
+        xAxis.setAxisMinimum(0f);
+        xAxis.setDrawLimitLinesBehindData(true);
+
+        LimitLine ll1 = new LimitLine(budget, "Monthly Budget");
+        ll1.setLineWidth(4f);
+        ll1.enableDashedLine(10f, 10f, 0f);
+        ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
+        ll1.setTextSize(10f);
+
+        YAxis leftAxis = mChart.getAxisLeft();
+        leftAxis.removeAllLimitLines();
+        leftAxis.addLimitLine(ll1);
+        leftAxis.addLimitLine(ll2);
+        leftAxis.setAxisMaximum(budget + 200);
+        leftAxis.setAxisMinimum(0f);
+        leftAxis.setDrawZeroLine(false);
+        leftAxis.setDrawLimitLinesBehindData(false);
+
+        mChart.getAxisRight().setEnabled(false);
+        setData();
+    }
+
+    private void setData() {
+        SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
+        String userId = userConfigurations.getString("facebookUid","0");
+
+        ArrayList<Entry> values = new ArrayList<>();
+
+        DocumentReference docRef = smartyFirestore.collection("users").document(userId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document.get("expenses"));
+                        Map<String, String> currentExpense = (HashMap<String, String>) document.get("expenses");
+                        System.out.println(currentExpense);
+                        if (currentExpense != null) {
+                            currentExpense.forEach((k, v) -> {
+                                values.add(new Entry(Float.parseFloat(k.substring(0, 2)), Float.parseFloat(v)));
+                            });
+
+                            Date date = new Date();
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                            if (currentExpense.get(formatter.format(date)) == null) {
+                                dailyExpensesValue.setText("0.00");
+                            } else {
+                                dailyExpensesValue.setText(currentExpense.get(formatter.format(date)));
+                            }
+                        }
+
+                        Collections.sort(values, new EntryXComparator());
+
+                        LineDataSet set1;
+                        if (mChart.getData() != null && mChart.getData().getDataSetCount() > 0) {
+                            set1 = (LineDataSet) mChart.getData().getDataSetByIndex(0);
+                            set1.setValues(values);
+                            mChart.getData().notifyDataChanged();
+                            mChart.notifyDataSetChanged();
+                        } else {
+                            set1 = new LineDataSet(values, "Monthly Expenses");
+                            set1.setDrawIcons(false);
+                            set1.enableDashedLine(10f, 5f, 0f);
+                            set1.enableDashedHighlightLine(10f, 5f, 0f);
+                            set1.setColor(Color.DKGRAY);
+                            set1.setCircleColor(Color.DKGRAY);
+                            set1.setLineWidth(1f);
+                            set1.setCircleRadius(3f);
+                            set1.setDrawCircleHole(false);
+                            set1.setValueTextSize(9f);
+                            set1.setDrawFilled(true);
+                            set1.setFormLineWidth(1f);
+                            set1.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
+                            set1.setFormSize(15.f);
+
+                            if (Utils.getSDKInt() >= 18) {
+                                Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.gradient_background_main);
+                                set1.setFillDrawable(drawable);
+                            } else {
+                                set1.setFillColor(Color.DKGRAY);
+                            }
+                            ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+                            dataSets.add(set1);
+                            LineData data = new LineData(dataSets);
+                            mChart.setData(data);
+                        }
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
             }
-            return MainActivity.super.onOptionsItemSelected(menuItem);
         });
+
+
     }
+
+
+
 
     private void initFirestore() {
         smartyFirestore = FirebaseFirestore.getInstance();
@@ -267,24 +388,41 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         String userName = userConfigurations.getString("facebookName","0");
         String userEmail = userConfigurations.getString("facebookEmail","0");
         float budget = userConfigurations.getFloat("budget",0);
-        Map<String, String> expenses = new HashMap<>();
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        expenses.put(formatter.format(date), "0");
+//        Map<String, String> expenses = new HashMap<>();
+//        Date date = new Date();
+//        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+//        expenses.put(formatter.format(date), "0");
 
-        User newUser = new User(userId, userName, userEmail, (HashMap<String, Boolean>) loadMap(), budget, expenses);
+        DocumentReference docRef = smartyFirestore.collection("users").document(userId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        docRef.update("budget", budget);
+                        docRef.update("userMealPreferences", (HashMap<String, Boolean>) loadMap());
+                    } else {
+                        Log.d(TAG, "No such document");
+                        User newUser = new User(userId, userName, userEmail, (HashMap<String, Boolean>) loadMap(), budget);
 
-        smartyFirestore.collection("users").document(userId).set(newUser)
-                .addOnSuccessListener(new OnSuccessListener< Void >() {
-                    public void onSuccess(Void aVoid) {
-                        View contextView = findViewById(R.id.scrollView);
-                        Snackbar.make(contextView, "You are all set! ", Snackbar.LENGTH_SHORT).show();
+                        smartyFirestore.collection("users").document(userId).set(newUser)
+                                .addOnSuccessListener(new OnSuccessListener< Void >() {
+                                    public void onSuccess(Void aVoid) {
+                                        View contextView = findViewById(R.id.scrollView);
+                                        Snackbar.make(contextView, "You are all set! ", Snackbar.LENGTH_SHORT).show();
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                            public void onFailure(@NonNull Exception e) {
+                                View contextView = findViewById(R.id.scrollView);
+                                Snackbar.make(contextView, "ERROR: " + e.toString(), Snackbar.LENGTH_LONG).show();
+                                Log.d("TAG", e.toString());
+                            }
+                        });
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-            public void onFailure(@NonNull Exception e) {
-                View contextView = findViewById(R.id.scrollView);
-                Snackbar.make(contextView, "ERROR: " + e.toString(), Snackbar.LENGTH_LONG).show();
-                Log.d("TAG", e.toString());
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
             }
         });
 
@@ -293,6 +431,6 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         System.out.println("userEmail is set to: " + userEmail);
         System.out.println("meal preferences is set to: " + loadMap());
         System.out.println("budget is set to: " + budget);
-        System.out.println("expenses is set to: " + expenses);
+//        System.out.println("expenses is set to: " + expenses);
     }
 }

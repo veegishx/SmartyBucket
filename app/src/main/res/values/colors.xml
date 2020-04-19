@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#273c75</color>
-    <color name="colorPrimaryDark">#192a56</color>
+    <color name="colorPrimaryDark">#1347FF</color>
     <color name="colorAccent">#0097E6</color>
     <color name="white">#FFFFFF</color>
     <color name="colorPromptGradientStart">#4A00E0</color>
     <color name="colorPromptGradienEnd">#8E2DE2</color>
     <color name="colorMainGradientStart">#0072ff</color>
     <color name="colorMainGradientEnd">#00c6ff</color>
+    <color name="MainActivityBackground">#F3F3F3</color>
+
+    <color name="tfe_color_primary">#ffa800</color>
+    <color name="tfe_color_primary_dark">#ff6f00</color>
+    <color name="tfe_color_accent">#425066</color>
+
+    <color name="tfe_semi_transparent">#66000000</color>
 </resources>

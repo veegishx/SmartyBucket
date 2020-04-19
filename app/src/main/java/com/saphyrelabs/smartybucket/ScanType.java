@@ -17,16 +17,18 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.saphyrelabs.smartybucket.tflite.Classifier;
 import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
 
 public class ScanType extends AppCompatActivity {
-    private Button parseItemBtn;
-    private Button parseListBtn;
+    private CardView scanListCard;
+    private CardView scanIngredientCard;
     private int scanType = 0;
     public static final int REQUEST_PERMISSION = 300;
     public static final int REQUEST_IMAGE = 100;
@@ -54,44 +56,37 @@ public class ScanType extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_PERMISSION);
         }
 
-        parseItemBtn = (Button) findViewById(R.id.scan_item_btn);
-        parseItemBtn.setOnClickListener(new View.OnClickListener() {
+        scanIngredientCard = (CardView) findViewById(R.id.scan_ingredient_card);
+        scanIngredientCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SharedPreferences myPreferences = getSharedPreferences("userConfigurations", MODE_PRIVATE);
                 String modelType = myPreferences.getString("modelType",null);
-                scanType = 2;
-                if (modelType.equals("float")) {
-                    choice = "inception_float.tflite";
-                    quant = false;
-                    openCameraIntent();
-                } else  {
-                    choice = "inception_quant.tflite";
-                    quant = true;
-                    openCameraIntent();
-                }
+                scanType = 1;
+                Intent i = new Intent(ScanType.this, ClassifierActivity.class);
+                startActivity(i);
+//                if (modelType.equals("float")) {
+//                    choice = "new_mobile_model.tflite";
+//                    quant = false;
+//                    openCameraIntent();
+//                } else  {
+//                    choice = "inception_quant.tflite";
+//                    quant = true;
+//                    openCameraIntent();
+//                }
 
 
             }
         });
 
-        parseListBtn = (Button) findViewById(R.id.scan_list_btn);
-        parseListBtn.setOnClickListener(new View.OnClickListener() {
+        scanListCard = (CardView) findViewById(R.id.scan_list_card);
+        scanListCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openCameraIntent();
                 scanType = 1;
             }
         });
-
-
-        // Get the default model type
-        TextView modelTypeLabel = (TextView) findViewById(R.id.currentModel);
-        SharedPreferences myPreferences = getSharedPreferences("userConfigurations", MODE_PRIVATE);
-
-        String modelType = myPreferences.getString("modelType",null);
-        modelTypeLabel.setText(modelType);
-
     }
 
     private void openCameraIntent() {
@@ -133,29 +128,16 @@ public class ScanType extends AppCompatActivity {
 
         // if cropping acitivty is finished, get the resulting cropped image uri and send it to 'parseItemImage' or 'parseListImage' activity, depending on user choice of scan
         else if(requestCode == Crop.REQUEST_CROP && resultCode == RESULT_OK){
-            if (scanType == 2) {
-                imageUri = Crop.getOutput(data);
-                Intent i = new Intent(ScanType.this, parseItemImage.class);
-                // put image data in extras to send
-                i.putExtra("resID_uri", imageUri);
-                // put filename in extras
-                i.putExtra("choice", choice);
-                // put model type in extras
-                i.putExtra("quant", quant);
-                // send other required data
-                startActivity(i);
-            } else {
-                imageUri = Crop.getOutput(data);
-                Intent i = new Intent(ScanType.this, parseListImage.class);
-                // put image data in extras to send
-                i.putExtra("resID_uri", imageUri);
-                // put filename in extras
-                i.putExtra("choice", choice);
-                // put model type in extras
-                i.putExtra("quant", quant);
-                // send other required data
-                startActivity(i);
-            }
+            imageUri = Crop.getOutput(data);
+            Intent i = new Intent(ScanType.this, parseListImage.class);
+            // put image data in extras to send
+            i.putExtra("resID_uri", imageUri);
+            // put filename in extras
+            i.putExtra("choice", choice);
+            // put model type in extras
+            i.putExtra("quant", quant);
+            // send other required data
+            startActivity(i);
         }
     }
 }

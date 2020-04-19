@@ -67,6 +67,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     private OnItemClickListener onItemClickListener;
     private FirebaseFirestore smartyFirestore;
     private static final String TAG = "RecipeAdapterFirestore";
+    private Map<String, String> newExpense = new HashMap<>();
 
 
     private void initFirestore() {
@@ -278,11 +279,16 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                             Map<String, String> currentExpense = (HashMap<String, String>) document.get("expenses");
                             Date date = new Date();
                             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-                            if (currentExpense.get(formatter.format(date)) != null) {
-                                float updatedExpense = Float.parseFloat((String) holder.totalPrice.getText()) + Float.parseFloat(currentExpense.get(formatter.format(date)));
-                                currentExpense.put(formatter.format(date), String.valueOf(updatedExpense));
+                            if (currentExpense != null){
+                                if (currentExpense.get(formatter.format(date)) != null) {
+                                    float updatedExpense = Float.parseFloat((String) holder.totalPrice.getText()) + Float.parseFloat(currentExpense.get(formatter.format(date)));
+                                    currentExpense.put(formatter.format(date), String.valueOf(updatedExpense));
+                                } else {
+                                    currentExpense.put(formatter.format(date), (String) holder.totalPrice.getText());
+                                }
                             } else {
-                                currentExpense.put(formatter.format(date), (String) holder.totalPrice.getText());
+                                newExpense.put(formatter.format(date), (String) holder.totalPrice.getText());
+                                docRef.update("expenses", newExpense);
                             }
 
                             smartyFirestore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -291,7 +297,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                                     if (task.isSuccessful()) {
                                         for (DocumentSnapshot document : task.getResult()) {
                                             User user = document.toObject(User.class);
-                                            user.setExpenses(currentExpense);
+                                            if (currentExpense != null) {
+                                                user.setExpenses(currentExpense);
+                                            } else  {
+                                                user.setExpenses(newExpense);
+                                            }
                                             String id = document.getId();
                                             smartyFirestore.collection("users").document(id).set(user); //Set student object
                                         }

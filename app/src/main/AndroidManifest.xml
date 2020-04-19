@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.saphyrelabs.smartybucket" >
+    package="com.saphyrelabs.smartybucket">
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -21,11 +21,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true" >
+        android:usesCleartextTraffic="true">
+        <activity android:name=".CustomChartMarkerView"></activity>
         <activity
             android:name=".RecipeDetails"
-            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".SetPreferences"
@@ -36,7 +37,7 @@
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".ReviewListImageItems"
+            android:name=".ReviewItems"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
@@ -88,7 +89,7 @@
             android:label="@string/app_name" />
         <activity
             android:name="com.facebook.CustomTabActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -98,6 +99,26 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ClassifierActivity"
+            android:label="@string/tfe_ic_app_name"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
+
+        <activity
+            android:name=".tflite.Classifier"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
+
+        <activity android:name=".tflite.ClassifierFloatMobileNet"></activity>
+        <activity android:name=".CameraActivity"></activity>
+        <activity android:name=".env.Logger"></activity>
+        <activity android:name=".env.ImageUtils"></activity>
+        <activity android:name=".env.BorderedText"></activity>
+        <activity android:name=".customview.AutoFitTextureView"></activity>
+        <activity android:name=".customview.OverlayView"></activity>
+        <activity android:name=".customview.RecognitionScoreView"></activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

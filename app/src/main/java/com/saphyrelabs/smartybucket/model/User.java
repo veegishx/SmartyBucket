@@ -36,6 +36,19 @@ public class User {
         this.userMealPreferencesString = userMealPreferencesString;
     }
 
+    public User(String userId, String userName, String userEmail, HashMap<String, Boolean> userMealPreferences, float budget) {
+        this.userId = userId;
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.userMealPreferences = userMealPreferences;
+        this.budget = budget;
+    }
+
+    public User(String userId, Map<String, String> expenses) {
+        this.userId = userId;
+        this.expenses = expenses;
+    }
+
     public User() {}
 
     public String getUserId() {

@@ -1,9 +1,7 @@
 package com.saphyrelabs.smartybucket;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.exifinterface.media.ExifInterface;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -133,11 +131,11 @@ public class parseListImage extends AppCompatActivity {
         t1.start();
         t1.join();
 
-        Intent displayRecipeActivity = new Intent(parseListImage.this, ReviewListImageItems.class);
+        Intent reviewItems = new Intent(parseListImage.this, ReviewItems.class);
         Bundle args = new Bundle();
         args.putSerializable("ingredients",(Serializable) listOfIngredients);
-        displayRecipeActivity.putExtra("BUNDLE",args);
-        startActivity(displayRecipeActivity);
+        reviewItems.putExtra("BUNDLE",args);
+        startActivity(reviewItems);
     }
 
     /**

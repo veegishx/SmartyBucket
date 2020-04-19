@@ -15,14 +15,19 @@
     <string name="monthly_budget_date_range">10 – 21 SEP</string>
     <string name="track_new_items_msg_heading">Got more items to track?</string>
     <string name="track_new_items_msg_body">Tap here to add them and update their prices</string>
-    <!-- BottomAppBar Menu Items -->
-    <string name="action_inventory">Inventory Menu</string>
-    <string name="action_search">Search Item</string>
-    <string name="action_settings">Settings Menu</string>
-    <!-- BottomAppBar Drawer Navigation Items -->
-    <string name="navigation_profile">My Profile</string>
+
+    <!-- Bottom Navigation Items -->
+    <string name="navigation_scan">Ingredients</string>
     <string name="navigation_home">Home</string>
-    <string name="navigation_recipes">My Preferences</string>
+    <string name="navigation_settings">Settings</string>
+
+    <string name="hello_message">Hello</string>
+    <string name="currency">$</string>
+    <string name="monthly_budget_label">Monthly Budget</string>
+    <string name="daily_expense_label">Daily Expenses</string>
+    <string name="default_daily_expense">0.00</string>
+    <string name="last_meal_added_label">Last Meal Added</string>
+    <string name="default_last_meal_added">Loading Last Meal Added</string>
 
     <!-- Register new Items and prices -->
     <string name="register_items_title">Your Bucket List</string>
@@ -61,5 +66,29 @@
     </string-array>
     <string name="set_budget_desc">Setting a monthly spending target is important as it helps in the forecasting and planning process!</string>
     <string name="set_preferences_desc">Setting preferences will allow us to show the most suitable recipes for you</string>
+    <string name="main_activity_expenses_chart_label">Expenses Tracking</string>
 
+    <string name="tfe_ic_app_name" translation_description="Image Classification demo app [CHAR_LIMIT=40]">TFL Classify</string>
+    <string name="tfe_ic_camera_error" translation_description="Error regarding camera support[CHAR_LIMIT=40]">This device doesn\'t support Camera2 API.</string>
+    <string name="tfe_ic_gpu_quant_error" translation_description="Error regarding GPU support for Quant models[CHAR_LIMIT=60]">GPU does not yet supported quantized models.</string>
+    <string name="tfe_ic_model" translatable="false">Model:</string>
+    <string-array name="tfe_ic_models" translatable="false">
+        <item>Quantized_EfficientNet</item>
+        <item>Float_EfficientNet</item>
+        <item>Quantized_MobileNet</item>
+        <item>Float_MobileNet</item>
+    </string-array>
+
+    <string name="tfe_ic_device" translatable="false">Device:</string>
+    <string-array name="tfe_ic_devices" translatable="false">
+        <item>CPU</item>
+        <!-- TODO: Add GPU  -->
+        <item>GPU</item>
+    </string-array>
+    <string name="add_ingredients">Add Ingredients</string>
+    <string name="scan_grocery_list">Scan Grocery List</string>
+    <string name="scan_ingredient">Scan Ingredient</string>
+    <string name="scan_grocery_list_desc">Take a picture of a list of groceries that you want to use to prepare your meal</string>
+    <string name="scan_ingredient_desc">Scan ingredients in real-time and add them to your basket of ingredients for your meal</string>
+    <string name="scan_instruction">Tap on the scan method you want to use.</string>
 </resources>
