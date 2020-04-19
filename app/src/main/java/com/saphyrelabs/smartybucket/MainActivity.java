@@ -248,7 +248,11 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
 
                             Date date = new Date();
                             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-                            dailyExpensesValue.setText(currentExpense.get(formatter.format(date)));
+                            if (currentExpense.get(formatter.format(date)) == null) {
+                                dailyExpensesValue.setText("0.00");
+                            } else {
+                                dailyExpensesValue.setText(currentExpense.get(formatter.format(date)));
+                            }
                         }
 
                         LineDataSet set1;
