@@ -5,13 +5,16 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.saphyrelabs.smartybucket.adapter.RecipeAdapter;
 import com.saphyrelabs.smartybucket.api.RecipeApiClient;
 import com.saphyrelabs.smartybucket.api.RecipeApiInterface;
@@ -39,6 +42,7 @@ public class DisplayRecipes extends AppCompatActivity {
     private RecyclerView recyclerView;
     private List<Recipe> recipes;
     private TextView totalRecipes;
+    private BottomNavigationView bottomNav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +91,28 @@ public class DisplayRecipes extends AppCompatActivity {
             public void onFailure(Call<RecipeResponse>call, Throwable t) {
                 // Log error here since request failed
                 Log.e(TAG, t.toString());
+            }
+        });
+
+        // Initialize BottomAppBar
+        bottomNav = findViewById(R.id.bottom_navigation);
+
+        // Handle onClick event
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch (id){
+                    case R.id.homeNav:
+                        Intent home = new Intent(DisplayRecipes.this, MainActivity.class);
+                        startActivity(home);
+                        break;
+                    case R.id.scanNav:
+                        Intent scanType = new Intent(DisplayRecipes.this, ScanType.class);
+                        startActivity(scanType);
+                        break;
+                }
+                return false;
             }
         });
 

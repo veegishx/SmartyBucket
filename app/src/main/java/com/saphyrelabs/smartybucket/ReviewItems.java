@@ -1,16 +1,19 @@
 package com.saphyrelabs.smartybucket;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.saphyrelabs.smartybucket.adapter.ReviewIngredientAdapter;
 import com.saphyrelabs.smartybucket.model.Ingredient;
 
@@ -23,6 +26,7 @@ public class ReviewItems extends AppCompatActivity {
     private ArrayList<Ingredient> reviewedIngredients;
     private EditText ingredientTitle;
     private FrameLayout ingredients_layout;
+    private BottomNavigationView bottomNav;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +58,28 @@ public class ReviewItems extends AppCompatActivity {
                 args.putSerializable("ingredients",(Serializable) reviewIngredientAdapter.getIngredients());
                 displayRecipeActivity.putExtra("BUNDLE",args);
                 startActivity(displayRecipeActivity);
+            }
+        });
+
+        // Initialize BottomAppBar
+        bottomNav = findViewById(R.id.bottom_navigation);
+
+        // Handle onClick event
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch (id){
+                    case R.id.homeNav:
+                        Intent home = new Intent(ReviewItems.this, MainActivity.class);
+                        startActivity(home);
+                        break;
+                    case R.id.scanNav:
+                        Intent scanType = new Intent(ReviewItems.this, ScanType.class);
+                        startActivity(scanType);
+                        break;
+                }
+                return false;
             }
         });
 

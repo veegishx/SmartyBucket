@@ -138,6 +138,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         // Enable Firestore logging
         FirebaseFirestore.setLoggingEnabled(true);
         String [] ingredientParametersArray = ingredientParameters.split(",");
+        ArrayList<String> cleanIngredientLines = new ArrayList<String>();
         ArrayList<Item> dbItemList = new ArrayList<>();
 
         // Based on https://htmlpreview.github.io/?https://github.com/kulsoom-abdullah/kulsoom-abdullah.github.io/blob/master/AWS-lambda-implementation/model_implementation/recipe%20binary%20classification/recipe%20binary%20classification.html#Easy-method-of-removing-%22useless%22-words
@@ -233,6 +234,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             ingredientLine = ingredientLine.trim();
 
             System.out.println("CLEAN: " + ingredientLine);
+
+            cleanIngredientLines.add(ingredientLine);
         }
 
 
@@ -241,16 +244,17 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         holder.title.setText(recipes.get(position).getLabel());
         holder.ingredients.setText(totalIngredients);
 
-        for (int i = 0; i < ingredientParametersArray.length; i++) {
+        for (int i = 0; i < cleanIngredientLines.size(); i++) {
             smartyFirestore.collection("items")
-                    .whereEqualTo("itemName", ingredientParametersArray[i])
+                    .whereEqualTo("itemName", cleanIngredientLines.get(i))
                     .limit(20)
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        Double totalItemsPrice = 0.0;
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
-                                Double totalItemsPrice = 0.0;
+
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     // Get price of ingredient
                                     totalItemsPrice += Double.parseDouble(document.getData().get("itemPrice").toString());
@@ -371,30 +375,5 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     @Override
     public int getItemCount() {
         return recipes.size();
-    }
-
-    public static String removeWord(String string, String word)
-    {
-
-        // Check if the word is present in string
-        // If found, remove it using removeAll()
-        if (string.contains(word)) {
-
-            // To cover the case
-            // if the word is at the
-            // beginning of the string
-            // or anywhere in the middle
-            String tempWord = word + " ";
-            string = string.replaceAll(tempWord, "");
-
-            // To cover the edge case
-            // if the word is at the
-            // end of the string
-            tempWord = " " + word;
-            string = string.replaceAll(tempWord, "");
-        }
-
-        // Return the resultant string
-        return string;
     }
 }
