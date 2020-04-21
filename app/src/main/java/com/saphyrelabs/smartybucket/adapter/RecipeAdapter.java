@@ -137,7 +137,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     public void onBindViewHolder(RecipeViewHolder holder, final int position) {
         // Enable Firestore logging
         FirebaseFirestore.setLoggingEnabled(true);
-        String [] ingredientParametersArray = ingredientParameters.split(",");
         ArrayList<String> cleanIngredientLines = new ArrayList<String>();
         ArrayList<Item> dbItemList = new ArrayList<>();
 
@@ -244,23 +243,30 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         holder.title.setText(recipes.get(position).getLabel());
         holder.ingredients.setText(totalIngredients);
 
+        ArrayList<Double> pricesArraylist = new ArrayList<Double>();
+
         for (int i = 0; i < cleanIngredientLines.size(); i++) {
+            int finalI = i;
             smartyFirestore.collection("items")
                     .whereEqualTo("itemName", cleanIngredientLines.get(i))
                     .limit(20)
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        Double totalItemsPrice = 0.0;
+                        Double totalItemsPrice = 0.00;
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
-
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     // Get price of ingredient
-                                    totalItemsPrice += Double.parseDouble(document.getData().get("itemPrice").toString());
+                                    System.out.println("Price of " + cleanIngredientLines.get(finalI) + " is " + Double.parseDouble(document.getData().get("itemPrice").toString()));
+                                    //totalItemsPrice += Double.parseDouble(document.getData().get("itemPrice").toString());
                                     Log.d(TAG, document.getId() + " => " + document.getData().get("itemPrice").toString());
-
+                                    pricesArraylist.add(Double.parseDouble(document.getData().get("itemPrice").toString()));
                                 }
+//                                holder.totalPrice.setText(String.valueOf(totalItemsPrice));
+                                System.out.println("PricesArrayList: " + pricesArraylist.size());
+                                for(Double price : pricesArraylist)
+                                    totalItemsPrice += price;
 
                                 holder.totalPrice.setText(String.valueOf(totalItemsPrice));
 
@@ -268,12 +274,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                             } else {
                                 Log.d(TAG, "Error getting documents: ", task.getException());
                             }
-                            //notifyDataSetChanged();
                         }
                     });
         }
 
-        System.out.println("DBITEMS:" + dbItemList.toString());
 
         holder.viewRecipeBtn.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), RecipeDetails.class);
