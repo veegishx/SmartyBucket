@@ -141,11 +141,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         ArrayList<Item> dbItemList = new ArrayList<>();
 
         // Based on https://htmlpreview.github.io/?https://github.com/kulsoom-abdullah/kulsoom-abdullah.github.io/blob/master/AWS-lambda-implementation/model_implementation/recipe%20binary%20classification/recipe%20binary%20classification.html#Easy-method-of-removing-%22useless%22-words
-        String [] measures = {"litres","liter","millilitres","mL","grams","g", "kg","teaspoon", "teaspoons","tsp", "tablespoon", "tablespoons","tbsp","fluid", "ounce","oz","fl.oz", "cup","pint","pt","quart","qt","gallon","gal","smidgen","drop","pinch","dash","scruple","dessertspoon","teacup","cup","c","pottle","gill","dram","wineglass","coffeespoon","pound","lb","tbsp","plus","firmly", "packed","lightly","level","even","rounded","heaping","heaped","sifted","bushel","peck","stick","chopped","sliced","halves", "shredded","slivered","sliced","whole","paste","whole"," fresh", "peeled", "diced","mashed","dried","frozen","fresh","peeled","candied","no", "pulp","crystallized","canned","crushed","minced","julienned","clove","head", "small","large","medium"};
-        String [] common_remove = {"ground","to","taste", "and", "or", "powder","black","white","red","green","yellow", "can", "seed", "into", "cut", "grated", "leaf","package","finely","divided","a","piece","optional","inch","needed","more","drained","for","flake","juice","dry","breast","extract","yellow","thinly","boneless","skinless","cubed","bell","bunch","cube","slice","pod","beaten","seeded","broth","uncooked","root","plain","baking","heavy","halved","crumbled","sweet","with","hot","confectioner","room","temperature","trimmed","allpurpose","sauce","crumb","deveined","bulk","seasoning","jar","food","sundried","italianstyle","if","bag","mix","in","each","roll","instant","double",
+        String [] measures = {"litres","liter","millilitres","-ounce","mL","grams","g", "kg","teaspoon", "teaspoons","tsp", "tablespoon", "tablespoons","tbsp", "Tbsp","fluid", "ounce","oz","fl.oz", "cup","pint","pt","quart","qt","gallon","gal","smidgen","drop","pinch","dash","scruple","dessertspoon","teacup","cup","c","pottle","gill","dram","wineglass","coffeespoon","pound","pounds","lb","tbsp","plus","firmly", "packed","lightly","level","even","rounded","heaping","heaped","sifted","bushel","peck","stick","chopped","sliced","halves","shredded","slivered","sliced","whole","paste","whole"," fresh","peeled","diced","mashed","dried","frozen","fresh","peeled","candied","no", "pulp","crystallized","canned","crushed","minced","julienned","clove","head", "small","large","medium"};
+        String [] common_remove = {"ground","to","taste", "and", "or", "powder","can","seed","into","cut","grated","leaf","package","finely","divided","a","piece","optional","inch","needed","more","drained","for","flake","juice","dry","breast","extract","yellow","thinly","boneless","skinless","cubed","bell","bunch","cube","slice","pod","beaten","seeded","broth","uncooked","root","plain","baking","heavy","halved","crumbled","sweet","with","hot","confectioner","room","temperature","trimmed","allpurpose","crumb","deveined","bulk","seasoning","jar","food","sundried","italianstyle","if","bag","mix","in","each","roll","instant","double",
                 "such","extravirgin","frying","thawed","whipping","stock","rinsed","mild","sprig","brown","freshly","toasted","link","boiling","cooked","basmati","unsalted","container","split",
-                "cooking","thin","lengthwise","warm","softened","thick","quartered","juiced","pitted","chunk","melted","cold","coloring","puree","cored","stewed","gingergarlic","floret","coarsely","the","clarified","blanched","zested","sweetened","powdered","longgrain","garnish","indian","dressing","soup","at","active","french","lean","chip","sour","condensed","long","smoked","ripe","skinned","fillet","from","stem","flaked","removed","zest","stalk","unsweetened","baby","cover","crust", "extra", "prepared", "blend", "of", "ring", "peeled" , "with", "just", "the", "tops", "trimmed", "off", "about"};
-        String [] numberLabels = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
+                "cooking","thin","lengthwise","warm","softened","thick","quartered","juiced","pitted","chunk","melted","cold","coloring","puree","cored","stewed","gingergarlic","floret","coarsely","the","clarified","blanched","zested","sweetened","powdered","longgrain","garnish","indian","dressing","soup","at","active","french","lean","chip","sour","condensed","long","smoked","ripe","skinned","fillet","flat","from","stem","flaked","removed","zest","stalk","unsweetened","baby","cover","crust","extra","prepared","blend","of","ring","peeled","with","just","the","tops","trimmed","off","about","plus","more","for","drizzling","extra-virgin","roughly","handful"};
+        String [] numberLabels = {"1","2","3","4","5","6","7","8","9","/"};
 
         initFirestore();
 
@@ -178,46 +178,60 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         // Get ingredientLines
         List<String> ingredientsLinesList = recipes.get(position).getIncredientLines();
         for (String ingredientLine: ingredientsLinesList) {
-            System.out.println("DIRTY: " + ingredientLine);
-            for (String measureWord: measures) {
-                if (ingredientLine.contains(measureWord)) {
-                    String tempWord = measureWord + " ";
-                    // Remove measureWord and anything after comma, which are usually specifics about the ingredient, therefore we can safely discard this portion of the string
-                    ingredientLine = ingredientLine.replaceAll(tempWord, "").split(",")[0];
 
-                    // To cover the edge case
-                    // if the word is at the
-                    // end of the string
-                    tempWord = " " + measureWord;
+            System.out.println("DIRTY: " + ingredientLine);
+
+            // Removing anything after comma, which are usually specifics about the ingredient, therefore we can safely discard this portion of the string
+            ingredientLine = ingredientLine.split(",")[0];
+
+            // Removing any parenthesis
+            ingredientLine = ingredientLine.replaceAll("\\(.*\\)", "");
+
+            // Removing Unicode symbols
+            ingredientLine = ingredientLine.replaceAll("\\p{No}+", "");
+
+            // Removing any dots and digits
+            ingredientLine = ingredientLine.replaceAll("^[\\.\\d]+", "");
+
+            // Removing leading and trailing whitespace characters
+            ingredientLine = ingredientLine.trim();
+
+            // Removing fractions represented using slash instead of unicode characters
+            for (String numberLabelToRemove: numberLabels) {
+                if (ingredientLine.contains(numberLabelToRemove)) {
+                    String tempWord = numberLabelToRemove + " ";
                     ingredientLine = ingredientLine.replaceAll(tempWord, "");
                 }
 
             }
 
+            // Removing leading and trailing whitespace characters
+            ingredientLine = ingredientLine.trim();
+
+            // Removing Common words that make up sentences
             for (String commonWord: common_remove) {
                 if (ingredientLine.contains(commonWord)) {
                     String tempWord = commonWord + " ";
                     ingredientLine = ingredientLine.replaceAll(tempWord, "");
+                }
 
-                    // To cover the edge case
-                    // if the word is at the
-                    // end of the string
-                    tempWord = " " + commonWord;
+            }
+
+            // Removing leading and trailing whitespace characters
+            ingredientLine = ingredientLine.trim();
+
+            // Removing Measure labels
+            for (String measureWord: measures) {
+                if (ingredientLine.contains(measureWord)) {
+                    String tempWord = measureWord + " ";
                     ingredientLine = ingredientLine.replaceAll(tempWord, "");
                 }
 
             }
 
-            if (ingredientLine.substring(1).contains("/")) {
-                String tempWord = "/" + " ";
-                ingredientLine = ingredientLine.substring(ingredientLine.indexOf("/") + 1, ingredientLine.length());
+            // Removing leading and trailing whitespace characters
+            ingredientLine = ingredientLine.trim();
 
-                // To cover the edge case
-                // if the word is at the
-                // end of the string
-//                    tempWord = " " + numberLabelToRemove;
-//                    ingredientLine = ingredientLine.replaceAll(tempWord, "");
-            }
             System.out.println("CLEAN: " + ingredientLine);
         }
 
