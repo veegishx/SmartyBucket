@@ -141,10 +141,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         ArrayList<Item> dbItemList = new ArrayList<>();
 
         // Based on https://htmlpreview.github.io/?https://github.com/kulsoom-abdullah/kulsoom-abdullah.github.io/blob/master/AWS-lambda-implementation/model_implementation/recipe%20binary%20classification/recipe%20binary%20classification.html#Easy-method-of-removing-%22useless%22-words
-        String [] measures = {"litres","liter","millilitres","mL","grams","g", "kg","teaspoon","tsp", "tablespoon","tbsp","fluid", "ounce","oz","fl.oz", "cup","pint","pt","quart","qt","gallon","gal","smidgen","drop","pinch","dash","scruple","dessertspoon","teacup","cup","c","pottle","gill","dram","wineglass","coffeespoon","pound","lb","tbsp","plus","firmly", "packed","lightly","level","even","rounded","heaping","heaped","sifted","bushel","peck","stick","chopped","sliced","halves", "shredded","slivered","sliced","whole","paste","whole"," fresh", "peeled", "diced","mashed","dried","frozen","fresh","peeled","candied","no", "pulp","crystallized","canned","crushed","minced","julienned","clove","head", "small","large","medium"};
+        String [] measures = {"litres","liter","millilitres","mL","grams","g", "kg","teaspoon", "teaspoons","tsp", "tablespoon", "tablespoons","tbsp","fluid", "ounce","oz","fl.oz", "cup","pint","pt","quart","qt","gallon","gal","smidgen","drop","pinch","dash","scruple","dessertspoon","teacup","cup","c","pottle","gill","dram","wineglass","coffeespoon","pound","lb","tbsp","plus","firmly", "packed","lightly","level","even","rounded","heaping","heaped","sifted","bushel","peck","stick","chopped","sliced","halves", "shredded","slivered","sliced","whole","paste","whole"," fresh", "peeled", "diced","mashed","dried","frozen","fresh","peeled","candied","no", "pulp","crystallized","canned","crushed","minced","julienned","clove","head", "small","large","medium"};
         String [] common_remove = {"ground","to","taste", "and", "or", "powder","black","white","red","green","yellow", "can", "seed", "into", "cut", "grated", "leaf","package","finely","divided","a","piece","optional","inch","needed","more","drained","for","flake","juice","dry","breast","extract","yellow","thinly","boneless","skinless","cubed","bell","bunch","cube","slice","pod","beaten","seeded","broth","uncooked","root","plain","baking","heavy","halved","crumbled","sweet","with","hot","confectioner","room","temperature","trimmed","allpurpose","sauce","crumb","deveined","bulk","seasoning","jar","food","sundried","italianstyle","if","bag","mix","in","each","roll","instant","double",
                 "such","extravirgin","frying","thawed","whipping","stock","rinsed","mild","sprig","brown","freshly","toasted","link","boiling","cooked","basmati","unsalted","container","split",
-                "cooking","thin","lengthwise","warm","softened","thick","quartered","juiced","pitted","chunk","melted","cold","coloring","puree","cored","stewed","gingergarlic","floret","coarsely","the","clarified","blanched","zested","sweetened","powdered","longgrain","garnish","indian","dressing","soup","at","active","french","lean","chip","sour","condensed","long","smoked","ripe","skinned","fillet","from","stem","flaked","removed","zest","stalk","unsweetened","baby","cover","crust", "extra", "prepared", "blend", "of", "ring"};
+                "cooking","thin","lengthwise","warm","softened","thick","quartered","juiced","pitted","chunk","melted","cold","coloring","puree","cored","stewed","gingergarlic","floret","coarsely","the","clarified","blanched","zested","sweetened","powdered","longgrain","garnish","indian","dressing","soup","at","active","french","lean","chip","sour","condensed","long","smoked","ripe","skinned","fillet","from","stem","flaked","removed","zest","stalk","unsweetened","baby","cover","crust", "extra", "prepared", "blend", "of", "ring", "peeled" , "with", "just", "the", "tops", "trimmed", "off", "about"};
+        String [] numberLabels = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
 
         initFirestore();
 
@@ -173,20 +174,53 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.thumbnail);
 
-        /**
-         * Trying to get ingredients from ingredientLines
-         */
-        List<String> ingredients = recipes.get(position).getIncredientLines();
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < ingredients.size(); i++) {
-            for (int j = 0; j < measures.length; j++) {
-                builder = new StringBuilder(removeWord(ingredients.get(i), measures[j]));
+
+        // Get ingredientLines
+        List<String> ingredientsLinesList = recipes.get(position).getIncredientLines();
+        for (String ingredientLine: ingredientsLinesList) {
+            System.out.println("DIRTY: " + ingredientLine);
+            for (String measureWord: measures) {
+                if (ingredientLine.contains(measureWord)) {
+                    String tempWord = measureWord + " ";
+                    // Remove measureWord and anything after comma, which are usually specifics about the ingredient, therefore we can safely discard this portion of the string
+                    ingredientLine = ingredientLine.replaceAll(tempWord, "").split(",")[0];
+
+                    // To cover the edge case
+                    // if the word is at the
+                    // end of the string
+                    tempWord = " " + measureWord;
+                    ingredientLine = ingredientLine.replaceAll(tempWord, "");
+                }
+
             }
-//            for (int k = 0; k < common_remove.length; k++) {
-//                builder.append(removeWord(ingredients.get(i), measures[k]));
-//            }
-            System.out.println("Builder: " + builder);
+
+            for (String commonWord: common_remove) {
+                if (ingredientLine.contains(commonWord)) {
+                    String tempWord = commonWord + " ";
+                    ingredientLine = ingredientLine.replaceAll(tempWord, "");
+
+                    // To cover the edge case
+                    // if the word is at the
+                    // end of the string
+                    tempWord = " " + commonWord;
+                    ingredientLine = ingredientLine.replaceAll(tempWord, "");
+                }
+
+            }
+
+            if (ingredientLine.substring(1).contains("/")) {
+                String tempWord = "/" + " ";
+                ingredientLine = ingredientLine.substring(ingredientLine.indexOf("/") + 1, ingredientLine.length());
+
+                // To cover the edge case
+                // if the word is at the
+                // end of the string
+//                    tempWord = " " + numberLabelToRemove;
+//                    ingredientLine = ingredientLine.replaceAll(tempWord, "");
+            }
+            System.out.println("CLEAN: " + ingredientLine);
         }
+
 
         String totalIngredients = recipes.get(position).getIncredientLines().size() + " ingredients";
 
