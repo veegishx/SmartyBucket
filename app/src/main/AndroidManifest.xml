@@ -65,7 +65,7 @@
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".UserConfigurations"
+            android:name=".UserSettings"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity

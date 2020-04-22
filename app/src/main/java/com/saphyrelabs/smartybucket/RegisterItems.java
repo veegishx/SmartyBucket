@@ -3,9 +3,11 @@ package com.saphyrelabs.smartybucket;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -27,6 +30,7 @@ public class RegisterItems extends AppCompatActivity {
     private FirebaseFirestore smartyFirestore;
     private Query readItemsQuery;
     private static final int LIMIT = 10;
+    private BottomNavigationView bottomNav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +58,27 @@ public class RegisterItems extends AppCompatActivity {
             }
         });
 
+        // Initialize BottomAppBar
+        bottomNav = findViewById(R.id.bottom_navigation);
+
+        // Handle onClick event
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch (id){
+                    case R.id.homeNav:
+                        Intent home = new Intent(RegisterItems.this, MainActivity.class);
+                        startActivity(home);
+                        break;
+                    case R.id.scanNav:
+                        Intent scanType = new Intent(RegisterItems.this, ScanType.class);
+                        startActivity(scanType);
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     private void initFirestore() {
@@ -86,10 +111,10 @@ public class RegisterItems extends AppCompatActivity {
 
         smartyFirestore.collection("items").document(itemNameVal.toLowerCase().replaceAll("//s+", "")).set(newItem)
                 .addOnSuccessListener(aVoid -> {
-                    View contextView = findViewById(R.id.coordinatorLayout);
+                    View contextView = findViewById(R.id.frameLayout);
                     Snackbar.make(contextView, "Added " + itemNameVal + " to bucket list!", Snackbar.LENGTH_SHORT).show();
                 }).addOnFailureListener(e -> {
-                    View contextView = findViewById(R.id.coordinatorLayout);
+                    View contextView = findViewById(R.id.frameLayout);
                     Snackbar.make(contextView, "ERROR: " + e.toString(), Snackbar.LENGTH_LONG).show();
                     Log.d("TAG", e.toString());
                 });

@@ -1,6 +1,7 @@
 package com.saphyrelabs.smartybucket.model;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ public class User {
     private String userMealPreferencesString;
     private float budget;
     private Map<String, String> expenses;
+    private ArrayList<Meal> meals;
 
     public User(String userId, String userName, String userEmail, HashMap<String, Boolean> userMealPreferences, float budget, Map<String, String> expenses) {
         this.userId = userId;
@@ -97,5 +99,17 @@ public class User {
 
     public void setExpenses(Map<String, String> expenses) {
         this.expenses = expenses;
+    }
+
+    public ArrayList<Meal> getMeals() {
+        return meals;
+    }
+
+    public void setMeals(ArrayList<Meal> meals) {
+        this.meals = meals;
+    }
+
+    public void addMeals(Meal meal) {
+        meals.add(meal);
     }
 }

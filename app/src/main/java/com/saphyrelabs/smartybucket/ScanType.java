@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.saphyrelabs.smartybucket.tflite.Classifier;
 import com.soundcloud.android.crop.Crop;
 
@@ -38,6 +40,7 @@ public class ScanType extends AppCompatActivity {
     private String choice;
 
     private boolean quant;
+    private BottomNavigationView bottomNav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +88,28 @@ public class ScanType extends AppCompatActivity {
             public void onClick(View view) {
                 openCameraIntent();
                 scanType = 1;
+            }
+        });
+
+        // Initialize BottomAppBar
+        bottomNav = findViewById(R.id.bottom_navigation);
+
+        // Handle onClick event
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch (id){
+                    case R.id.homeNav:
+                        Intent home = new Intent(ScanType.this, MainActivity.class);
+                        startActivity(home);
+                        break;
+                    case R.id.scanNav:
+                        Intent scanType = new Intent(ScanType.this, ScanType.class);
+                        startActivity(scanType);
+                        break;
+                }
+                return false;
             }
         });
     }

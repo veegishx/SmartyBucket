@@ -91,4 +91,5 @@
     <string name="scan_grocery_list_desc">Take a picture of a list of groceries that you want to use to prepare your meal</string>
     <string name="scan_ingredient_desc">Scan ingredients in real-time and add them to your basket of ingredients for your meal</string>
     <string name="scan_instruction">Tap on the scan method you want to use.</string>
+    <string name="recommended_label">Recommended Recipe</string>
 </resources>
