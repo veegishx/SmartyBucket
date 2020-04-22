@@ -44,6 +44,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.saphyrelabs.smartybucket.R;
 import com.saphyrelabs.smartybucket.RecipeDetails;
 import com.saphyrelabs.smartybucket.model.Item;
+import com.saphyrelabs.smartybucket.model.Meal;
 import com.saphyrelabs.smartybucket.model.Recipe;
 import com.saphyrelabs.smartybucket.model.User;
 
@@ -68,7 +69,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     private FirebaseFirestore smartyFirestore;
     private static final String TAG = "RecipeAdapterFirestore";
     private Map<String, String> newExpense = new HashMap<>();
-
+    private ArrayList<Meal> newMeal = new ArrayList<Meal>();
 
     private void initFirestore() {
         smartyFirestore = FirebaseFirestore.getInstance();
@@ -270,6 +271,88 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
                                 holder.totalPrice.setText(String.valueOf(totalItemsPrice));
 
+                                /**
+                                 * Add recipe expense to user model and send to Firestore
+                                 */
+                                holder.addToBudgetBtn.setOnClickListener(v -> {
+                                    System.out.println("PRICE OF EXPENSE:" + holder.totalPrice.getText());
+                                    DocumentReference docRef = smartyFirestore.collection("users").document(userId);
+                                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                DocumentSnapshot document = task.getResult();
+                                                if (document.exists()) {
+                                                    // LOGGING EVENTS
+                                                    Log.d(TAG, "DocumentSnapshot data: " + document.get("expenses"));
+                                                    Log.d(TAG, "DocumentSnapshot data: " + document.get("meals"));
+
+                                                    // Retrieving expense data from Firestore
+                                                    Map<String, String> currentExpense = (HashMap<String, String>) document.get("expenses");
+                                                    // Retrieving meal data from Firestore
+                                                    ArrayList<Meal> meals = (ArrayList<Meal>) document.get("meals");
+
+                                                    // Creating a new instance of the Date object
+                                                    Date date = new Date();
+                                                    // Formatting current date to day/month/year
+                                                    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+
+                                                    // Check if the expenses field exist
+                                                    if (currentExpense != null){
+                                                        if (currentExpense.get(formatter.format(date)) != null) {
+                                                            float updatedExpense = Float.parseFloat((String) holder.totalPrice.getText()) + Float.parseFloat(currentExpense.get(formatter.format(date)));
+                                                            currentExpense.put(formatter.format(date), String.valueOf(updatedExpense));
+                                                        } else {
+                                                            currentExpense.put(formatter.format(date), (String) holder.totalPrice.getText());
+                                                        }
+                                                    } else {
+                                                        newExpense.put(formatter.format(date), (String) holder.totalPrice.getText());
+                                                        docRef.update("expenses", newExpense);
+                                                    }
+
+                                                    // Check if the meals field exists
+                                                    if (meals != null) {
+                                                        newMeal.add(new Meal(recipes.get(position).getLabel(), totalItemsPrice, cleanIngredientLines));
+                                                    } else {
+                                                        newMeal.add(new Meal(recipes.get(position).getLabel(), totalItemsPrice, cleanIngredientLines));
+                                                        docRef.update("meals", newMeal);
+                                                    }
+
+                                                    smartyFirestore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                            if (task.isSuccessful()) {
+                                                                for (DocumentSnapshot document : task.getResult()) {
+                                                                    User user = document.toObject(User.class);
+                                                                    if (currentExpense != null) {
+                                                                        user.setExpenses(currentExpense);
+                                                                    } else  {
+                                                                        user.setExpenses(newExpense);
+                                                                    }
+
+                                                                    if (meals != null) {
+                                                                        user.addMeals(new Meal(recipes.get(position).getLabel(), totalItemsPrice, cleanIngredientLines));
+                                                                    } else {
+                                                                        user.setMeals(newMeal);
+                                                                    }
+
+                                                                    String id = document.getId();
+                                                                    smartyFirestore.collection("users").document(id).set(user);
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+
+                                                } else {
+                                                    Log.d(TAG, "No such document");
+                                                }
+                                            } else {
+                                                Log.d(TAG, "get failed with ", task.getException());
+                                            }
+                                        }
+                                    });
+                                });
+
                                 System.out.println("TOTAL PRICE:" + totalItemsPrice);
                             } else {
                                 Log.d(TAG, "Error getting documents: ", task.getException());
@@ -319,61 +402,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             }, 1000);
         });
 
-        /**
-         * Add recipe expense to user model and send to Firestore
-         */
-        holder.addToBudgetBtn.setOnClickListener(v -> {
-            System.out.println("PRICE OF EXPENSE:" + holder.totalPrice.getText());
-            DocumentReference docRef = smartyFirestore.collection("users").document(userId);
-            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            Log.d(TAG, "DocumentSnapshot data: " + document.get("expenses"));
-                            Map<String, String> currentExpense = (HashMap<String, String>) document.get("expenses");
-                            Date date = new Date();
-                            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-                            if (currentExpense != null){
-                                if (currentExpense.get(formatter.format(date)) != null) {
-                                    float updatedExpense = Float.parseFloat((String) holder.totalPrice.getText()) + Float.parseFloat(currentExpense.get(formatter.format(date)));
-                                    currentExpense.put(formatter.format(date), String.valueOf(updatedExpense));
-                                } else {
-                                    currentExpense.put(formatter.format(date), (String) holder.totalPrice.getText());
-                                }
-                            } else {
-                                newExpense.put(formatter.format(date), (String) holder.totalPrice.getText());
-                                docRef.update("expenses", newExpense);
-                            }
 
-                            smartyFirestore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        for (DocumentSnapshot document : task.getResult()) {
-                                            User user = document.toObject(User.class);
-                                            if (currentExpense != null) {
-                                                user.setExpenses(currentExpense);
-                                            } else  {
-                                                user.setExpenses(newExpense);
-                                            }
-                                            String id = document.getId();
-                                            smartyFirestore.collection("users").document(id).set(user); //Set student object
-                                        }
-                                    }
-                                }
-                            });
-
-                        } else {
-                            Log.d(TAG, "No such document");
-                        }
-                    } else {
-                        Log.d(TAG, "get failed with ", task.getException());
-                    }
-                }
-            });
-        });
     }
 
     @Override
