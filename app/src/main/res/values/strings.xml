@@ -92,4 +92,5 @@
     <string name="scan_ingredient_desc">Scan ingredients in real-time and add them to your basket of ingredients for your meal</string>
     <string name="scan_instruction">Tap on the scan method you want to use.</string>
     <string name="recommended_label">Recommended Recipe</string>
+    <string name="default_lastmeal_expense">$ --</string>
 </resources>

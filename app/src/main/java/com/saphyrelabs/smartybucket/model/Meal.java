@@ -11,12 +11,12 @@ import java.util.List;
 public class Meal {
     private String mealName;
     private double mealPrice;
-    private List<String> incredientLines;
+    private List<String> ingredientLines;
 
-    public Meal(String mealName, double mealPrice, List<String> incredientLines) {
+    public Meal(String mealName, double mealPrice, List<String> ingredientLines) {
         this.mealName = mealName;
         this.mealPrice = mealPrice;
-        this.incredientLines = incredientLines;
+        this.ingredientLines = ingredientLines;
     }
 
     public Meal() {}
@@ -37,12 +37,12 @@ public class Meal {
         this.mealPrice = mealPrice;
     }
 
-    public List<String> getIncredientLines() {
-        return incredientLines;
+    public List<String> getIngredientLines() {
+        return ingredientLines;
     }
 
-    public void setIncredientLines(List<String> incredientLines) {
-        this.incredientLines = incredientLines;
+    public void setIngredientLines(List<String> ingredientLines) {
+        this.ingredientLines = ingredientLines;
     }
 }
 
