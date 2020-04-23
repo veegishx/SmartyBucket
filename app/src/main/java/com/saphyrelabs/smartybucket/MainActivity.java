@@ -170,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         mChart = findViewById(R.id.chart);
         mChart.setTouchEnabled(true);
         mChart.setPinchZoom(true);
+        mChart.getXAxis().setDrawGridLines(false);
         CustomChartMarkerView mv = new CustomChartMarkerView(getApplicationContext(), R.layout.activity_custom_chart_marker_view);
         mv.setChartView(mChart);
         mChart.setMarker(mv);
@@ -279,10 +280,16 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
                         if (mChart.getData() != null && mChart.getData().getDataSetCount() > 0) {
                             set1 = (LineDataSet) mChart.getData().getDataSetByIndex(0);
                             set1.setValues(values);
+                            set1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+                            set1.setDrawFilled(true);
+                            set1.setDrawValues(false);
                             mChart.getData().notifyDataChanged();
                             mChart.notifyDataSetChanged();
                         } else {
                             set1 = new LineDataSet(values, "Monthly Expenses");
+                            set1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+                            set1.setDrawFilled(true);
+                            set1.setDrawValues(false);
                             set1.setDrawIcons(false);
                             set1.enableDashedLine(10f, 5f, 0f);
                             set1.enableDashedHighlightLine(10f, 5f, 0f);
