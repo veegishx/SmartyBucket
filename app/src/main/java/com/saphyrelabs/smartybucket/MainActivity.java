@@ -250,7 +250,12 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
                             if (currentExpense.get(formatter.format(date)) == null) {
                                 dailyExpensesValue.setText("0.00");
                             } else {
-                                dailyExpensesValue.setText(currentExpense.get(formatter.format(date)).substring(0, 5));
+                                if (currentExpense.get(formatter.format(date)).length() > 4) {
+                                    dailyExpensesValue.setText(currentExpense.get(formatter.format(date)).substring(0, 4));
+                                } else {
+                                    dailyExpensesValue.setText(currentExpense.get(formatter.format(date)));
+                                }
+
                             }
                         }
 
