@@ -239,11 +239,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
         ArrayList<Double> pricesArraylist = new ArrayList<Double>();
 
+        // Problem with this is, it will match strictly items found in the array.
+        // If the array contains an item such as onion[s] and the database contains onion, then it will fail to find a match.
         for (int i = 0; i < cleanIngredientLines.size(); i++) {
             int finalI = i;
             smartyFirestore.collection("items")
                     .whereEqualTo("itemName", cleanIngredientLines.get(i))
-                    .limit(20)
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         Double totalItemsPrice = 0.00;
