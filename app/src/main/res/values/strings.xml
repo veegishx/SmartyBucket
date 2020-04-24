@@ -95,4 +95,8 @@
     <string name="default_lastmeal_expense">$ --</string>
     <string name="default_recommendation_placeholder">Add some recipes to get recommendations</string>
     <string name="not_interested">Not Interested</string>
+    <string name="balanced_diet">Balanced Diet</string>
+    <string name="high_protein_diet">High Protein Diet</string>
+    <string name="low_fat_diet">Low Fat Diet</string>
+    <string name="low_carb_diet">Low Carb Diet</string>
 </resources>
