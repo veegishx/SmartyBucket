@@ -49,6 +49,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
@@ -369,26 +370,17 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
         kitchenIngredientsArray = ingredientParameters.replaceAll("\\s+","").split(",");
 
-//        for (int i = 0; i < cleanIngredientLines.size(); i++) {
-//            for (int j = 0; j < kitchenIngredientsArray.length; j++) {
-//                if (cleanIngredientLines.get(i).equalsIgnoreCase(kitchenIngredientsArray[j])) {
-//                    ingredientCount++;
-//                    break;
-//                }
-//            }
-//        }
-
-
         int ingredientCount = 0;
 
-        for(int i = 0; i < cleanIngredientLines.size(); i++) {
-            for (int j = 0; j < kitchenIngredientsArray.length; j++) {
-                if (cleanIngredientLines.get(i).equalsIgnoreCase(kitchenIngredientsArray[j])) {
-                    System.out.println(cleanIngredientLines.get(i));
-                    System.out.println(kitchenIngredientsArray[j]);
-                    System.out.println(cleanIngredientLines.get(i).equalsIgnoreCase(kitchenIngredientsArray[j]));
+        outer: for(int i = 0; i < kitchenIngredientsArray.length; i++) {
+            inner: for (int j = 0; j < cleanIngredientLines.size(); j++) {
+                if (Pattern.compile(Pattern.quote(cleanIngredientLines.get(j)), Pattern.CASE_INSENSITIVE).matcher(kitchenIngredientsArray[i]).find()) {
+                    System.out.println(cleanIngredientLines.get(j));
+                    System.out.println(kitchenIngredientsArray[i]);
+                    System.out.println(Pattern.compile(Pattern.quote(cleanIngredientLines.get(j)), Pattern.CASE_INSENSITIVE).matcher(kitchenIngredientsArray[i]).find());
                     ingredientCount++;
                     System.out.println("--------------");
+                    break inner;
                 }
             }
         }
