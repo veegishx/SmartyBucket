@@ -62,8 +62,10 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
+                        android:layout_marginStart="151dp"
                         android:layout_marginEnd="190dp"
                         android:layout_marginBottom="45dp"
                         app:cardCornerRadius="4dp"
@@ -74,7 +76,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
-                            android:text="$ 8.50"
+                            android:text="@string/default_lastmeal_expense"
                             android:textColor="#09BA10"
                             android:textSize="12sp"
                             android:textStyle="bold" />
@@ -184,17 +186,17 @@
                         android:layout_marginBottom="91dp"
                         android:text="@string/last_meal_added_label"
                         android:textAllCaps="true"
-                        android:textColor="#FF9BBF"
+                        android:textColor="#FF679E"
                         android:textSize="10sp"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/textView42"
+                        android:id="@+id/lastMeal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginStart="155dp"
+                        android:layout_marginStart="150dp"
                         android:layout_marginBottom="69dp"
                         android:text="@string/default_last_meal_added"
                         android:textColor="#FFFFFF"

@@ -9,13 +9,15 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CheckBox;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import java.util.HashMap;
 
 public class SetPreferences extends AppCompatDialogFragment {
     private SetPreferences.SetPreferencesListenerInterface listener;
-    private CheckBox balancedDiet, highProteinDiet, sugarDiet, vegetarianDiet, veganDiet, lowFatDiet;
+    private RadioGroup radioGroup;
+    private RadioButton balancedDiet, highProteinDiet, lowFatDiet, selectedRadioButton;
     private HashMap<String, Boolean> userMealPreferences = new HashMap<String, Boolean>();
 
     @Override
@@ -25,12 +27,15 @@ public class SetPreferences extends AppCompatDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.activity_set_preferences, null);
 
-        balancedDiet = (CheckBox) view.findViewById(R.id.balancedDiet);
-        highProteinDiet = (CheckBox) view.findViewById(R.id.highProteinDiet);
-        sugarDiet = (CheckBox) view.findViewById(R.id.sugarDiet);
-        vegetarianDiet = (CheckBox) view.findViewById(R.id.vegetarianDiet);
-        veganDiet = (CheckBox) view.findViewById(R.id.veganDiet);
-        lowFatDiet = (CheckBox) view.findViewById(R.id.lowFatDiet);
+        radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
+        balancedDiet = (RadioButton) view.findViewById(R.id.balanced);
+        highProteinDiet = (RadioButton) view.findViewById(R.id.high_protein);
+        lowFatDiet = (RadioButton) view.findViewById(R.id.low_fat);
+
+        userMealPreferences.put("balanced", false);
+        userMealPreferences.put("high-protein", false);
+        userMealPreferences.put("low-fat", false);
+        userMealPreferences.put("low-carb", false);
 
         builder.setView(view)
                 .setCancelable(false)
@@ -39,41 +44,21 @@ public class SetPreferences extends AppCompatDialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         // Pass data to setData in MainActivity
 
-                        if (balancedDiet.isChecked()) {
-                            userMealPreferences.put("balancedDiet", true);
-                        } else {
-                            userMealPreferences.put("balancedDiet", false);
+                        if (radioGroup.getCheckedRadioButtonId() != -1) {
+                            int selectedId = radioGroup.getCheckedRadioButtonId();
+                            selectedRadioButton = (RadioButton) view.findViewById(selectedId);
+//
+                            if (selectedRadioButton == balancedDiet) {
+                                userMealPreferences.put("balanced", true);
+                            } else if (selectedRadioButton == highProteinDiet) {
+                                userMealPreferences.put("high-protein", true);
+                            } else if (selectedRadioButton == lowFatDiet) {
+                                userMealPreferences.put("low-fat", true);
+                            } else {
+                                userMealPreferences.put("low-carb", true);
+                            }
                         }
 
-                        if (highProteinDiet.isChecked()) {
-                            userMealPreferences.put("highProteinDiet", true);
-                        } else {
-                            userMealPreferences.put("highProteinDiet", false);
-                        }
-
-                        if (sugarDiet.isChecked()) {
-                            userMealPreferences.put("sugarDiet", true);
-                        } else {
-                            userMealPreferences.put("sugarDiet", false);
-                        }
-
-                        if (vegetarianDiet.isChecked()) {
-                            userMealPreferences.put("vegetarianDiet", true);
-                        } else {
-                            userMealPreferences.put("vegetarianDiet", false);
-                        }
-
-                        if (veganDiet.isChecked()) {
-                            userMealPreferences.put("veganDiet", true);
-                        } else {
-                            userMealPreferences.put("veganDiet", false);
-                        }
-
-                        if (lowFatDiet.isChecked()) {
-                            userMealPreferences.put("lowFatDiet", true);
-                        } else {
-                            userMealPreferences.put("lowFatDiet", false);
-                        }
 
                         listener.setData(userMealPreferences);
                     }

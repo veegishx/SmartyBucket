@@ -14,27 +14,20 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.mikephil.charting.utils.EntryXComparator;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.bottomnavigation.LabelVisibilityMode;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.saphyrelabs.smartybucket.model.Meal;
 import com.saphyrelabs.smartybucket.model.User;
 
 import org.json.JSONObject;
@@ -46,7 +39,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Random;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.LimitLine;
@@ -55,15 +47,13 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.Utils;
 
 
 public class MainActivity extends AppCompatActivity implements SetBudget.SetBudgetListenerInterface, SetPreferences.SetPreferencesListenerInterface{
     BottomNavigationView bottomNav;
-    private TextView monthlyBudgetValue, userGreeting, dailyExpensesValue;
+    private TextView monthlyBudgetValue, userGreeting, dailyExpensesValue, lastMeal, lastMealPrice;
     private FirebaseFirestore smartyFirestore;
     private LineChart mChart;
     private static final String TAG = "MainActivityFirestore";
@@ -84,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         monthlyBudgetValue = findViewById(R.id.monthlyBudgetValue);
         userGreeting = findViewById(R.id.userGreeting);
         dailyExpensesValue = findViewById(R.id.dailyExpensesValue);
+        lastMeal = findViewById(R.id.lastMeal);
+        lastMealPrice = findViewById(R.id.lastMealPrice);
 
         String modelType = userConfigurations.getString("modelType",null);
         String facebookEmail = userConfigurations.getString("facebookEmail",null);
@@ -178,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         mChart = findViewById(R.id.chart);
         mChart.setTouchEnabled(true);
         mChart.setPinchZoom(true);
+        mChart.getXAxis().setDrawGridLines(false);
         CustomChartMarkerView mv = new CustomChartMarkerView(getApplicationContext(), R.layout.activity_custom_chart_marker_view);
         mv.setChartView(mChart);
         mChart.setMarker(mv);
@@ -240,8 +233,13 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Log.d(TAG, "DocumentSnapshot data: " + document.get("expenses"));
-                        Map<String, String> currentExpense = (HashMap<String, String>) document.get("expenses");
+
+                        // Map document data to User object
+                        User user = document.toObject(User.class);
+
+                        // Get user expenses
+                        Map<String, String> currentExpense = user.getExpenses();
+
                         System.out.println(currentExpense);
                         if (currentExpense != null) {
                             currentExpense.forEach((k, v) -> {
@@ -253,8 +251,27 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
                             if (currentExpense.get(formatter.format(date)) == null) {
                                 dailyExpensesValue.setText("0.00");
                             } else {
-                                dailyExpensesValue.setText(currentExpense.get(formatter.format(date)));
+                                if (currentExpense.get(formatter.format(date)).length() > 4) {
+                                    dailyExpensesValue.setText(currentExpense.get(formatter.format(date)).substring(0, 4));
+                                } else {
+                                    dailyExpensesValue.setText(currentExpense.get(formatter.format(date)));
+                                }
+
                             }
+                        }
+
+                        if (user.getMeals() != null) {
+                            int lastMealIndex = user.getMeals().size() - 1;
+
+                            if (user.getMeals().get(lastMealIndex).getMealName().length() > 22) {
+                                lastMeal.setText(user.getMeals().get(lastMealIndex).getMealName().substring(0, 20) + "...");
+                            } else {
+                                lastMeal.setText(user.getMeals().get(lastMealIndex).getMealName());
+                            }
+
+                            lastMealPrice.setText("$ " + user.getMeals().get(lastMealIndex).getMealPrice());
+                        } else {
+                            lastMeal.setText("No meals added yet!");
                         }
 
                         Collections.sort(values, new EntryXComparator());
@@ -263,10 +280,16 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
                         if (mChart.getData() != null && mChart.getData().getDataSetCount() > 0) {
                             set1 = (LineDataSet) mChart.getData().getDataSetByIndex(0);
                             set1.setValues(values);
+                            set1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+                            set1.setDrawFilled(true);
+                            set1.setDrawValues(false);
                             mChart.getData().notifyDataChanged();
                             mChart.notifyDataSetChanged();
                         } else {
                             set1 = new LineDataSet(values, "Monthly Expenses");
+                            set1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+                            set1.setDrawFilled(true);
+                            set1.setDrawValues(false);
                             set1.setDrawIcons(false);
                             set1.enableDashedLine(10f, 5f, 0f);
                             set1.enableDashedHighlightLine(10f, 5f, 0f);
