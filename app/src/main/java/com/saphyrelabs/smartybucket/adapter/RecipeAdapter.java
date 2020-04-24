@@ -63,7 +63,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     private static final String TAG = "RecipeAdapterFirestore";
     private Map<String, String> newExpense = new HashMap<>();
     private ArrayList<Meal> newMeal = new ArrayList<Meal>();
-    private int ingredientsInPossessionCount = 0;
     private String [] kitchenIngredientsArray;
 
     private void initFirestore() {

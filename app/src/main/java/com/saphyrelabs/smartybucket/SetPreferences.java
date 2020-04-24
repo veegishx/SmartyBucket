@@ -11,14 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Switch;
 
 import java.util.HashMap;
 
 public class SetPreferences extends AppCompatDialogFragment {
     private SetPreferences.SetPreferencesListenerInterface listener;
     private RadioGroup radioGroup;
-    private RadioButton balancedDiet, highProteinDiet, lowCarbDiet, vegetarianDiet, veganDiet, lowFatDiet, selectedRadioButton;
+    private RadioButton balancedDiet, highProteinDiet, lowFatDiet, selectedRadioButton;
     private HashMap<String, Boolean> userMealPreferences = new HashMap<String, Boolean>();
 
     @Override
@@ -32,7 +31,6 @@ public class SetPreferences extends AppCompatDialogFragment {
         balancedDiet = (RadioButton) view.findViewById(R.id.balanced);
         highProteinDiet = (RadioButton) view.findViewById(R.id.high_protein);
         lowFatDiet = (RadioButton) view.findViewById(R.id.low_fat);
-        lowCarbDiet = (RadioButton) view.findViewById(R.id.low_carb);
 
         userMealPreferences.put("balanced", false);
         userMealPreferences.put("high-protein", false);
