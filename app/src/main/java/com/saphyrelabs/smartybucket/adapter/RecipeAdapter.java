@@ -4,7 +4,6 @@ package com.saphyrelabs.smartybucket.adapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.Log;
@@ -16,7 +15,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,10 +30,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -48,15 +43,12 @@ import com.saphyrelabs.smartybucket.model.Meal;
 import com.saphyrelabs.smartybucket.model.Recipe;
 import com.saphyrelabs.smartybucket.model.User;
 
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
@@ -70,6 +62,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     private static final String TAG = "RecipeAdapterFirestore";
     private Map<String, String> newExpense = new HashMap<>();
     private ArrayList<Meal> newMeal = new ArrayList<Meal>();
+    private int ingredientsInPossessionCount = 0;
+    private String [] kitchenIngredientsArray;
 
     private void initFirestore() {
         smartyFirestore = FirebaseFirestore.getInstance();
@@ -88,7 +82,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     }
 
     public class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView title, ingredients, source, totalPrice;
+        TextView title, ingredients, source, totalPrice, recommendedRecipeLabel;
         ImageView thumbnail;
         ProgressBar progressBar;
         OnItemClickListener onItemClickListener;
@@ -108,6 +102,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             viewRecipeBtn = (Button) v.findViewById(R.id.viewRecipeBtn);
             addToBudgetBtn = (Button) v.findViewById(R.id.addToBudgetBtn);
             totalPrice = (TextView) v.findViewById(R.id.totalPrice);
+            recommendedRecipeLabel = (TextView) v.findViewById(R.id.recommendedRecipeLabel);
 
             recipeCard.setOnClickListener(this);
 
@@ -145,7 +140,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         String [] measures = {"litres","liter","millilitres","-ounce","mL","grams","g", "kg","teaspoon", "teaspoons","tsp", "tablespoon", "tablespoons","tbsp", "Tbsp","fluid", "ounce","oz","fl.oz", "cup","pint","pt","quart","qt","gallon","gal","smidgen","drop","pinch","dash","scruple","dessertspoon","teacup","cup","c","pottle","gill","dram","wineglass","coffeespoon","pound","pounds","lb","tbsp","plus","firmly", "packed","lightly","level","even","rounded","heaping","heaped","sifted","bushel","peck","stick","chopped","sliced","halves","shredded","slivered","sliced","whole","paste","whole"," fresh","peeled","diced","mashed","dried","frozen","fresh","peeled","candied","no", "pulp","crystallized","canned","crushed","minced","julienned","clove","head", "small","large","medium"};
         String [] common_remove = {"ground","to","taste", "and", "or", "powder","can","seed","into","cut","grated","leaf","package","finely","divided","a","piece","optional","inch","needed","more","drained","for","flake","juice","dry","breast","extract","yellow","thinly","boneless","skinless","cubed","bell","bunch","cube","slice","pod","beaten","seeded","broth","uncooked","root","plain","baking","heavy","halved","crumbled","sweet","with","hot","confectioner","room","temperature","trimmed","allpurpose","crumb","deveined","bulk","seasoning","jar","food","sundried","italianstyle","if","bag","mix","in","each","roll","instant","double",
                 "such","extravirgin","frying","thawed","whipping","stock","rinsed","mild","sprig","brown","freshly","toasted","link","boiling","cooked","basmati","unsalted","container","split",
-                "cooking","thin","lengthwise","warm","softened","thick","quartered","juiced","pitted","chunk","melted","cold","coloring","puree","cored","stewed","gingergarlic","floret","coarsely","the","clarified","blanched","zested","sweetened","powdered","longgrain","garnish","indian","dressing","soup","at","active","french","lean","chip","sour","condensed","long","smoked","ripe","skinned","fillet","flat","from","stem","flaked","removed","zest","stalk","unsweetened","baby","cover","crust","extra","prepared","blend","of","ring","peeled","with","just","the","tops","trimmed","off","about","plus","more","for","drizzling","extra-virgin","roughly","handful"};
+                "cooking","thin","lengthwise","warm","softened","thick","quartered","juiced","pitted","chunk","melted","cold","coloring","puree","cored","stewed","gingergarlic","floret","coarsely","coarse","the","clarified","blanched","zested","sweetened","powdered","longgrain","garnish","indian","dressing","soup","at","active","french","lean","chip","sour","condensed","long","smoked","ripe","skinned","fillet","flat","from","stem","flaked","removed","zest","stalk","unsweetened","baby","cover","crust","extra","prepared","blend","of","ring","peeled","with","just","the","tops","trimmed","off","about","plus","more","for","drizzling","extra-virgin","roughly","handful"};
         String [] numberLabels = {"1","2","3","4","5","6","7","8","9","/"};
 
         initFirestore();
@@ -238,11 +233,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             cleanIngredientLines.add(ingredientLine);
         }
 
-
-        String totalIngredients = recipes.get(position).getIncredientLines().size() + " ingredients";
+        int totalIngredients = recipes.get(position).getIncredientLines().size();
 
         holder.title.setText(recipes.get(position).getLabel());
-        holder.ingredients.setText(totalIngredients);
 
         ArrayList<Double> pricesArraylist = new ArrayList<Double>();
 
@@ -373,6 +366,36 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
             v.getContext().startActivity(intent);
         });
+
+        kitchenIngredientsArray = ingredientParameters.replaceAll("\\s+","").split(",");
+
+//        for (int i = 0; i < cleanIngredientLines.size(); i++) {
+//            for (int j = 0; j < kitchenIngredientsArray.length; j++) {
+//                if (cleanIngredientLines.get(i).equalsIgnoreCase(kitchenIngredientsArray[j])) {
+//                    ingredientCount++;
+//                    break;
+//                }
+//            }
+//        }
+
+
+        int ingredientCount = 0;
+
+        for(int i = 0; i < cleanIngredientLines.size(); i++) {
+            for (int j = 0; j < kitchenIngredientsArray.length; j++) {
+                if (cleanIngredientLines.get(i).equalsIgnoreCase(kitchenIngredientsArray[j])) {
+                    System.out.println(cleanIngredientLines.get(i));
+                    System.out.println(kitchenIngredientsArray[j]);
+                    System.out.println(cleanIngredientLines.get(i).equalsIgnoreCase(kitchenIngredientsArray[j]));
+                    ingredientCount++;
+                    System.out.println("--------------");
+                }
+            }
+        }
+
+        holder.ingredients.setText("You have " + ingredientCount + " out of " + totalIngredients + " ingredients");
+        System.out.println("Ingredient count for " + recipes.get(position).getLabel() + " is " + ingredientCount);
+
 
         holder.recipeCard.setOnClickListener(v -> {
             Recipe recipe = recipes.get(position);

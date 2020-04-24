@@ -98,7 +98,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView20"
+                    android:id="@+id/recommendedRecipeLabel"
                     android:layout_width="314dp"
                     android:layout_height="45dp"
                     android:gravity="center"
