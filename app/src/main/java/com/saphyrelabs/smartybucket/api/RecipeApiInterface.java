@@ -11,6 +11,8 @@ public interface RecipeApiInterface {
     Call<RecipeResponse> getRecipes(
             @Query("q") String ingredients,
             @Query("app_id") String apiKey,
-            @Query("app_key") String appId
+            @Query("app_key") String appId,
+            @Query("from") int from,
+            @Query("to") int to
     );
 }

@@ -3,7 +3,10 @@ package com.saphyrelabs.smartybucket.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 public class RecipeResponse {
     @SerializedName("q")
@@ -71,7 +74,8 @@ public class RecipeResponse {
     }
 
     public List<Hits> getHits() {
-        return hits;
+        Collections.shuffle(hits, new Random());
+        return hits.stream().distinct().collect(Collectors.toList());
     }
 
     public void setHits(List<Hits> hits) {

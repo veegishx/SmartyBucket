@@ -64,7 +64,7 @@ public class DisplayRecipes extends AppCompatActivity {
         System.out.println(ingredientsParameter);
 
         RecipeApiInterface apiInterface = RecipeApiClient.getRecipeApi().create(RecipeApiInterface.class);
-        Call<RecipeResponse> call = apiInterface.getRecipes(ingredientsParameter, appIdParameter, apiKeyParameter);
+        Call<RecipeResponse> call = apiInterface.getRecipes(ingredientsParameter, appIdParameter, apiKeyParameter, 0, 50);
         call.enqueue(new Callback<RecipeResponse>() {
             @Override
             public void onResponse(Call<RecipeResponse>call, Response<RecipeResponse> response) {
