@@ -71,7 +71,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     private ArrayList<Meal> newMeal = new ArrayList<Meal>();
     private ArrayList<Recipe> recommendedRecipes = new ArrayList<Recipe>();
     private String [] kitchenIngredientsArray;
-    private TextView recommendedRecipeLabel;
+    private TextView recommendedRecipeLabel, recRecipeExpense;
+    private Button viewRecRecipe, addToBudgetRecRecipe;
 
     private void initFirestore() {
         smartyFirestore = FirebaseFirestore.getInstance();
@@ -122,13 +123,16 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         }
     }
 
-    public RecipeAdapter(String userId, String ingredientParameters, List<Recipe> recipes, int rowLayout, Context context, TextView recommendedRecipeLabel) {
+    public RecipeAdapter(String userId, String ingredientParameters, List<Recipe> recipes, int rowLayout, Context context, TextView recommendedRecipeLabel, Button viewRecRecipe, Button addToBudgetRecRecipe, TextView recRecipeExpense) {
         this.userId = userId;
         this.ingredientParameters = ingredientParameters;
         this.recipes = recipes;
         this.rowLayout = rowLayout;
         this.context = context;
         this.recommendedRecipeLabel = recommendedRecipeLabel;
+        this.viewRecRecipe = viewRecRecipe;
+        this.addToBudgetRecRecipe = addToBudgetRecRecipe;
+        this.recRecipeExpense = recRecipeExpense;
     }
 
     @Override
@@ -142,6 +146,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         // Enable Firestore logging
         FirebaseFirestore.setLoggingEnabled(true);
         ArrayList<String> cleanIngredientLines = new ArrayList<String>();
+        ArrayList<String> cleanRecIngredientLines = new ArrayList<String>();
         ArrayList<Item> dbItemList = new ArrayList<>();
 
         // Based on https://htmlpreview.github.io/?https://github.com/kulsoom-abdullah/kulsoom-abdullah.github.io/blob/master/AWS-lambda-implementation/model_implementation/recipe%20binary%20classification/recipe%20binary%20classification.html#Easy-method-of-removing-%22useless%22-words
@@ -273,6 +278,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
                         if (recipes.get(position).getDietLabels().get(j).contains("Balanced")) {
                             System.out.println("YES!");
+
                             recommendedRecipes.add(recipes.get(position));
                         }
                     }
@@ -284,16 +290,216 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 Collections.shuffle(recommendedRecipes, new Random());
                 System.out.println("Size:" + recommendedRecipes.size());
                 if (recommendedRecipes.size() > 1) {
-                    recommendedRecipeLabel.setText(recommendedRecipes.get(new Random().nextInt(recommendedRecipes.size())).getLabel());
+                    Recipe recommended = recommendedRecipes.get(new Random().nextInt(recommendedRecipes.size()));
+                    recommendedRecipeLabel.setText(recommended.getLabel());
+
+                    viewRecRecipe.setVisibility(View.VISIBLE);
+                    addToBudgetRecRecipe.setVisibility(View.VISIBLE);
+
+                    List<String> recommendedRecipeIngredientLines = recommended.getIncredientLines();
+                    for (String ingredientLine: recommendedRecipeIngredientLines) {
+
+                        System.out.println("DIRTY: " + ingredientLine);
+
+                        // Removing anything after comma, which are usually specifics about the ingredient, therefore we can safely discard this portion of the string
+                        ingredientLine = ingredientLine.split(",")[0];
+
+                        // Removing any parenthesis
+                        ingredientLine = ingredientLine.replaceAll("\\(.*\\)", "");
+
+                        // Removing Unicode symbols
+                        ingredientLine = ingredientLine.replaceAll("\\p{No}+", "");
+
+                        // Removing any dots and digits
+                        ingredientLine = ingredientLine.replaceAll("[^a-zA-Z]"," ");
+
+                        // Removing leading and trailing whitespace characters
+                        ingredientLine = ingredientLine.trim();
+
+                        // Removing fractions represented using slash instead of unicode characters
+                        for (String numberLabelToRemove: numberLabels) {
+                            if (ingredientLine.contains(numberLabelToRemove)) {
+                                String tempWord = numberLabelToRemove + " ";
+                                ingredientLine = ingredientLine.replaceAll(tempWord, "");
+                            }
+
+                        }
+
+                        // Removing leading and trailing whitespace characters
+                        ingredientLine = ingredientLine.trim();
+
+                        // Removing Common words that make up sentences
+                        for (String commonWord: common_remove) {
+                            if (ingredientLine.contains(commonWord)) {
+                                String tempWord = commonWord + " ";
+                                ingredientLine = ingredientLine.replaceAll(tempWord, "");
+                            }
+
+                        }
+
+                        // Removing leading and trailing whitespace characters
+                        ingredientLine = ingredientLine.trim();
+
+                        // Removing Measure labels
+                        for (String measureWord: measures) {
+                            if (ingredientLine.contains(measureWord)) {
+                                String tempWord = measureWord + " ";
+                                ingredientLine = ingredientLine.replaceAll(tempWord, "");
+                            }
+
+                        }
+
+                        // Removing leading and trailing whitespace characters along with any slash
+                        ingredientLine = ingredientLine.trim();
+
+                        System.out.println("CLEAN: " + ingredientLine);
+
+                        cleanRecIngredientLines.add(ingredientLine);
+                    }
+
+                    viewRecRecipe.setOnClickListener(v -> {
+                        Intent intent = new Intent(v.getContext(), RecipeDetails.class);
+
+                        intent.putExtra("url", recommended.getUrl());
+                        intent.putExtra("label", recommended.getLabel());
+                        intent.putExtra("img", recommended.getImage());
+                        intent.putExtra("source", recommended.getSource());
+
+                        v.getContext().startActivity(intent);
+                    });
+
+                    /*
+                    @TODO: Wrap all this ugly code into functions
+                     */
+                    ArrayList<Double> recRecipePricesArraylist = new ArrayList<Double>();
+                    for (int i = 0; i < cleanRecIngredientLines.size(); i++) {
+                        int finalI = i;
+                        smartyFirestore.collection("items")
+                                .whereEqualTo("itemName", cleanRecIngredientLines.get(i))
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    Double totalItemsPrice = 0.00;
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                // Get price of ingredient
+                                                System.out.println("Price of " + cleanRecIngredientLines.get(finalI) + " is " + Double.parseDouble(document.getData().get("itemPrice").toString()));
+                                                //totalItemsPrice += Double.parseDouble(document.getData().get("itemPrice").toString());
+                                                Log.d(TAG, document.getId() + " => " + document.getData().get("itemPrice").toString());
+                                                recRecipePricesArraylist.add(Double.parseDouble(document.getData().get("itemPrice").toString()));
+                                            }
+
+                                            System.out.println("PricesArrayList: " + recRecipePricesArraylist.size());
+                                            for(Double price : recRecipePricesArraylist)
+                                                totalItemsPrice += price;
+
+                                            recRecipeExpense.setText(String.valueOf(totalItemsPrice));
+
+                                            /**
+                                             * Add recipe expense to user model and send to Firestore
+                                             */
+                                            addToBudgetRecRecipe.setOnClickListener(v -> {
+                                                System.out.println("PRICE OF EXPENSE:" + holder.totalPrice.getText());
+                                                DocumentReference docRef = smartyFirestore.collection("users").document(userId);
+                                                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                        if (task.isSuccessful()) {
+                                                            DocumentSnapshot document = task.getResult();
+                                                            if (document.exists()) {
+                                                                // LOGGING EVENTS
+                                                                Log.d(TAG, "DocumentSnapshot data: " + document.get("expenses"));
+                                                                Log.d(TAG, "DocumentSnapshot data: " + document.get("meals"));
+
+                                                                // Retrieving expense data from Firestore
+                                                                Map<String, String> currentExpense = (HashMap<String, String>) document.get("expenses");
+                                                                // Retrieving meal data from Firestore
+                                                                ArrayList<Meal> meals = (ArrayList<Meal>) document.get("meals");
+
+                                                                // Creating a new instance of the Date object
+                                                                Date date = new Date();
+                                                                // Formatting current date to day/month/year
+                                                                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+
+                                                                // Check if the expenses field exist
+                                                                if (currentExpense != null){
+                                                                    if (currentExpense.get(formatter.format(date)) != null) {
+                                                                        float updatedExpense = Float.parseFloat((String) recRecipeExpense.getText()) + Float.parseFloat(currentExpense.get(formatter.format(date)));
+                                                                        currentExpense.put(formatter.format(date), String.valueOf(updatedExpense));
+                                                                    } else {
+                                                                        currentExpense.put(formatter.format(date), (String) recRecipeExpense.getText());
+                                                                    }
+                                                                } else {
+                                                                    newExpense.put(formatter.format(date), (String) recRecipeExpense.getText());
+                                                                    docRef.update("expenses", newExpense);
+                                                                }
+
+                                                                // Check if the meals field exists
+                                                                if (meals != null) {
+                                                                    newMeal.add(new Meal(recommended.getLabel(), totalItemsPrice, cleanRecIngredientLines));
+                                                                } else {
+                                                                    newMeal.add(new Meal(recommended.getLabel(), totalItemsPrice, cleanRecIngredientLines));
+                                                                    docRef.update("meals", newMeal);
+                                                                }
+
+                                                                smartyFirestore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                    @Override
+                                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                        if (task.isSuccessful()) {
+                                                                            for (DocumentSnapshot document : task.getResult()) {
+                                                                                User user = document.toObject(User.class);
+                                                                                if (currentExpense != null) {
+                                                                                    user.setExpenses(currentExpense);
+                                                                                } else  {
+                                                                                    user.setExpenses(newExpense);
+                                                                                }
+
+                                                                                if (meals != null) {
+                                                                                    user.addMeals(new Meal(recommended.getLabel(), totalItemsPrice, cleanRecIngredientLines));
+                                                                                } else {
+                                                                                    user.setMeals(newMeal);
+                                                                                }
+
+                                                                                String id = document.getId();
+                                                                                smartyFirestore.collection("users").document(id).set(user);
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                });
+
+                                                            } else {
+                                                                Log.d(TAG, "No such document");
+                                                            }
+                                                        } else {
+                                                            Log.d(TAG, "get failed with ", task.getException());
+                                                        }
+                                                    }
+                                                });
+                                            });
+
+                                            System.out.println("TOTAL PRICE:" + totalItemsPrice);
+                                        } else {
+                                            Log.d(TAG, "Error getting documents: ", task.getException());
+                                        }
+                                    }
+                                });
+                    }
+
+
+
                 } else {
                     recommendedRecipeLabel.setText("Loading recipes");
                 }
 
                 if (recommendedRecipes.size() == 0) {
                     recommendedRecipeLabel.setText("We couldn't recommend anything at the moment, sorry!");
+                    viewRecRecipe.setVisibility(View.INVISIBLE);
+                    addToBudgetRecRecipe.setVisibility(View.INVISIBLE);
                 }
 
                 recommendedRecipeLabel.invalidate();
+                recRecipeExpense.invalidate();
 
             }
         });

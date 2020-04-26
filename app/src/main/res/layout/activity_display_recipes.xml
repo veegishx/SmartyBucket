@@ -101,7 +101,7 @@
                     android:id="@+id/recommendedRecipeLabel"
                     android:layout_width="257dp"
                     android:layout_height="50dp"
-                    android:layout_marginEnd="100dp"
+                    android:layout_marginEnd="108dp"
                     android:text="@string/default_recommendation_placeholder"
                     android:textColor="#1439BA"
                     android:textSize="14sp"
@@ -109,6 +109,60 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.222" />
+
+                <Button
+                    android:id="@+id/viewRecRecipe"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="#F6F6F6"
+                    android:backgroundTint="#F6F6F6"
+                    android:text="View Recipe"
+                    android:textColor="#010031"
+                    android:textColorHighlight="#010031"
+                    android:textColorHint="#010031"
+                    android:textColorLink="#010031"
+                    app:icon="@drawable/ic_open_in_new_black_24dp"
+                    app:iconTint="#010031"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:visibility="invisible" />
+
+                <Button
+                    android:id="@+id/addToBudgetRecRecipe"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="#4FFF80"
+                    android:backgroundTint="#4FFF80"
+                    android:text="Add To Budget"
+                    android:textColor="#010031"
+                    android:textColorHighlight="#010031"
+                    android:textColorHint="#010031"
+                    android:textColorLink="#010031"
+                    app:icon="@drawable/ic_add_black_24dp"
+                    app:iconTint="#010031"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:visibility="invisible" />
+
+                <TextView
+                    android:id="@+id/recRecipeExpense"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/default_daily_expense"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 

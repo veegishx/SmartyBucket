@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,8 +40,9 @@ public class DisplayRecipes extends AppCompatActivity {
     private RecipeAdapter recipeAdapter;
     private RecyclerView recyclerView;
     private List<Recipe> recipes;
-    private TextView totalRecipes, recommendedRecipeLabel;
+    private TextView totalRecipes, recommendedRecipeLabel, recRecipeExpense;
     private BottomNavigationView bottomNav;
+    private Button viewRecRecipe, addToBudgetRecRecipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,9 @@ public class DisplayRecipes extends AppCompatActivity {
         setContentView(R.layout.activity_display_recipes);
         totalRecipes = (TextView) findViewById(R.id.totalRecipes);
         recommendedRecipeLabel = (TextView) findViewById(R.id.recommendedRecipeLabel);
+        viewRecRecipe = (Button) findViewById(R.id.viewRecRecipe);
+        addToBudgetRecRecipe = (Button) findViewById(R.id.addToBudgetRecRecipe);
+        recRecipeExpense = (TextView) findViewById(R.id.recRecipeExpense);
 
         SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
         String userId = userConfigurations.getString("facebookUid","0");
@@ -83,7 +88,7 @@ public class DisplayRecipes extends AppCompatActivity {
 
                 String totalRecipesString = response.body().getCount() + " Recipes Found";
                 totalRecipes.setText(totalRecipesString);
-                recyclerView.setAdapter(new RecipeAdapter(userId, ingredientsParameter, recipes, R.layout.item, getApplicationContext(), recommendedRecipeLabel));
+                recyclerView.setAdapter(new RecipeAdapter(userId, ingredientsParameter, recipes, R.layout.item, getApplicationContext(), recommendedRecipeLabel, viewRecRecipe, addToBudgetRecRecipe, recRecipeExpense));
             }
 
             @Override
