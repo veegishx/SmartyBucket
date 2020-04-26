@@ -30,7 +30,10 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -45,10 +48,13 @@ import com.saphyrelabs.smartybucket.model.User;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
@@ -63,7 +69,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     private static final String TAG = "RecipeAdapterFirestore";
     private Map<String, String> newExpense = new HashMap<>();
     private ArrayList<Meal> newMeal = new ArrayList<Meal>();
+    private ArrayList<Recipe> recommendedRecipes = new ArrayList<Recipe>();
     private String [] kitchenIngredientsArray;
+    private TextView recommendedRecipeLabel;
 
     private void initFirestore() {
         smartyFirestore = FirebaseFirestore.getInstance();
@@ -82,7 +90,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     }
 
     public class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView title, ingredients, source, totalPrice, recommendedRecipeLabel;
+        TextView title, ingredients, source, totalPrice;
         ImageView thumbnail;
         ProgressBar progressBar;
         OnItemClickListener onItemClickListener;
@@ -102,7 +110,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             viewRecipeBtn = (Button) v.findViewById(R.id.viewRecipeBtn);
             addToBudgetBtn = (Button) v.findViewById(R.id.addToBudgetBtn);
             totalPrice = (TextView) v.findViewById(R.id.totalPrice);
-            recommendedRecipeLabel = (TextView) v.findViewById(R.id.recommendedRecipeLabel);
 
             recipeCard.setOnClickListener(this);
 
@@ -115,12 +122,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         }
     }
 
-    public RecipeAdapter(String userId, String ingredientParameters, List<Recipe> recipes, int rowLayout, Context context) {
+    public RecipeAdapter(String userId, String ingredientParameters, List<Recipe> recipes, int rowLayout, Context context, TextView recommendedRecipeLabel) {
         this.userId = userId;
         this.ingredientParameters = ingredientParameters;
         this.recipes = recipes;
         this.rowLayout = rowLayout;
         this.context = context;
+        this.recommendedRecipeLabel = recommendedRecipeLabel;
     }
 
     @Override
@@ -169,7 +177,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 })
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.thumbnail);
-
 
         // Get ingredientLines
         List<String> ingredientsLinesList = recipes.get(position).getIncredientLines();
@@ -226,7 +233,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             }
 
             // Removing leading and trailing whitespace characters along with any slash
-            ingredientLine = ingredientLine.trim();;
+            ingredientLine = ingredientLine.trim();
 
             System.out.println("CLEAN: " + ingredientLine);
 
@@ -236,6 +243,60 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         int totalIngredients = recipes.get(position).getIncredientLines().size();
 
         holder.title.setText(recipes.get(position).getLabel());
+
+
+
+        DocumentReference docRef = smartyFirestore.collection("users").document(userId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    User user = document.toObject(User.class);
+
+                    // Set recommended recipe
+                    HashMap<String, Boolean> userPref = user.getUserMealPreferences();
+                    String dietLabel = "";
+
+                    for (Map.Entry<String, Boolean> entry : userPref.entrySet()) {
+                        System.out.println("MAPP: " + entry.getValue());
+                        if (entry.getValue() == true) {
+                            dietLabel = entry.getKey();
+                        }
+                    }
+
+                    System.out.println("DIET: " +dietLabel);
+
+                    for (int j = 0; j < recipes.get(position).getDietLabels().size(); j++) {
+                        System.out.println("INSIDE");
+                        System.out.println("GOTIT: " + recipes.get(position).getDietLabels().get(j));
+
+                        if (recipes.get(position).getDietLabels().get(j).contains("Balanced")) {
+                            System.out.println("YES!");
+                            recommendedRecipes.add(recipes.get(position));
+                        }
+                    }
+
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+
+                Collections.shuffle(recommendedRecipes, new Random());
+                System.out.println("Size:" + recommendedRecipes.size());
+                if (recommendedRecipes.size() > 1) {
+                    recommendedRecipeLabel.setText(recommendedRecipes.get(new Random().nextInt(recommendedRecipes.size())).getLabel());
+                } else {
+                    recommendedRecipeLabel.setText("Loading recipes");
+                }
+
+                if (recommendedRecipes.size() == 0) {
+                    recommendedRecipeLabel.setText("We couldn't recommend anything at the moment, sorry!");
+                }
+
+                recommendedRecipeLabel.invalidate();
+
+            }
+        });
 
         ArrayList<Double> pricesArraylist = new ArrayList<Double>();
 

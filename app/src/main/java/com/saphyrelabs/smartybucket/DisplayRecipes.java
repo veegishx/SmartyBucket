@@ -39,7 +39,7 @@ public class DisplayRecipes extends AppCompatActivity {
     private RecipeAdapter recipeAdapter;
     private RecyclerView recyclerView;
     private List<Recipe> recipes;
-    private TextView totalRecipes;
+    private TextView totalRecipes, recommendedRecipeLabel;
     private BottomNavigationView bottomNav;
 
     @Override
@@ -47,6 +47,7 @@ public class DisplayRecipes extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_recipes);
         totalRecipes = (TextView) findViewById(R.id.totalRecipes);
+        recommendedRecipeLabel = (TextView) findViewById(R.id.recommendedRecipeLabel);
 
         SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
         String userId = userConfigurations.getString("facebookUid","0");
@@ -82,7 +83,7 @@ public class DisplayRecipes extends AppCompatActivity {
 
                 String totalRecipesString = response.body().getCount() + " Recipes Found";
                 totalRecipes.setText(totalRecipesString);
-                recyclerView.setAdapter(new RecipeAdapter(userId, ingredientsParameter, recipes, R.layout.item, getApplicationContext()));
+                recyclerView.setAdapter(new RecipeAdapter(userId, ingredientsParameter, recipes, R.layout.item, getApplicationContext(), recommendedRecipeLabel));
             }
 
             @Override

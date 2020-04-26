@@ -99,18 +99,16 @@
 
                 <TextView
                     android:id="@+id/recommendedRecipeLabel"
-                    android:layout_width="314dp"
-                    android:layout_height="45dp"
-                    android:gravity="center"
+                    android:layout_width="257dp"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="100dp"
                     android:text="@string/default_recommendation_placeholder"
                     android:textColor="#1439BA"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.491"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.207" />
+                    app:layout_constraintVertical_bias="0.222" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 

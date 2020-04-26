@@ -192,4 +192,12 @@ public class Recipe {
     public void setTotalTime(double totalTime) {
         this.totalTime = totalTime;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Recipe) {
+            return ((Recipe) obj).getLabel() == label;
+        }
+        return false;
+    }
 }
