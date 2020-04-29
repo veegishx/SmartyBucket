@@ -385,7 +385,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                                             for (QueryDocumentSnapshot document : task.getResult()) {
                                                 // Get price of ingredient
                                                 System.out.println("Price of " + cleanRecIngredientLines.get(finalI) + " is " + Double.parseDouble(document.getData().get("itemPrice").toString()));
-                                                //totalItemsPrice += Double.parseDouble(document.getData().get("itemPrice").toString());
                                                 Log.d(TAG, document.getId() + " => " + document.getData().get("itemPrice").toString());
                                                 recRecipePricesArraylist.add(Double.parseDouble(document.getData().get("itemPrice").toString()));
                                             }
@@ -443,11 +442,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                                                                     docRef.update("meals", newMeal);
                                                                 }
 
-                                                                smartyFirestore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                                                     @Override
-                                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                                                         if (task.isSuccessful()) {
-                                                                            for (DocumentSnapshot document : task.getResult()) {
                                                                                 User user = document.toObject(User.class);
                                                                                 if (currentExpense != null) {
                                                                                     user.setExpenses(currentExpense);
@@ -461,11 +459,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                                                                                     user.setMeals(newMeal);
                                                                                 }
 
-                                                                                String id = document.getId();
-                                                                                smartyFirestore.collection("users").document(id).set(user);
+
+                                                                                docRef.set(user);
                                                                             }
                                                                         }
-                                                                    }
                                                                 });
 
                                                             } else {
@@ -579,27 +576,25 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                                                         docRef.update("meals", newMeal);
                                                     }
 
-                                                    smartyFirestore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                                         @Override
-                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                                             if (task.isSuccessful()) {
-                                                                for (DocumentSnapshot document : task.getResult()) {
-                                                                    User user = document.toObject(User.class);
-                                                                    if (currentExpense != null) {
-                                                                        user.setExpenses(currentExpense);
-                                                                    } else  {
-                                                                        user.setExpenses(newExpense);
-                                                                    }
-
-                                                                    if (meals != null) {
-                                                                        user.addMeals(new Meal(recipes.get(position).getLabel(), totalItemsPrice, cleanIngredientLines));
-                                                                    } else {
-                                                                        user.setMeals(newMeal);
-                                                                    }
-
-                                                                    String id = document.getId();
-                                                                    smartyFirestore.collection("users").document(id).set(user);
+                                                                User user = document.toObject(User.class);
+                                                                if (currentExpense != null) {
+                                                                    user.setExpenses(currentExpense);
+                                                                } else  {
+                                                                    user.setExpenses(newExpense);
                                                                 }
+
+                                                                if (meals != null) {
+                                                                    user.addMeals(new Meal(recipes.get(position).getLabel(), totalItemsPrice, cleanIngredientLines));
+                                                                } else {
+                                                                    user.setMeals(newMeal);
+                                                                }
+
+                                                                String id = document.getId();
+                                                                smartyFirestore.collection("users").document(id).set(user);
                                                             }
                                                         }
                                                     });
