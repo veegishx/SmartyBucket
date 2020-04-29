@@ -51,7 +51,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -389,7 +388,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                                                 recRecipePricesArraylist.add(Double.parseDouble(document.getData().get("itemPrice").toString()));
                                             }
 
-                                            System.out.println("PricesArrayList: " + recRecipePricesArraylist.size());
                                             for(Double price : recRecipePricesArraylist)
                                                 totalItemsPrice += price;
 
@@ -401,76 +399,70 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                                             addToBudgetRecRecipe.setOnClickListener(v -> {
                                                 System.out.println("PRICE OF EXPENSE:" + holder.totalPrice.getText());
                                                 DocumentReference docRef = smartyFirestore.collection("users").document(userId);
-                                                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                        if (task.isSuccessful()) {
-                                                            DocumentSnapshot document = task.getResult();
-                                                            if (document.exists()) {
-                                                                // LOGGING EVENTS
-                                                                Log.d(TAG, "DocumentSnapshot data: " + document.get("expenses"));
-                                                                Log.d(TAG, "DocumentSnapshot data: " + document.get("meals"));
+                                                docRef.get().addOnCompleteListener(task14 -> {
+                                                    if (task14.isSuccessful()) {
+                                                        DocumentSnapshot document = task14.getResult();
+                                                        if (document.exists()) {
+                                                            // LOGGING EVENTS
+                                                            Log.d(TAG, "DocumentSnapshot data: " + document.get("expenses"));
+                                                            Log.d(TAG, "DocumentSnapshot data: " + document.get("meals"));
 
-                                                                // Retrieving expense data from Firestore
-                                                                Map<String, String> currentExpense = (HashMap<String, String>) document.get("expenses");
-                                                                // Retrieving meal data from Firestore
-                                                                ArrayList<Meal> meals = (ArrayList<Meal>) document.get("meals");
+                                                            // Retrieving expense data from Firestore
+                                                            Map<String, String> currentExpense = (HashMap<String, String>) document.get("expenses");
+                                                            // Retrieving meal data from Firestore
+                                                            ArrayList<Meal> meals = (ArrayList<Meal>) document.get("meals");
 
-                                                                // Creating a new instance of the Date object
-                                                                Date date = new Date();
-                                                                // Formatting current date to day/month/year
-                                                                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                                                            // Creating a new instance of the Date object
+                                                            Date date = new Date();
+                                                            // Formatting current date to day/month/year
+                                                            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 
-                                                                // Check if the expenses field exist
-                                                                if (currentExpense != null){
-                                                                    if (currentExpense.get(formatter.format(date)) != null) {
-                                                                        float updatedExpense = Float.parseFloat((String) recRecipeExpense.getText()) + Float.parseFloat(currentExpense.get(formatter.format(date)));
-                                                                        currentExpense.put(formatter.format(date), String.valueOf(updatedExpense));
-                                                                    } else {
-                                                                        currentExpense.put(formatter.format(date), (String) recRecipeExpense.getText());
-                                                                    }
+                                                            // Check if the expenses field exist
+                                                            if (currentExpense != null){
+                                                                if (currentExpense.get(formatter.format(date)) != null) {
+                                                                    float updatedExpense = Float.parseFloat((String) recRecipeExpense.getText()) + Float.parseFloat(currentExpense.get(formatter.format(date)));
+                                                                    currentExpense.put(formatter.format(date), String.valueOf(updatedExpense));
                                                                 } else {
-                                                                    newExpense.put(formatter.format(date), (String) recRecipeExpense.getText());
-                                                                    docRef.update("expenses", newExpense);
+                                                                    currentExpense.put(formatter.format(date), (String) recRecipeExpense.getText());
                                                                 }
+                                                            } else {
+                                                                newExpense.put(formatter.format(date), (String) recRecipeExpense.getText());
+                                                                docRef.update("expenses", newExpense);
+                                                            }
 
-                                                                // Check if the meals field exists
-                                                                if (meals != null) {
-                                                                    newMeal.add(new Meal(recommended.getLabel(), totalItemsPrice, cleanRecIngredientLines));
-                                                                } else {
-                                                                    newMeal.add(new Meal(recommended.getLabel(), totalItemsPrice, cleanRecIngredientLines));
-                                                                    docRef.update("meals", newMeal);
-                                                                }
+                                                            // Check if the meals field exists
+                                                            if (meals != null) {
+                                                                newMeal.add(new Meal(recommended.getLabel(), totalItemsPrice, cleanRecIngredientLines));
+                                                            } else {
+                                                                newMeal.add(new Meal(recommended.getLabel(), totalItemsPrice, cleanRecIngredientLines));
+                                                                docRef.update("meals", newMeal);
+                                                            }
 
-                                                                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                                    @Override
-                                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                                        if (task.isSuccessful()) {
-                                                                                User user = document.toObject(User.class);
-                                                                                if (currentExpense != null) {
-                                                                                    user.setExpenses(currentExpense);
-                                                                                } else  {
-                                                                                    user.setExpenses(newExpense);
-                                                                                }
-
-                                                                                if (meals != null) {
-                                                                                    user.addMeals(new Meal(recommended.getLabel(), totalItemsPrice, cleanRecIngredientLines));
-                                                                                } else {
-                                                                                    user.setMeals(newMeal);
-                                                                                }
-
-
-                                                                                docRef.set(user);
-                                                                            }
+                                                            docRef.get().addOnCompleteListener(task13 -> {
+                                                                if (task13.isSuccessful()) {
+                                                                        User user = document.toObject(User.class);
+                                                                        if (currentExpense != null) {
+                                                                            user.setExpenses(currentExpense);
+                                                                        } else  {
+                                                                            user.setExpenses(newExpense);
                                                                         }
+
+                                                                        if (meals != null) {
+                                                                            user.addMeals(new Meal(recommended.getLabel(), totalItemsPrice, cleanRecIngredientLines));
+                                                                        } else {
+                                                                            user.setMeals(newMeal);
+                                                                        }
+
+
+                                                                        docRef.set(user);
+                                                                    }
                                                                 });
 
-                                                            } else {
-                                                                Log.d(TAG, "No such document");
-                                                            }
                                                         } else {
-                                                            Log.d(TAG, "get failed with ", task.getException());
+                                                            Log.d(TAG, "No such document");
                                                         }
+                                                    } else {
+                                                        Log.d(TAG, "get failed with ", task14.getException());
                                                     }
                                                 });
                                             });
@@ -518,12 +510,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     // Get price of ingredient
                                     System.out.println("Price of " + cleanIngredientLines.get(finalI) + " is " + Double.parseDouble(document.getData().get("itemPrice").toString()));
-                                    //totalItemsPrice += Double.parseDouble(document.getData().get("itemPrice").toString());
                                     Log.d(TAG, document.getId() + " => " + document.getData().get("itemPrice").toString());
                                     pricesArraylist.add(Double.parseDouble(document.getData().get("itemPrice").toString()));
                                 }
-//                                holder.totalPrice.setText(String.valueOf(totalItemsPrice));
-                                System.out.println("PricesArrayList: " + pricesArraylist.size());
+
                                 for(Double price : pricesArraylist)
                                     totalItemsPrice += price;
 
@@ -535,76 +525,70 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                                 holder.addToBudgetBtn.setOnClickListener(v -> {
                                     System.out.println("PRICE OF EXPENSE:" + holder.totalPrice.getText());
                                     DocumentReference docRef = smartyFirestore.collection("users").document(userId);
-                                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            if (task.isSuccessful()) {
-                                                DocumentSnapshot document = task.getResult();
-                                                if (document.exists()) {
-                                                    // LOGGING EVENTS
-                                                    Log.d(TAG, "DocumentSnapshot data: " + document.get("expenses"));
-                                                    Log.d(TAG, "DocumentSnapshot data: " + document.get("meals"));
+                                    docRef.get().addOnCompleteListener(task12 -> {
+                                        if (task12.isSuccessful()) {
+                                            DocumentSnapshot document = task12.getResult();
+                                            if (document.exists()) {
+                                                // LOGGING EVENTS
+                                                Log.d(TAG, "DocumentSnapshot data: " + document.get("expenses"));
+                                                Log.d(TAG, "DocumentSnapshot data: " + document.get("meals"));
 
-                                                    // Retrieving expense data from Firestore
-                                                    Map<String, String> currentExpense = (HashMap<String, String>) document.get("expenses");
-                                                    // Retrieving meal data from Firestore
-                                                    ArrayList<Meal> meals = (ArrayList<Meal>) document.get("meals");
+                                                // Retrieving expense data from Firestore
+                                                Map<String, String> currentExpense = (HashMap<String, String>) document.get("expenses");
+                                                // Retrieving meal data from Firestore
+                                                ArrayList<Meal> meals = (ArrayList<Meal>) document.get("meals");
 
-                                                    // Creating a new instance of the Date object
-                                                    Date date = new Date();
-                                                    // Formatting current date to day/month/year
-                                                    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                                                // Creating a new instance of the Date object
+                                                Date date = new Date();
+                                                // Formatting current date to day/month/year
+                                                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 
-                                                    // Check if the expenses field exist
-                                                    if (currentExpense != null){
-                                                        if (currentExpense.get(formatter.format(date)) != null) {
-                                                            float updatedExpense = Float.parseFloat((String) holder.totalPrice.getText()) + Float.parseFloat(currentExpense.get(formatter.format(date)));
-                                                            currentExpense.put(formatter.format(date), String.valueOf(updatedExpense));
-                                                        } else {
-                                                            currentExpense.put(formatter.format(date), (String) holder.totalPrice.getText());
-                                                        }
+                                                // Check if the expenses field exist
+                                                if (currentExpense != null){
+                                                    if (currentExpense.get(formatter.format(date)) != null) {
+                                                        float updatedExpense = Float.parseFloat((String) holder.totalPrice.getText()) + Float.parseFloat(currentExpense.get(formatter.format(date)));
+                                                        currentExpense.put(formatter.format(date), String.valueOf(updatedExpense));
                                                     } else {
-                                                        newExpense.put(formatter.format(date), (String) holder.totalPrice.getText());
-                                                        docRef.update("expenses", newExpense);
+                                                        currentExpense.put(formatter.format(date), (String) holder.totalPrice.getText());
                                                     }
-
-                                                    // Check if the meals field exists
-                                                    if (meals != null) {
-                                                        newMeal.add(new Meal(recipes.get(position).getLabel(), totalItemsPrice, cleanIngredientLines));
-                                                    } else {
-                                                        newMeal.add(new Meal(recipes.get(position).getLabel(), totalItemsPrice, cleanIngredientLines));
-                                                        docRef.update("meals", newMeal);
-                                                    }
-
-                                                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                            if (task.isSuccessful()) {
-                                                                User user = document.toObject(User.class);
-                                                                if (currentExpense != null) {
-                                                                    user.setExpenses(currentExpense);
-                                                                } else  {
-                                                                    user.setExpenses(newExpense);
-                                                                }
-
-                                                                if (meals != null) {
-                                                                    user.addMeals(new Meal(recipes.get(position).getLabel(), totalItemsPrice, cleanIngredientLines));
-                                                                } else {
-                                                                    user.setMeals(newMeal);
-                                                                }
-
-                                                                String id = document.getId();
-                                                                smartyFirestore.collection("users").document(id).set(user);
-                                                            }
-                                                        }
-                                                    });
-
                                                 } else {
-                                                    Log.d(TAG, "No such document");
+                                                    newExpense.put(formatter.format(date), (String) holder.totalPrice.getText());
+                                                    docRef.update("expenses", newExpense);
                                                 }
+
+                                                // Check if the meals field exists
+                                                if (meals != null) {
+                                                    newMeal.add(new Meal(recipes.get(position).getLabel(), totalItemsPrice, cleanIngredientLines));
+                                                } else {
+                                                    newMeal.add(new Meal(recipes.get(position).getLabel(), totalItemsPrice, cleanIngredientLines));
+                                                    docRef.update("meals", newMeal);
+                                                }
+
+                                                docRef.get().addOnCompleteListener(task1 -> {
+                                                    if (task1.isSuccessful()) {
+                                                        User user = document.toObject(User.class);
+                                                        if (currentExpense != null) {
+                                                            user.setExpenses(currentExpense);
+                                                        } else  {
+                                                            user.setExpenses(newExpense);
+                                                        }
+
+                                                        if (meals != null) {
+                                                            user.addMeals(new Meal(recipes.get(position).getLabel(), totalItemsPrice, cleanIngredientLines));
+                                                        } else {
+                                                            user.setMeals(newMeal);
+                                                        }
+
+                                                        String id = document.getId();
+                                                        smartyFirestore.collection("users").document(id).set(user);
+                                                    }
+                                                });
+
                                             } else {
-                                                Log.d(TAG, "get failed with ", task.getException());
+                                                Log.d(TAG, "No such document");
                                             }
+                                        } else {
+                                            Log.d(TAG, "get failed with ", task12.getException());
                                         }
                                     });
                                 });
@@ -648,9 +632,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         }
 
         holder.ingredients.setText("You have " + ingredientCount + " out of " + totalIngredients + " ingredients");
-        System.out.println("Ingredient count for " + recipes.get(position).getLabel() + " is " + ingredientCount);
-
-
         holder.recipeCard.setOnClickListener(v -> {
             Recipe recipe = recipes.get(position);
             System.out.println("Tapped!");
@@ -658,24 +639,21 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             System.out.println(ingredientParameters);
 
             final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext(), R.style.IngredientSummary);
-                    builder.setTitle("Ingredient Summary");
-                    // Hardcoding values for now
-                    builder.setMessage("You are missing the following ingredients: Onions, Black Pepper, Tomatoes. Total price is: ");
-                    builder.setPositiveButton("OK", null);
-                    builder.show();
+            handler.postDelayed(() -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext(), R.style.IngredientSummary);
+                builder.setTitle("Ingredient Summary");
+                // Hardcoding values for now
+                builder.setMessage("You are missing the following ingredients: Onions, Black Pepper, Tomatoes. Total price is: ");
+                builder.setPositiveButton("OK", null);
+                builder.show();
 
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            //totalCost[0] = 0.0;
-                        }
-                    });
-                    Log.d("Handler", "Running Handler");
-                }
+                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+
+                    }
+                });
+                Log.d("Handler", "Running Handler");
             }, 1000);
         });
 
