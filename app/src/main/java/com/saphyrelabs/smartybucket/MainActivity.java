@@ -269,7 +269,11 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
                                 lastMeal.setText(user.getMeals().get(lastMealIndex).getMealName());
                             }
 
-                            lastMealPrice.setText("$ " + user.getMeals().get(lastMealIndex).getMealPrice());
+                            if (String.valueOf(user.getMeals().get(lastMealIndex).getMealPrice()).length() > 4) {
+                                lastMealPrice.setText("$ " + String.valueOf(user.getMeals().get(lastMealIndex).getMealPrice()).substring(0, 4));
+                            } else {
+                                lastMealPrice.setText("$ " + String.valueOf(user.getMeals().get(lastMealIndex).getMealPrice()));
+                            }
                         } else {
                             lastMeal.setText("No meals added yet!");
                         }
