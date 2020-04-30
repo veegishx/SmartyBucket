@@ -27,15 +27,11 @@ import java.io.File;
 public class ScanType extends AppCompatActivity {
     private CardView scanListCard;
     private CardView scanIngredientCard;
-    private int scanType = 0;
-    public static final int REQUEST_PERMISSION = 300;
-    public static final int REQUEST_IMAGE = 100;
+    private static final int REQUEST_PERMISSION = 300;
+    private static final int PERMISSION_REQUEST_CODE = 200;
+    private static final int REQUEST_IMAGE = 100;
 
     private Uri imageUri;
-
-    private String choice;
-
-    private boolean quant;
     private BottomNavigationView bottomNav;
 
     @Override
@@ -43,47 +39,34 @@ public class ScanType extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_options);
 
-        if(ActivityCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, REQUEST_PERMISSION);
-        }
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSION);
-        }
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_PERMISSION);
-        }
-
-        scanIngredientCard = (CardView) findViewById(R.id.scan_ingredient_card);
-        scanIngredientCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SharedPreferences myPreferences = getSharedPreferences("userConfigurations", MODE_PRIVATE);
-                String modelType = myPreferences.getString("modelType",null);
-                scanType = 1;
+        scanIngredientCard = findViewById(R.id.scan_ingredient_card);
+        scanIngredientCard.setOnClickListener(view -> {
+            if (checkCameraPermissions()) {
                 Intent i = new Intent(ScanType.this, ClassifierActivity.class);
                 startActivity(i);
-//                if (modelType.equals("float")) {
-//                    choice = "new_mobile_model.tflite";
-//                    quant = false;
-//                    openCameraIntent();
-//                } else  {
-//                    choice = "inception_quant.tflite";
-//                    quant = true;
-//                    openCameraIntent();
-//                }
-
-
+            } else {
+                Toast.makeText(ScanType.this.getApplicationContext(),"This feature needs camera permissions to run. Please enable this permission first",Toast.LENGTH_LONG).show();
+                requestCameraPermission();
             }
         });
 
-        scanListCard = (CardView) findViewById(R.id.scan_list_card);
-        scanListCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openCameraIntent();
-                scanType = 1;
+        scanListCard = findViewById(R.id.scan_list_card);
+        scanListCard.setOnClickListener(view -> {
+            if (checkCameraPermissions()) {
+                if (checkReadPermissions()) {
+                    if (checkWritePermissions()) {
+                        openCameraIntent();
+                    } else {
+                        Toast.makeText(ScanType.this.getApplicationContext(),"This feature needs write permissions to run. Please enable this permission first",Toast.LENGTH_LONG).show();
+                        requestWritePermission();
+                    }
+                } else {
+                    Toast.makeText(ScanType.this.getApplicationContext(),"This feature needs read permissions to run. Please enable this permission first",Toast.LENGTH_LONG).show();
+                    requestReadPermission();
+                }
+            } else {
+                Toast.makeText(ScanType.this.getApplicationContext(),"This feature needs camera permissions to run. Please enable this permission first",Toast.LENGTH_LONG).show();
+                requestCameraPermission();
             }
         });
 
@@ -91,23 +74,57 @@ public class ScanType extends AppCompatActivity {
         bottomNav = findViewById(R.id.bottom_navigation);
 
         // Handle onClick event
-        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                switch (id){
-                    case R.id.homeNav:
-                        Intent home = new Intent(ScanType.this, MainActivity.class);
-                        startActivity(home);
-                        break;
-                    case R.id.scanNav:
-                        Intent scanType = new Intent(ScanType.this, ScanType.class);
-                        startActivity(scanType);
-                        break;
-                }
-                return false;
+        bottomNav.setOnNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            switch (id){
+                case R.id.homeNav:
+                    Intent home = new Intent(ScanType.this, MainActivity.class);
+                    startActivity(home);
+                    break;
+                case R.id.scanNav:
+                    Intent scanType = new Intent(ScanType.this, ScanType.class);
+                    startActivity(scanType);
+                    break;
             }
+            return false;
         });
+    }
+
+    public boolean checkCameraPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(ScanType.this.getApplicationContext(),"This feature needs camera permissions to run. Please enable this permission first",Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkReadPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(ScanType.this.getApplicationContext(),"This feature needs read permissions to run. Please enable this permission first",Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean checkWritePermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(ScanType.this.getApplicationContext(),"This feature needs write permissions to run. Please enable this permission first",Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
+    }
+
+    private void requestCameraPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CODE);
+    }
+
+    private void requestReadPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+    }
+
+    private void requestWritePermission() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
     }
 
     private void openCameraIntent() {
@@ -125,7 +142,7 @@ public class ScanType extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_PERMISSION) {
             if (!(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                Toast.makeText(getApplicationContext(),"This application needs read, write, and camera permissions to run. Application now closing.",Toast.LENGTH_LONG);
+                Toast.makeText(getApplicationContext(),"This application needs read, write, and camera permissions to run. Application now closing.",Toast.LENGTH_LONG).show();
                 System.exit(0);
             }
         }
@@ -153,10 +170,6 @@ public class ScanType extends AppCompatActivity {
             Intent i = new Intent(ScanType.this, parseListImage.class);
             // put image data in extras to send
             i.putExtra("resID_uri", imageUri);
-            // put filename in extras
-            i.putExtra("choice", choice);
-            // put model type in extras
-            i.putExtra("quant", quant);
             // send other required data
             startActivity(i);
         }
