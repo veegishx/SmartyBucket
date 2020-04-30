@@ -60,20 +60,20 @@
                     android:elevation="10dp">
 
                     <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
+                        android:layout_width="52dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
                         android:layout_marginStart="151dp"
-                        android:layout_marginEnd="190dp"
+                        android:layout_marginEnd="176dp"
                         android:layout_marginBottom="45dp"
                         app:cardCornerRadius="4dp"
                         app:cardElevation="4dp">
 
                         <TextView
                             android:id="@+id/lastMealPrice"
-                            android:layout_width="wrap_content"
+                            android:layout_width="53dp"
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
                             android:text="@string/default_lastmeal_expense"

@@ -7,6 +7,7 @@
     <string name="app_tagline">Tracking expenses the smart way.</string>
     <string name="home">Home</string>
     <string name="scan">Scan</string>
+    <string name="expenses">Expenses</string>
     <string name="inventory">Inventory</string>
     <string name="dollar_sign">$</string>
     <string name="money_spent_value">230</string>

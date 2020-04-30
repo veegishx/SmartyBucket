@@ -155,6 +155,10 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
                         Intent scanType = new Intent(MainActivity.this, ScanType.class);
                         startActivity(scanType);
                         break;
+                    case R.id.expense:
+                        Intent expenses = new Intent(MainActivity.this, ViewExpenses.class);
+                        startActivity(expenses);
+                        break;
                 }
                 return false;
             }
@@ -262,17 +266,18 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
 
                         if (user.getMeals() != null) {
                             int lastMealIndex = user.getMeals().size() - 1;
+                            if (lastMealIndex > -1) {
+                                if (user.getMeals().get(lastMealIndex).getMealName().length() > 22) {
+                                    lastMeal.setText(user.getMeals().get(lastMealIndex).getMealName().substring(0, 20) + "...");
+                                } else {
+                                    lastMeal.setText(user.getMeals().get(lastMealIndex).getMealName());
+                                }
 
-                            if (user.getMeals().get(lastMealIndex).getMealName().length() > 22) {
-                                lastMeal.setText(user.getMeals().get(lastMealIndex).getMealName().substring(0, 20) + "...");
-                            } else {
-                                lastMeal.setText(user.getMeals().get(lastMealIndex).getMealName());
-                            }
-
-                            if (String.valueOf(user.getMeals().get(lastMealIndex).getMealPrice()).length() > 4) {
-                                lastMealPrice.setText("$ " + String.valueOf(user.getMeals().get(lastMealIndex).getMealPrice()).substring(0, 4));
-                            } else {
-                                lastMealPrice.setText("$ " + String.valueOf(user.getMeals().get(lastMealIndex).getMealPrice()));
+                                if (String.valueOf(user.getMeals().get(lastMealIndex).getMealPrice()).length() > 4) {
+                                    lastMealPrice.setText("$ " + String.valueOf(user.getMeals().get(lastMealIndex).getMealPrice()).substring(0, 4));
+                                } else {
+                                    lastMealPrice.setText("$ " + String.valueOf(user.getMeals().get(lastMealIndex).getMealPrice()));
+                                }
                             }
                         } else {
                             lastMeal.setText("No meals added yet!");
