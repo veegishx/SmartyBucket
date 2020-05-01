@@ -26,11 +26,13 @@ public class MealExpensesAdapter extends RecyclerView.Adapter<MealExpensesAdapte
 
 
     public class MealExpensesAdapterViewHolder extends RecyclerView.ViewHolder {
-        TextView dateTextView;
+        TextView expenseDate, expenseTotal, expenseIngredient;
 
         public MealExpensesAdapterViewHolder(View v) {
             super(v);
-            dateTextView = (TextView) v.findViewById(R.id.expenseDate);
+            expenseDate = (TextView) v.findViewById(R.id.expenseDate);
+            expenseTotal = (TextView) v.findViewById(R.id.expenseTotal);
+            expenseIngredient = (TextView) v.findViewById(R.id.expenseIngredient);
         }
     }
 
@@ -48,7 +50,19 @@ public class MealExpensesAdapter extends RecyclerView.Adapter<MealExpensesAdapte
 
     @Override
     public void onBindViewHolder(MealExpensesAdapterViewHolder holder, final int position) {
-        holder.dateTextView.setText(meals.get(position).getDate());
+        double mealPrice = meals.get(position).getMealPrice();
+
+        holder.expenseDate.setText(meals.get(position).getDate());
+        for (int i = 0; i < meals.get(position).getIngredientLines().size(); i++) {
+            holder.expenseIngredient.append(meals.get(position).getIngredientLines().get(i) + "\n");
+        }
+
+
+        if (String.valueOf(mealPrice).length() > 4) {
+            holder.expenseTotal.setText(String.valueOf(mealPrice).substring(0, 4));
+        } else {
+            holder.expenseTotal.setText(String.valueOf(mealPrice));
+        }
     }
 
     @Override

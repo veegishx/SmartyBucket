@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomnavigation.LabelVisibilityMode;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -140,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
 
         // Initialize BottomAppBar
         bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
 
         // Handle onClick event
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -159,17 +161,13 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
                         Intent expenses = new Intent(MainActivity.this, ViewExpenses.class);
                         startActivity(expenses);
                         break;
+                    case R.id.account:
+                        Intent account = new Intent(MainActivity.this, UserProfile.class);
+                        startActivity(account);
                 }
                 return false;
             }
         });
-
-        // Register click event for BottomAppBar FloatingActionButton icon
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(v -> {
-//            Intent cameraIntent = new Intent(MainActivity.this, ScanType.class);
-//            startActivity(cameraIntent);
-//        });
 
         mChart = findViewById(R.id.chart);
         mChart.setTouchEnabled(true);
