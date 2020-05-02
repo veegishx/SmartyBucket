@@ -86,7 +86,7 @@
             <View
                 android:id="@+id/view7"
                 android:layout_width="3dp"
-                android:layout_height="94dp"
+                android:layout_height="0dp"
                 android:layout_marginEnd="36dp"
                 android:background="#DADADA"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -96,22 +96,36 @@
                 app:layout_constraintTop_toBottomOf="@+id/view6"
                 app:layout_constraintVertical_bias="0.777" />
 
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip3"
+                android:layout_width="144dp"
+                android:layout_height="42dp"
+                android:checkable="false"
+                android:checked="false"
+                app:checkedIconEnabled="false"
+                app:checkedIconVisible="false"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view6" />
+
             <TextView
                 android:id="@+id/expenseIngredient"
                 android:layout_width="190dp"
-                android:layout_height="21dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/view7"
-                app:layout_constraintHorizontal_bias="0.695"
+                app:layout_constraintHorizontal_bias="0.555"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view6"
-                app:layout_constraintVertical_bias="0.382" />
+                app:layout_constraintVertical_bias="0.348" />
 
             <TextView
                 android:id="@+id/textView45"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:enabled="false"
+                android:padding="5dp"
                 android:text="Ingredients used"
                 android:textColor="#0013C0"
                 app:layout_constraintBottom_toTopOf="@+id/expenseIngredient"
