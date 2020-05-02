@@ -321,8 +321,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         System.out.println("MEALPREF: " + userDietLabel);
         for (int j = 0; j < recipes.get(position).getDietLabels().size(); j++) {
             for (int k = 0; k < recipes.get(position).getDietLabels().size(); k++) {
+                // Check if recipe contains label set by user, eg: balanced, low-fat, low-carb, high-protein
                 if (Pattern.compile(Pattern.quote(recipes.get(position).getDietLabels().get(k)), Pattern.CASE_INSENSITIVE).matcher(userDietLabel).find()) {
-                    recommendedRecipes.add(recipes.get(position));
+                    // Check if user has enough ingredients - difference not more than 4
+                    if ((kitchenIngredientsArray.length == recipes.get(position).getIncredientLines().size()) || recipes.get(position).getIncredientLines().size() - kitchenIngredientsArray.length < 4) {
+                        recommendedRecipes.add(recipes.get(position));
+                    }
                 }
             }
         }
