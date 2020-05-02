@@ -40,18 +40,18 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
                     .setSmallIcon(R.drawable.ic_monetization_on_black_24dp)
                     .setLights(Color.RED, 300, 300)
                     .setChannelId(CHANNEL_ID)
-                    .setContentTitle("SmartyBucket Meal Assistant");
+                    .setContentTitle("Explore Recipes");
         } else {
             mBuilder = new NotificationCompat.Builder(context)
                     .setSmallIcon(R.drawable.ic_monetization_on_black_24dp)
                     .setPriority(Notification.PRIORITY_HIGH)
-                    .setContentTitle("SmartyBucket Meal Assistant");
+                    .setContentTitle("Explore Recipes");
         }
 
         mBuilder.setContentIntent(contentIntent);
-        mBuilder.setContentText("Not sure what to cook? Scan some ingredients and we will help you decide!")
+        mBuilder.setContentText("Not sure what meal to cook? Scan some ingredients and we will help you decide!")
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText("Not sure what to cook? Scan some ingredients and we will help you decide!"));
+                        .bigText("Not sure what meal to cook? Scan some ingredients and we will help you decide!"));
         mBuilder.setAutoCancel(true);
         mNotificationManager.notify(1, mBuilder.build());
     }
