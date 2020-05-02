@@ -103,4 +103,7 @@
     <string name="action_add">Add</string>
     <string name="reminder_label">Daily Reminder</string>
     <string name="action_set_reminder">Set Time</string>
+    <string name="budget_label">Monthly Budget</string>
+    <string name="update_preferences">Set your diet preferences</string>
+    <string name="update_budget">Set your Monthly Budget</string>
 </resources>
