@@ -15,7 +15,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="40dp"
         android:text="Diet Preferences"
-        android:textColor="#000000"
+        android:textColor="#FF01092C"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -101,13 +101,16 @@
         android:id="@+id/notify"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:background="@color/colorPrimaryDark"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:text="@string/action_set_reminder"
+        app:icon="@drawable/ic_notifications_active_black_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.049"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView32"
-        app:layout_constraintVertical_bias="0.058" />
+        app:layout_constraintVertical_bias="0.181" />
 
     <FrameLayout
         android:id="@+id/frameLayout"
@@ -129,5 +132,17 @@
             app:menu="@menu/bottom_nav_drawer_menu" />
 
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/textView29"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="268dp"
+        android:text="@string/reminder_label"
+        android:textColor="#01092C"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
