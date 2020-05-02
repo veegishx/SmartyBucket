@@ -26,7 +26,7 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
         String CHANNEL_ID = "200";// The id of the channel.
         CharSequence name = "dailynotification";// The user-visible name of the channel.
         NotificationCompat.Builder mBuilder;
-        Intent notificationIntent = new Intent(context, NotificationBroadcastReceiver.class);
+        Intent notificationIntent = new Intent(context, MainActivity.class);
         Bundle bundle = new Bundle();
         notificationIntent.putExtras(bundle);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
@@ -37,19 +37,21 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_HIGH);
             mNotificationManager.createNotificationChannel(mChannel);
             mBuilder = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setSmallIcon(R.drawable.ic_monetization_on_black_24dp)
                     .setLights(Color.RED, 300, 300)
                     .setChannelId(CHANNEL_ID)
                     .setContentTitle("SmartyBucket Meal Assistant");
         } else {
             mBuilder = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setSmallIcon(R.drawable.ic_monetization_on_black_24dp)
                     .setPriority(Notification.PRIORITY_HIGH)
                     .setContentTitle("SmartyBucket Meal Assistant");
         }
 
         mBuilder.setContentIntent(contentIntent);
-        mBuilder.setContentText("Not sure what to cook? Scan some ingredients and we will help you decide!");
+        mBuilder.setContentText("Not sure what to cook? Scan some ingredients and we will help you decide!")
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText("Not sure what to cook? Scan some ingredients and we will help you decide!"));
         mBuilder.setAutoCancel(true);
         mNotificationManager.notify(1, mBuilder.build());
     }
