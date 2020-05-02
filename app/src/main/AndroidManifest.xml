@@ -122,6 +122,7 @@
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="ocr" />
+        <receiver android:name=".NotificationBroadcastReceiver"/>
     </application>
 
 </manifest>
