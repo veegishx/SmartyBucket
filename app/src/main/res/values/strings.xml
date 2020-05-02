@@ -100,4 +100,5 @@
     <string name="high_protein_diet">High Protein Diet</string>
     <string name="low_fat_diet">Low Fat Diet</string>
     <string name="low_carb_diet">Low Carb Diet</string>
+    <string name="action_add">Add</string>
 </resources>
