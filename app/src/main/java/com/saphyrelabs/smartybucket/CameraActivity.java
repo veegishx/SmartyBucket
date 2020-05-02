@@ -30,15 +30,21 @@ import android.media.Image;
 import android.media.Image.Plane;
 import android.media.ImageReader;
 import android.media.ImageReader.OnImageAvailableListener;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Trace;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
+import android.os.Vibrator;
 import android.util.Size;
+import android.view.Gravity;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -55,7 +61,13 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.saphyrelabs.smartybucket.env.ImageUtils;
 import com.saphyrelabs.smartybucket.env.Logger;
 import com.saphyrelabs.smartybucket.model.Ingredient;
@@ -108,6 +120,8 @@ public abstract class CameraActivity extends AppCompatActivity
 
   private Device device = Device.CPU;
   private int numThreads = -1;
+
+  private Set<Ingredient> ingredientSet = new HashSet<Ingredient>();
 
   private ArrayList<Ingredient> listOfIngredients = new ArrayList<Ingredient>();
 
@@ -532,6 +546,8 @@ public abstract class CameraActivity extends AppCompatActivity
 
   @UiThread
   protected void showResultsInBottomSheet(List<Recognition> results) {
+    final Vibrator vibe = (Vibrator) CameraActivity.this.getSystemService(Context.VIBRATOR_SERVICE);
+    final MediaPlayer mp = MediaPlayer.create(this, R.raw.beep);
     if (results != null && results.size() >= 3) {
       Recognition recognition = results.get(0);
       String recognitionClean = recognition.getTitle().replace("_", " ");
@@ -543,8 +559,12 @@ public abstract class CameraActivity extends AppCompatActivity
         recognitionButton.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-            listOfIngredients.add(new Ingredient(recognitionClean));
-            System.out.println(listOfIngredients);
+            ingredientSet.add(new Ingredient(recognitionClean));
+            vibe.vibrate(80);
+            mp.start();
+            Toast toast = Toast.makeText(CameraActivity.this.getApplicationContext(),"Added " + recognitionClean,Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.TOP, 0, 40);
+            toast.show();
           }
         });
       }
@@ -559,8 +579,12 @@ public abstract class CameraActivity extends AppCompatActivity
         recognition1Button.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-            listOfIngredients.add(new Ingredient(recognition1Clean));
-            System.out.println(listOfIngredients);
+            ingredientSet.add(new Ingredient(recognition1Clean));
+            mp.start();
+            vibe.vibrate(80);
+            Toast toast = Toast.makeText(CameraActivity.this.getApplicationContext(),"Added " + recognition1Clean,Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.TOP, 0, 40);
+            toast.show();
           }
         });
       }
@@ -575,8 +599,12 @@ public abstract class CameraActivity extends AppCompatActivity
         recognition2Button.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-            listOfIngredients.add(new Ingredient(recognition2Clean));
-            System.out.println(listOfIngredients);
+            ingredientSet.add(new Ingredient(recognition2Clean));
+            vibe.vibrate(80);
+            mp.start();
+            Toast toast = Toast.makeText(CameraActivity.this.getApplicationContext(),"Added " + recognition2Clean,Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.TOP, 0, 40);
+            toast.show();
           }
         });
       }
@@ -584,6 +612,10 @@ public abstract class CameraActivity extends AppCompatActivity
       recognitionCompleteButton.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+          Iterator itr = ingredientSet.iterator();
+          while (itr.hasNext()) {
+              listOfIngredients.add((Ingredient) itr.next());
+          }
           Intent reviewItems = new Intent(CameraActivity.this, ReviewItems.class);
           Bundle args = new Bundle();
           args.putSerializable("ingredients",(Serializable) listOfIngredients);

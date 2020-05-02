@@ -47,4 +47,18 @@ public class Ingredient implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(ingredientName);
     }
+
+    @Override
+    public String toString() {
+        return getIngredientName();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return !super.equals(obj);
+    }
+
+    public int hashCode() {
+        return getIngredientName().hashCode();
+    }
 }

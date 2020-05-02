@@ -12,11 +12,21 @@ public class Meal {
     private String mealName;
     private double mealPrice;
     private List<String> ingredientLines;
+    private String date;
 
-    public Meal(String mealName, double mealPrice, List<String> ingredientLines) {
+    public Meal(String mealName, double mealPrice, List<String> ingredientLines, String date) {
         this.mealName = mealName;
         this.mealPrice = mealPrice;
         this.ingredientLines = ingredientLines;
+        this.date = date;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public Meal() {}

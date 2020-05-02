@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:allowBackup="true"
@@ -22,7 +23,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".CustomChartMarkerView"></activity>
+        <activity android:name=".ViewExpenses"></activity>
+        <activity android:name=".CustomChartMarkerView" />
         <activity
             android:name=".RecipeDetails"
             android:screenOrientation="portrait"
@@ -54,10 +56,6 @@
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ScanType"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".parseItemImage"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
@@ -99,26 +97,23 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ClassifierActivity"
             android:label="@string/tfe_ic_app_name"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".tflite.Classifier"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-
-        <activity android:name=".tflite.ClassifierFloatMobileNet"></activity>
-        <activity android:name=".CameraActivity"></activity>
-        <activity android:name=".env.Logger"></activity>
-        <activity android:name=".env.ImageUtils"></activity>
-        <activity android:name=".env.BorderedText"></activity>
-        <activity android:name=".customview.AutoFitTextureView"></activity>
-        <activity android:name=".customview.OverlayView"></activity>
-        <activity android:name=".customview.RecognitionScoreView"></activity>
+            tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".tflite.ClassifierFloatMobileNet" />
+        <activity android:name=".CameraActivity" />
+        <activity android:name=".env.Logger" />
+        <activity android:name=".env.ImageUtils" />
+        <activity android:name=".env.BorderedText" />
+        <activity android:name=".customview.AutoFitTextureView" />
+        <activity android:name=".customview.OverlayView" />
+        <activity android:name=".customview.RecognitionScoreView" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -127,6 +122,7 @@
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="ocr" />
+        <receiver android:name=".NotificationBroadcastReceiver"/>
     </application>
 
 </manifest>

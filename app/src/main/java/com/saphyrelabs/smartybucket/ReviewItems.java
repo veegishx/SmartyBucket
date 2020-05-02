@@ -38,7 +38,7 @@ public class ReviewItems extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle args = intent.getBundleExtra("BUNDLE");
-        reviewedIngredients= (ArrayList<Ingredient>) args.getSerializable("ingredients");
+        reviewedIngredients = (ArrayList<Ingredient>) args.getSerializable("ingredients");
 
         System.out.println("LIST DEBUG");
         for (int i = 0; i < reviewedIngredients.size(); i++) {

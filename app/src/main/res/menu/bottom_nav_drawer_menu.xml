@@ -11,8 +11,12 @@
             android:icon="@drawable/ic_camera_alt_white_24dp"
             android:title="@string/navigation_scan" />
         <item
-            android:id="@+id/settingsNav"
-            android:icon="@drawable/ic_settings_dark_24dp"
-            android:title="@string/navigation_settings" />
+            android:id="@+id/expense"
+            android:icon="@drawable/ic_monetization_on_black_24dp"
+            android:title="@string/expenses" />
+        <item
+            android:id="@+id/account"
+            android:icon="@drawable/ic_account_circle_black_24dp"
+            android:title="@string/navigation_account" />
     </group>
 </menu>

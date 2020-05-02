@@ -20,6 +20,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomnavigation.LabelVisibilityMode;
 import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
@@ -72,21 +73,32 @@ public class ScanType extends AppCompatActivity {
 
         // Initialize BottomAppBar
         bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
 
         // Handle onClick event
-        bottomNav.setOnNavigationItemSelectedListener(item -> {
-            int id = item.getItemId();
-            switch (id){
-                case R.id.homeNav:
-                    Intent home = new Intent(ScanType.this, MainActivity.class);
-                    startActivity(home);
-                    break;
-                case R.id.scanNav:
-                    Intent scanType = new Intent(ScanType.this, ScanType.class);
-                    startActivity(scanType);
-                    break;
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch (id){
+                    case R.id.homeNav:
+                        Intent home = new Intent(ScanType.this, MainActivity.class);
+                        startActivity(home);
+                        break;
+                    case R.id.scanNav:
+                        Intent scanType = new Intent(ScanType.this, ScanType.class);
+                        startActivity(scanType);
+                        break;
+                    case R.id.expense:
+                        Intent expenses = new Intent(ScanType.this, ViewExpenses.class);
+                        startActivity(expenses);
+                        break;
+                    case R.id.account:
+                        Intent account = new Intent(ScanType.this, UserProfile.class);
+                        startActivity(account);
+                }
+                return false;
             }
-            return false;
         });
     }
 
