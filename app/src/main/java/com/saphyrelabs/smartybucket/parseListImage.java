@@ -131,11 +131,16 @@ public class parseListImage extends AppCompatActivity {
         t1.start();
         t1.join();
 
-        Intent reviewItems = new Intent(parseListImage.this, ReviewItems.class);
-        Bundle args = new Bundle();
-        args.putSerializable("ingredients",(Serializable) listOfIngredients);
-        reviewItems.putExtra("BUNDLE",args);
-        startActivity(reviewItems);
+        if (listOfIngredients.size() == 0) {
+            Toast.makeText(parseListImage.this.getApplicationContext(),"No ingredients detected. Please try again!",Toast.LENGTH_LONG).show();
+        } else {
+            Intent reviewItems = new Intent(parseListImage.this, ReviewItems.class);
+            Bundle args = new Bundle();
+            args.putSerializable("ingredients",(Serializable) listOfIngredients);
+            reviewItems.putExtra("BUNDLE",args);
+            startActivity(reviewItems);
+        }
+
     }
 
     /**
