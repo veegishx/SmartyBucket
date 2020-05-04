@@ -144,6 +144,6 @@ public class UserProfile extends AppCompatActivity {
         calendar.set(Calendar.HOUR_OF_DAY, calendarHour);
         calendar.set(Calendar.MINUTE, calendarMinute);
         calendar.set(Calendar.SECOND, 0);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000*60*60*24, pendingIntent);
     }
 }
