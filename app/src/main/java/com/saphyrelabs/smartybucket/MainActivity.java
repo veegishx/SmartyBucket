@@ -35,6 +35,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -54,7 +55,7 @@ import com.github.mikephil.charting.utils.Utils;
 
 public class MainActivity extends AppCompatActivity implements SetBudget.SetBudgetListenerInterface, SetPreferences.SetPreferencesListenerInterface{
     BottomNavigationView bottomNav;
-    private TextView monthlyBudgetValue, userGreeting, dailyExpensesValue, lastMeal, lastMealPrice;
+    private TextView monthlyBudgetValue, userGreeting, dailyExpensesValue, lastMeal, lastMealPrice, dailyLimit, weeklyLimit;
     private FirebaseFirestore smartyFirestore;
     private LineChart mChart;
     private static final String TAG = "MainActivityFirestore";
@@ -77,6 +78,8 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         dailyExpensesValue = findViewById(R.id.dailyExpensesValue);
         lastMeal = findViewById(R.id.lastMeal);
         lastMealPrice = findViewById(R.id.lastMealPrice);
+        dailyLimit = findViewById(R.id.dailyLimit);
+        weeklyLimit = findViewById(R.id.weeklyLimit);
 
         String modelType = userConfigurations.getString("modelType",null);
         String facebookEmail = userConfigurations.getString("facebookEmail",null);
@@ -105,6 +108,25 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
                 String budgetString = Float.toString(budget);
                 monthlyBudgetValue.setText(budgetString);
                 System.out.println("Budget is set to: " + userConfigurations.getFloat("budget", 0));
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
+                calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
+                int numDays = calendar.getActualMaximum(Calendar.DATE);
+                double dailyLimitValue = Double.parseDouble(budgetString) / numDays;
+                double weeklyLimitValue = Double.parseDouble(budgetString) / 4;
+
+                if (String.valueOf(dailyLimitValue).length() > 4) {
+                    dailyLimit.setText(String.valueOf(dailyLimitValue).substring(0, 4));
+                } else {
+                    dailyLimit.setText(String.valueOf(dailyLimitValue));
+                }
+
+                if (String.valueOf(weeklyLimitValue).length() > 4) {
+                    weeklyLimit.setText(String.valueOf(weeklyLimitValue).substring(0, 4));
+                } else {
+                    weeklyLimit.setText(String.valueOf(weeklyLimitValue));
+                }
             }
         });
 

@@ -108,4 +108,6 @@
     <string name="update_budget">Set your Monthly Budget</string>
     <string name="set_budget">Set Budget</string>
     <string name="set_preferences">Set Preferences</string>
+    <string name="daily_limit_label">Your Daily Limit</string>
+    <string name="weekly_limit_label">Your Weekly Limit</string>
 </resources>
