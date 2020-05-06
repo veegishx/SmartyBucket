@@ -67,7 +67,7 @@
     </string-array>
     <string name="set_budget_desc">Setting a monthly spending target is important as it helps in the forecasting and planning process!</string>
     <string name="set_preferences_desc">Setting preferences will allow us to show the most suitable recipes for you</string>
-    <string name="main_activity_expenses_chart_label">Expenses Tracking</string>
+    <string name="main_activity_expenses_chart_label">Monthly Expenses Tracking</string>
 
     <string name="tfe_ic_app_name" translation_description="Image Classification demo app [CHAR_LIMIT=40]">TFL Classify</string>
     <string name="tfe_ic_camera_error" translation_description="Error regarding camera support[CHAR_LIMIT=40]">This device doesn\'t support Camera2 API.</string>

@@ -14,8 +14,13 @@ import com.saphyrelabs.smartybucket.R;
 import com.saphyrelabs.smartybucket.model.Ingredient;
 import com.saphyrelabs.smartybucket.model.Meal;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class MealExpensesAdapter extends RecyclerView.Adapter<MealExpensesAdapter.MealExpensesAdapterViewHolder> {
@@ -51,8 +56,19 @@ public class MealExpensesAdapter extends RecyclerView.Adapter<MealExpensesAdapte
     @Override
     public void onBindViewHolder(MealExpensesAdapterViewHolder holder, final int position) {
         double mealPrice = meals.get(position).getMealPrice();
+        String dateString = meals.get(position).getDate();
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("dd-MM-yyyy").parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        holder.expenseDate.setText(meals.get(position).getDate());
+        DateFormat targetFormat = new SimpleDateFormat("dd MMMM yyyy");
+
+        String formattedDate = targetFormat.format(date);
+
+        holder.expenseDate.setText(formattedDate);
         for (int i = 0; i < meals.get(position).getIngredientLines().size(); i++) {
             holder.expenseIngredient.append(meals.get(position).getIngredientLines().get(i) + "\n");
         }

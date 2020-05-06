@@ -2,6 +2,7 @@ package com.saphyrelabs.smartybucket;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
 import android.content.Context;
@@ -55,7 +56,8 @@ import com.github.mikephil.charting.utils.Utils;
 
 public class MainActivity extends AppCompatActivity implements SetBudget.SetBudgetListenerInterface, SetPreferences.SetPreferencesListenerInterface{
     BottomNavigationView bottomNav;
-    private TextView monthlyBudgetValue, userGreeting, dailyExpensesValue, lastMeal, lastMealPrice, dailyLimit, weeklyLimit;
+    private TextView monthlyBudgetValue, userGreeting, dailyExpensesValue, lastMeal, lastMealPrice, dailyLimit, weeklyLimit, warningText;
+    private CardView warningCard;
     private FirebaseFirestore smartyFirestore;
     private LineChart mChart;
     private static final String TAG = "MainActivityFirestore";
@@ -80,6 +82,9 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         lastMealPrice = findViewById(R.id.lastMealPrice);
         dailyLimit = findViewById(R.id.dailyLimit);
         weeklyLimit = findViewById(R.id.weeklyLimit);
+        warningText = findViewById(R.id.warningText);
+        warningCard = findViewById(R.id.warningCard);
+        warningCard.setVisibility(View.GONE);
 
         String modelType = userConfigurations.getString("modelType",null);
         String facebookEmail = userConfigurations.getString("facebookEmail",null);
@@ -281,6 +286,11 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
                                     dailyExpensesValue.setText(currentExpense.get(formatter.format(date)));
                                 }
 
+                                if (Double.valueOf(dailyExpensesValue.getText().toString()) > Double.valueOf(dailyLimit.getText().toString())) {
+                                    warningText.setText("WARNING: Daily Limit Exceeded!");
+                                    warningCard.setVisibility(View.VISIBLE);
+                                    warningCard.setBackgroundColor(Color.parseColor("#FFFF0048"));
+                                }
                             }
                         }
 

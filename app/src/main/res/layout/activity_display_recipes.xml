@@ -40,19 +40,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/view4" />
 
-        <Button
-            android:id="@+id/btnNotInterested"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:background="#1347FF"
-            android:backgroundTint="#1347FF"
-            android:text="@string/not_interested"
-            app:layout_constraintBottom_toBottomOf="@+id/view5"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView2"
-            app:layout_constraintVertical_bias="0.7" />
-
         <TextView
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
