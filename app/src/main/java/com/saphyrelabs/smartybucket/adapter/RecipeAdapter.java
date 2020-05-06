@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,6 +43,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.saphyrelabs.smartybucket.R;
 import com.saphyrelabs.smartybucket.RecipeDetails;
+import com.saphyrelabs.smartybucket.ScanType;
 import com.saphyrelabs.smartybucket.model.Item;
 import com.saphyrelabs.smartybucket.model.Meal;
 import com.saphyrelabs.smartybucket.model.Recipe;
@@ -324,8 +326,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 // Check if recipe contains label set by user, eg: balanced, low-fat, low-carb, high-protein
                 if (Pattern.compile(Pattern.quote(recipes.get(position).getDietLabels().get(k)), Pattern.CASE_INSENSITIVE).matcher(userDietLabel).find()) {
                     // Check if user has enough ingredients - difference not more than 4
-                    if ((kitchenIngredientsArray.length == recipes.get(position).getIncredientLines().size()) || recipes.get(position).getIncredientLines().size() - kitchenIngredientsArray.length < 4) {
-                        recommendedRecipes.add(recipes.get(position));
+                    try {
+                        if ((kitchenIngredientsArray.length == recipes.get(position).getIncredientLines().size()) || recipes.get(position).getIncredientLines().size() - kitchenIngredientsArray.length < 4) {
+                            recommendedRecipes.add(recipes.get(position));
+                        }
+                    } catch (NullPointerException e) {
+                        Toast.makeText(context,"Oops, we had some trouble fetching recipes, please try again!",Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -498,7 +504,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                     System.out.println(kitchenIngredientsArray[i]);
                     System.out.println(Pattern.compile(Pattern.quote(cleanIngredientLinesArrayList.get(j)), Pattern.CASE_INSENSITIVE).matcher(kitchenIngredientsArray[i]).find());
                     ingredientCount++;
-                    System.out.println("--------------");
                     break inner;
                 }
             }
@@ -506,17 +511,21 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
         holder.ingredients.setText("You have " + ingredientCount + " out of " + totalIngredients + " ingredients");
         holder.recipeCard.setOnClickListener(v -> {
-            Recipe recipe = recipes.get(position);
-            System.out.println("Tapped!");
-            System.out.println(recipe.getIncredientLines().toString());
-            System.out.println(ingredientParameters);
 
             final Handler handler = new Handler();
             handler.postDelayed(() -> {
+                Recipe recipe = recipes.get(position);
+                String missing = "";
+                for (int i = 0; i< kitchenIngredientsArray.length; i++) {
+                    for (int j = 0; j < cleanIngredientLinesArrayList.size(); j++) {
+                        removeAll(cleanIngredientLinesArrayList, kitchenIngredientsArray[i]);
+                    }
+                }
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext(), R.style.IngredientSummary);
                 builder.setTitle("Ingredient Summary");
                 // Hardcoding values for now
-                builder.setMessage("You are missing the following ingredients: Onions, Black Pepper, Tomatoes. Total price is: ");
+                builder.setMessage("You are missing the following ingredients: " + cleanIngredientLinesArrayList);
                 builder.setPositiveButton("OK", null);
                 builder.show();
 
@@ -629,5 +638,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             }
         }
         return mealPreferences;
+    }
+
+    public void removeAll(List<String> list, String element) {
+        while (list.contains(element)) {
+            list.remove(element);
+        }
     }
 }
