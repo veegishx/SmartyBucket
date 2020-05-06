@@ -106,4 +106,6 @@
     <string name="budget_label">Monthly Budget</string>
     <string name="update_preferences">Set your diet preferences</string>
     <string name="update_budget">Set your Monthly Budget</string>
+    <string name="set_budget">Set Budget</string>
+    <string name="set_preferences">Set Preferences</string>
 </resources>
