@@ -75,9 +75,7 @@ public class MealExpensesAdapter extends RecyclerView.Adapter<MealExpensesAdapte
         String formattedDate = targetFormat.format(date);
 
         holder.expenseDate.setText(formattedDate);
-        for (int i = 0; i < meals.get(position).getIngredientLines().size(); i++) {
-            holder.expenseIngredient.append(meals.get(position).getIngredientLines().get(i) + "\n");
-        }
+        holder.expenseIngredient.setText(meals.get(position).getIngredientLines().toString().replaceAll("\\[", "").replaceAll("\\]",""));
 
 
         if (String.valueOf(mealPrice).length() > 4) {
