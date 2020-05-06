@@ -273,9 +273,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
                                         // Check if the meals field exists
                                         if (meals != null) {
-                                            newMeal.add(new Meal(recipes.get(position).getLabel(), totalItemsPrice, cleanIngredientLinesArrayList, formatter.format(date)));
+                                            newMeal.add(new Meal(recipes.get(position).getLabel(), totalItemsPrice, cleanIngredientLinesArrayList, formatter.format(date), recipes.get(position).getUrl()));
                                         } else {
-                                            newMeal.add(new Meal(recipes.get(position).getLabel(), totalItemsPrice, cleanIngredientLinesArrayList, formatter.format(date)));
+                                            newMeal.add(new Meal(recipes.get(position).getLabel(), totalItemsPrice, cleanIngredientLinesArrayList, formatter.format(date), recipes.get(position).getUrl()));
                                             docRef.update("meals", newMeal);
                                         }
 
@@ -289,7 +289,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                                                 }
 
                                                 if (meals != null) {
-                                                    user.addMeals(new Meal(recipes.get(position).getLabel(), totalItemsPrice, cleanIngredientLinesArrayList, formatter.format(date)));
+                                                    user.addMeals(new Meal(recipes.get(position).getLabel(), totalItemsPrice, cleanIngredientLinesArrayList, formatter.format(date), recipes.get(position).getUrl()));
                                                 } else {
                                                     user.setMeals(newMeal);
                                                 }
@@ -422,9 +422,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
                                             // Check if the meals field exists
                                             if (meals != null) {
-                                                newMeal.add(new Meal(recommended.getLabel(), totalItemsPrice, cleanRecIngredientLines, formatter.format(date)));
+                                                newMeal.add(new Meal(recommended.getLabel(), totalItemsPrice, cleanRecIngredientLines, formatter.format(date), recommended.getUrl()));
                                             } else {
-                                                newMeal.add(new Meal(recommended.getLabel(), totalItemsPrice, cleanRecIngredientLines, formatter.format(date)));
+                                                newMeal.add(new Meal(recommended.getLabel(), totalItemsPrice, cleanRecIngredientLines, formatter.format(date), recommended.getUrl()));
                                                 docRef.update("meals", newMeal);
                                             }
 
@@ -438,7 +438,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                                                     }
 
                                                     if (meals != null) {
-                                                        user.addMeals(new Meal(recommended.getLabel(), totalItemsPrice, cleanRecIngredientLines, formatter.format(date)));
+                                                        user.addMeals(new Meal(recommended.getLabel(), totalItemsPrice, cleanRecIngredientLines, formatter.format(date), recommended.getUrl()));
                                                     } else {
                                                         user.setMeals(newMeal);
                                                     }

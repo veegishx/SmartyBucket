@@ -110,4 +110,7 @@
     <string name="set_preferences">Set Preferences</string>
     <string name="daily_limit_label">Your Daily Limit</string>
     <string name="weekly_limit_label">Your Weekly Limit</string>
+    <string name="total_cost">Total Cost</string>
+    <string name="view_online">View Online</string>
+    <string name="default_recipe">Loading Recipe Name...</string>
 </resources>
