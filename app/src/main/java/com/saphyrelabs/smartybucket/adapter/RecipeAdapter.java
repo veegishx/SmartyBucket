@@ -301,6 +301,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                                             }
                                         });
 
+
+                                        Toast.makeText(context, "Added to budget!", Toast.LENGTH_LONG).show();
+
                                     } else {
                                         Log.d(TAG, "No such document");
                                     }

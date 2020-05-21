@@ -105,14 +105,14 @@ public class UserProfile extends AppCompatActivity implements SetBudget.SetBudge
         });
 
         SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
-        String facebookName = userConfigurations.getString("facebookName",null);
-        String facebookAccountId = userConfigurations.getString("facebookUid",null);
+        String name = userConfigurations.getString("name",null);
+        String userId = userConfigurations.getString("userUid",null);
 
         facebookAccountName = findViewById(R.id.accountName);
-        facebookAccountName.setText(facebookName);
+        facebookAccountName.setText(name);
 
         accountId = findViewById(R.id.accountId);
-        accountId.setText(facebookAccountId);
+        accountId.setText(userId);
 
         logoutBtn = findViewById(R.id.logoutBtn);
 
@@ -252,9 +252,9 @@ public class UserProfile extends AppCompatActivity implements SetBudget.SetBudge
 
     public void sendDataToFirestore() {
         SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
-        String userId = userConfigurations.getString("facebookUid","0");
-        String userName = userConfigurations.getString("facebookName","0");
-        String userEmail = userConfigurations.getString("facebookEmail","0");
+        String userId = userConfigurations.getString("userUid","0");
+        String userName = userConfigurations.getString("name","0");
+        String userEmail = userConfigurations.getString("email","0");
         float budget = userConfigurations.getFloat("budget",0);
 //        Map<String, String> expenses = new HashMap<>();
 //        Date date = new Date();

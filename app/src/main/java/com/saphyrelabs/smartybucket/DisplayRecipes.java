@@ -59,7 +59,7 @@ public class DisplayRecipes extends AppCompatActivity {
         recipeLoading = findViewById(R.id.recipeLoading);
 
         SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
-        String userId = userConfigurations.getString("facebookUid","0");
+        String userId = userConfigurations.getString("userUid","0");
 
         Intent intent = getIntent();
         Bundle args = intent.getBundleExtra("BUNDLE");

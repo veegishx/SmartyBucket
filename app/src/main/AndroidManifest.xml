@@ -10,10 +10,11 @@
         android:name="android.hardware.camera.any"
         android:required="true" />
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -23,7 +24,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ViewExpenses"></activity>
+        <activity android:name=".LoginAccount"></activity>
+        <activity android:name=".CreateAccount" />
+        <activity android:name=".ViewExpenses" />
         <activity android:name=".CustomChartMarkerView" />
         <activity
             android:name=".RecipeDetails"
@@ -122,7 +125,8 @@
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="ocr" />
-        <receiver android:name=".NotificationBroadcastReceiver"/>
+
+        <receiver android:name=".NotificationBroadcastReceiver" />
     </application>
 
 </manifest>

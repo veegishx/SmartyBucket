@@ -87,13 +87,27 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         warningCard.setVisibility(View.GONE);
 
         String modelType = userConfigurations.getString("modelType",null);
-        String facebookEmail = userConfigurations.getString("facebookEmail",null);
-        String facebookUid = userConfigurations.getString("facebookUid",null);
-        String userName = userConfigurations.getString("facebookName","0");
+        String email = userConfigurations.getString("email",null);
+        String userUid = userConfigurations.getString("userUid", null);
+        String userName = userConfigurations.getString("name","0");
         float budget = userConfigurations.getFloat("budget",0);
         boolean userMealPreferencesStatus = userConfigurations.getBoolean("userMealPreferencesStatus", false);
 
-        userGreeting.setText("Hello, " + userName + ".");
+        DocumentReference docRef = smartyFirestore.collection("users").document(userUid);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    User user = document.toObject(User.class);
+                    userGreeting.setText("Hello, " + user.getUserName() + ".");
+                    System.out.println("UUU: " + user.getUserName());
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+
 
         Thread t1 = new Thread(() -> {
             if (modelType == null) {
@@ -155,8 +169,8 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         System.out.println();
         System.out.println("---------------------- DEBUG INFO ----------------------");
         System.out.println("ModelType: " + modelType);
-        System.out.println("FacebookEmail: " + facebookEmail);
-        System.out.println("FacebookUserId: " + facebookUid);
+        System.out.println("Email: " + email);
+        System.out.println("userUid: " + userUid);
         System.out.println("--------------------------------------------------------");
 
         RelativeLayout addItemBanner = findViewById(R.id.add_more_items_banner);
@@ -250,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
 
     private void setData() {
         SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
-        String userId = userConfigurations.getString("facebookUid","0");
+        String userId = userConfigurations.getString("userUid","0");
 
         ArrayList<Entry> values = new ArrayList<>();
 
@@ -446,9 +460,9 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
      */
     public void sendDataToFirestore() {
         SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
-        String userId = userConfigurations.getString("facebookUid","0");
-        String userName = userConfigurations.getString("facebookName","0");
-        String userEmail = userConfigurations.getString("facebookEmail","0");
+        String userId = userConfigurations.getString("userUid","0");
+        String userName = userConfigurations.getString("name","0");
+        String userEmail = userConfigurations.getString("email","0");
         float budget = userConfigurations.getFloat("budget",0);
 //        Map<String, String> expenses = new HashMap<>();
 //        Date date = new Date();
