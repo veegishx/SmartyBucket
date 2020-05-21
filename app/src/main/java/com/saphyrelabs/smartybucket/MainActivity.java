@@ -102,6 +102,9 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
                     User user = document.toObject(User.class);
                     userGreeting.setText("Hello, " + user.getUserName() + ".");
                     System.out.println("UUU: " + user.getUserName());
+                    SharedPreferences.Editor editor = userConfigurations.edit();
+                    editor.putString("name", user.getUserName());
+                    editor.apply();
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }

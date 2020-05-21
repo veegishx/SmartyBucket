@@ -288,6 +288,7 @@ public class UserProfile extends AppCompatActivity implements SetBudget.SetBudge
                             }
                         });
                     }
+                    Toast.makeText(UserProfile.this, "User Settings Updated Successfully!", Toast.LENGTH_LONG).show();
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
