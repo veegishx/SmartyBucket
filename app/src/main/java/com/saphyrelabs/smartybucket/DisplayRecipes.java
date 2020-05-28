@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomnavigation.LabelVisibilityMode;
 import com.saphyrelabs.smartybucket.adapter.RecipeAdapter;
 import com.saphyrelabs.smartybucket.api.RecipeApiClient;
 import com.saphyrelabs.smartybucket.api.RecipeApiInterface;
@@ -58,7 +59,7 @@ public class DisplayRecipes extends AppCompatActivity {
         recipeLoading = findViewById(R.id.recipeLoading);
 
         SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
-        String userId = userConfigurations.getString("facebookUid","0");
+        String userId = userConfigurations.getString("userUid","0");
 
         Intent intent = getIntent();
         Bundle args = intent.getBundleExtra("BUNDLE");
@@ -103,6 +104,7 @@ public class DisplayRecipes extends AppCompatActivity {
 
         // Initialize BottomAppBar
         bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
 
         // Handle onClick event
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -118,6 +120,13 @@ public class DisplayRecipes extends AppCompatActivity {
                         Intent scanType = new Intent(DisplayRecipes.this, ScanType.class);
                         startActivity(scanType);
                         break;
+                    case R.id.expense:
+                        Intent expenses = new Intent(DisplayRecipes.this, ViewExpenses.class);
+                        startActivity(expenses);
+                        break;
+                    case R.id.account:
+                        Intent account = new Intent(DisplayRecipes.this, UserProfile.class);
+                        startActivity(account);
                 }
                 return false;
             }

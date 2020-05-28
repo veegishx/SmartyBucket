@@ -51,6 +51,13 @@
             android:textSize="30sp"
             android:textStyle="bold" />
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible" />
+
         <TextView
             android:layout_width="267dp"
             android:layout_height="43dp"

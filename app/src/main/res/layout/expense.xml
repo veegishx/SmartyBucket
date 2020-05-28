@@ -32,7 +32,7 @@
                 android:layout_height="23dp"
                 android:layout_marginStart="16dp"
                 android:elevation="6dp"
-                app:cardBackgroundColor="#FD005B"
+                app:cardBackgroundColor="#2436D5"
                 app:cardCornerRadius="4dp"
                 app:layout_constraintBottom_toBottomOf="@+id/view6"
                 app:layout_constraintStart_toStartOf="@+id/view6"
@@ -56,18 +56,39 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
+            <View
+                android:id="@+id/view10"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:background="#FFEB3B"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view6" />
+
+            <View
+                android:id="@+id/view7"
+                android:layout_width="3dp"
+                android:layout_height="0dp"
+                android:background="#DADADA"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/textView42"
+                app:layout_constraintHorizontal_bias="0.915"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view13"
+                app:layout_constraintVertical_bias="1.0" />
+
             <TextView
                 android:id="@+id/expenseTotal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="32dp"
                 android:text="@string/default_daily_expense"
                 android:textColor="#000000"
                 android:textSize="36sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view6"
-                app:layout_constraintVertical_bias="0.527" />
+                app:layout_constraintTop_toBottomOf="@+id/view13"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/textView42"
@@ -80,59 +101,92 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/expenseTotal"
-                app:layout_constraintTop_toBottomOf="@+id/view6"
-                app:layout_constraintVertical_bias="0.527" />
-
-            <View
-                android:id="@+id/view7"
-                android:layout_width="3dp"
-                android:layout_height="0dp"
-                android:layout_marginEnd="36dp"
-                android:background="#DADADA"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/textView42"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view6"
-                app:layout_constraintVertical_bias="0.777" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip3"
-                android:layout_width="144dp"
-                android:layout_height="42dp"
-                android:checkable="false"
-                android:checked="false"
-                app:checkedIconEnabled="false"
-                app:checkedIconVisible="false"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view6" />
+                app:layout_constraintTop_toBottomOf="@+id/view13"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/expenseIngredient"
                 android:layout_width="190dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/view7"
                 app:layout_constraintHorizontal_bias="0.555"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view6"
-                app:layout_constraintVertical_bias="0.348" />
+                app:layout_constraintTop_toBottomOf="@+id/textView45" />
+
+            <TextView
+                android:id="@+id/expenseName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/default_recipe"
+                android:textColor="#070C37"
+                app:layout_constraintBottom_toBottomOf="@+id/view10"
+                app:layout_constraintEnd_toEndOf="@+id/view10"
+                app:layout_constraintHorizontal_bias="0.067"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view6" />
+
+            <View
+                android:id="@+id/view11"
+                android:layout_width="217dp"
+                android:layout_height="28dp"
+                android:background="#070C37"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view10" />
 
             <TextView
                 android:id="@+id/textView45"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
                 android:enabled="false"
                 android:padding="5dp"
                 android:text="Ingredients used"
-                android:textColor="#0013C0"
-                app:layout_constraintBottom_toTopOf="@+id/expenseIngredient"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.059"
+                app:layout_constraintHorizontal_bias="0.062"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view6" />
+                app:layout_constraintTop_toBottomOf="@+id/view10" />
+
+            <View
+                android:id="@+id/view13"
+                android:layout_width="154dp"
+                android:layout_height="28dp"
+                android:background="#00031E"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/view11"
+                app:layout_constraintTop_toBottomOf="@+id/view10" />
+
+            <TextView
+                android:id="@+id/textView47"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/total_cost"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/view13"
+                app:layout_constraintEnd_toEndOf="@+id/view13"
+                app:layout_constraintHorizontal_bias="0.412"
+                app:layout_constraintStart_toEndOf="@+id/view11"
+                app:layout_constraintTop_toTopOf="@+id/view13" />
+
+            <Button
+                android:id="@+id/viewOnline"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginEnd="12dp"
+                android:backgroundTint="#070C37"
+                android:text="@string/view_online"
+                android:textColor="#FFEB3B"
+                android:textSize="12sp"
+                app:icon="@drawable/ic_open_in_new_black_24dp"
+                app:iconTint="#FFEB3B"
+                app:layout_constraintBottom_toBottomOf="@+id/view10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/view6"
+                app:layout_constraintVertical_bias="0.062" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

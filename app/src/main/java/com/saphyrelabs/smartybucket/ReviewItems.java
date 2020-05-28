@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomnavigation.LabelVisibilityMode;
 import com.saphyrelabs.smartybucket.adapter.ReviewIngredientAdapter;
 import com.saphyrelabs.smartybucket.model.Ingredient;
 
@@ -63,6 +64,7 @@ public class ReviewItems extends AppCompatActivity {
 
         // Initialize BottomAppBar
         bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
 
         // Handle onClick event
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -78,6 +80,13 @@ public class ReviewItems extends AppCompatActivity {
                         Intent scanType = new Intent(ReviewItems.this, ScanType.class);
                         startActivity(scanType);
                         break;
+                    case R.id.expense:
+                        Intent expenses = new Intent(ReviewItems.this, ViewExpenses.class);
+                        startActivity(expenses);
+                        break;
+                    case R.id.account:
+                        Intent account = new Intent(ReviewItems.this, UserProfile.class);
+                        startActivity(account);
                 }
                 return false;
             }

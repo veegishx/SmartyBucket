@@ -616,11 +616,16 @@ public abstract class CameraActivity extends AppCompatActivity
           while (itr.hasNext()) {
               listOfIngredients.add((Ingredient) itr.next());
           }
-          Intent reviewItems = new Intent(CameraActivity.this, ReviewItems.class);
-          Bundle args = new Bundle();
-          args.putSerializable("ingredients",(Serializable) listOfIngredients);
-          reviewItems.putExtra("BUNDLE",args);
-          startActivity(reviewItems);
+
+          if (listOfIngredients.size() == 0) {
+            Toast.makeText(CameraActivity.this.getApplicationContext(),"No ingredients detected. Please add some and try again!",Toast.LENGTH_LONG).show();
+          } else {
+            Intent reviewItems = new Intent(CameraActivity.this, ReviewItems.class);
+            Bundle args = new Bundle();
+            args.putSerializable("ingredients",(Serializable) listOfIngredients);
+            reviewItems.putExtra("BUNDLE",args);
+            startActivity(reviewItems);
+          }
         }
       });
 

@@ -2,6 +2,7 @@ package com.saphyrelabs.smartybucket;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
 import android.content.Context;
@@ -35,6 +36,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -54,7 +56,8 @@ import com.github.mikephil.charting.utils.Utils;
 
 public class MainActivity extends AppCompatActivity implements SetBudget.SetBudgetListenerInterface, SetPreferences.SetPreferencesListenerInterface{
     BottomNavigationView bottomNav;
-    private TextView monthlyBudgetValue, userGreeting, dailyExpensesValue, lastMeal, lastMealPrice;
+    private TextView monthlyBudgetValue, userGreeting, dailyExpensesValue, lastMeal, lastMealPrice, dailyLimit, weeklyLimit, warningText;
+    private CardView warningCard;
     private FirebaseFirestore smartyFirestore;
     private LineChart mChart;
     private static final String TAG = "MainActivityFirestore";
@@ -77,15 +80,37 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         dailyExpensesValue = findViewById(R.id.dailyExpensesValue);
         lastMeal = findViewById(R.id.lastMeal);
         lastMealPrice = findViewById(R.id.lastMealPrice);
+        dailyLimit = findViewById(R.id.dailyLimit);
+        weeklyLimit = findViewById(R.id.weeklyLimit);
+        warningText = findViewById(R.id.warningText);
+        warningCard = findViewById(R.id.warningCard);
+        warningCard.setVisibility(View.GONE);
 
         String modelType = userConfigurations.getString("modelType",null);
-        String facebookEmail = userConfigurations.getString("facebookEmail",null);
-        String facebookUid = userConfigurations.getString("facebookUid",null);
-        String userName = userConfigurations.getString("facebookName","0");
+        String email = userConfigurations.getString("email",null);
+        String userUid = userConfigurations.getString("userUid", null);
+        String userName = userConfigurations.getString("name","0");
         float budget = userConfigurations.getFloat("budget",0);
         boolean userMealPreferencesStatus = userConfigurations.getBoolean("userMealPreferencesStatus", false);
 
-        userGreeting.setText("Hello, " + userName + ".");
+        DocumentReference docRef = smartyFirestore.collection("users").document(userUid);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    User user = document.toObject(User.class);
+                    userGreeting.setText("Hello, " + user.getUserName() + ".");
+                    System.out.println("UUU: " + user.getUserName());
+                    SharedPreferences.Editor editor = userConfigurations.edit();
+                    editor.putString("name", user.getUserName());
+                    editor.apply();
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+
 
         Thread t1 = new Thread(() -> {
             if (modelType == null) {
@@ -105,6 +130,25 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
                 String budgetString = Float.toString(budget);
                 monthlyBudgetValue.setText(budgetString);
                 System.out.println("Budget is set to: " + userConfigurations.getFloat("budget", 0));
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
+                calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
+                int numDays = calendar.getActualMaximum(Calendar.DATE);
+                double dailyLimitValue = Double.parseDouble(budgetString) / numDays;
+                double weeklyLimitValue = Double.parseDouble(budgetString) / 4;
+
+                if (String.valueOf(dailyLimitValue).length() > 4) {
+                    dailyLimit.setText(String.valueOf(dailyLimitValue).substring(0, 4));
+                } else {
+                    dailyLimit.setText(String.valueOf(dailyLimitValue));
+                }
+
+                if (String.valueOf(weeklyLimitValue).length() > 4) {
+                    weeklyLimit.setText(String.valueOf(weeklyLimitValue).substring(0, 4));
+                } else {
+                    weeklyLimit.setText(String.valueOf(weeklyLimitValue));
+                }
             }
         });
 
@@ -128,8 +172,8 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
         System.out.println();
         System.out.println("---------------------- DEBUG INFO ----------------------");
         System.out.println("ModelType: " + modelType);
-        System.out.println("FacebookEmail: " + facebookEmail);
-        System.out.println("FacebookUserId: " + facebookUid);
+        System.out.println("Email: " + email);
+        System.out.println("userUid: " + userUid);
         System.out.println("--------------------------------------------------------");
 
         RelativeLayout addItemBanner = findViewById(R.id.add_more_items_banner);
@@ -223,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
 
     private void setData() {
         SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
-        String userId = userConfigurations.getString("facebookUid","0");
+        String userId = userConfigurations.getString("userUid","0");
 
         ArrayList<Entry> values = new ArrayList<>();
 
@@ -259,6 +303,11 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
                                     dailyExpensesValue.setText(currentExpense.get(formatter.format(date)));
                                 }
 
+                                if (Double.valueOf(dailyExpensesValue.getText().toString()) > Double.valueOf(dailyLimit.getText().toString())) {
+                                    warningText.setText("WARNING: Daily Limit Exceeded!");
+                                    warningCard.setVisibility(View.VISIBLE);
+                                    warningCard.setBackgroundColor(Color.parseColor("#FFFF0048"));
+                                }
                             }
                         }
 
@@ -414,9 +463,9 @@ public class MainActivity extends AppCompatActivity implements SetBudget.SetBudg
      */
     public void sendDataToFirestore() {
         SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
-        String userId = userConfigurations.getString("facebookUid","0");
-        String userName = userConfigurations.getString("facebookName","0");
-        String userEmail = userConfigurations.getString("facebookEmail","0");
+        String userId = userConfigurations.getString("userUid","0");
+        String userName = userConfigurations.getString("name","0");
+        String userEmail = userConfigurations.getString("email","0");
         float budget = userConfigurations.getFloat("budget",0);
 //        Map<String, String> expenses = new HashMap<>();
 //        Date date = new Date();

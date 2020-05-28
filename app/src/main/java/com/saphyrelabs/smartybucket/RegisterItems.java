@@ -105,7 +105,7 @@ public class RegisterItems extends AppCompatActivity {
 
         // user
         SharedPreferences userConfigurations = getSharedPreferences("userConfigurations", MODE_PRIVATE);
-        String userId = userConfigurations.getString("facebookUid","0");
+        String userId = userConfigurations.getString("userUid","0");
 
         Item newItem = new Item(userId, itemId, itemNameVal, itemCategoryVal, itemPriceVal);
 

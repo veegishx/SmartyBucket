@@ -13,12 +13,14 @@ public class Meal {
     private double mealPrice;
     private List<String> ingredientLines;
     private String date;
+    private String url;
 
-    public Meal(String mealName, double mealPrice, List<String> ingredientLines, String date) {
+    public Meal(String mealName, double mealPrice, List<String> ingredientLines, String date, String url) {
         this.mealName = mealName;
         this.mealPrice = mealPrice;
         this.ingredientLines = ingredientLines;
         this.date = date;
+        this.url = url;
     }
 
     public String getDate() {
@@ -53,6 +55,14 @@ public class Meal {
 
     public void setIngredientLines(List<String> ingredientLines) {
         this.ingredientLines = ingredientLines;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
 
